@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>25 · The Three Things Maida Doesn&#39;t Track (And Why) | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="25 · The Three Things Maida Doesn&#39;t Track (And Why)">
+
+<meta property="og:url" content="https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/">Bright Raven</a>
+  <nav aria-label="中文">
+    <a href="/akatsuki/zh/F-25-three-things-maida-doesnt-track/" lang="zh-TW" hreflang="zh-TW">中文</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>25 · The Three Things Maida Doesn’t Track (And Why)</h1>
+<p>Maida sends three pieces of telemetry, total, ever. They go out once per launch.</p>
+<p>A random UUID (so I know unique installs vs the same person opening Maida ten times)
+Days since first install (so I know if people stick around)
+The app version (so I know which version is in the wild)</p>
+<p>That’s it. There’s no session data. No game titles. No play duration. No device fingerprint. No locale. No IP-derived inference. No analytics SDK. No third-party trackers.</p>
+<p>This is unusual for modern software. It’s worth explaining why.</p>
+<hr>
+<h2 id="what-maida-doesn%E2%80%99t-track%2C-listed-explicitly" tabindex="-1"><a class="header-anchor" href="#what-maida-doesn%E2%80%99t-track%2C-listed-explicitly"><span>What Maida doesn’t track, listed explicitly</span></a></h2>
+<p>I’ll go through the categories of data Maida doesn’t collect, in order of how surprised people are when I tell them.</p>
+<h3 id="what-games-you-have" tabindex="-1"><a class="header-anchor" href="#what-games-you-have"><span>What games you have</span></a></h3>
+<p>Maida reads your game library locally. It does not transmit any of it. Steam knows what games you own, because you bought them through Steam. Maida is a local tool that operates on data Steam has given your computer. That data stays on your computer.</p>
+<p>There is no Maida server that has a list of your games. There is no leaderboard. There is no aggregate report. The list of games on your machine is between you and Steam.</p>
+<h3 id="what-games-you-play" tabindex="-1"><a class="header-anchor" href="#what-games-you-play"><span>What games you play</span></a></h3>
+<p>When Maida shows you a card and you press TRY, that information stays in your local games.json file. It’s used to calculate which game to surface next. It is never sent anywhere.</p>
+<p>If you play a game for forty hours, Maida doesn’t know. If you abandon it after five minutes, Maida doesn’t know. The TRY signal is the only thing the system sees, and it sees it only locally.</p>
+<h3 id="how-long-you-use-maida" tabindex="-1"><a class="header-anchor" href="#how-long-you-use-maida"><span>How long you use Maida</span></a></h3>
+<p>There’s no session timer. There’s no usage report. The “days since first install” telemetry is computed from the install date, not from active sessions. Whether you opened Maida once a month or ten times a day, the telemetry is the same.</p>
+<p>This is one of the easier things to track in modern software, and many tools do it as a default. Maida doesn’t.</p>
+<h3 id="anything-about-you-specifically" tabindex="-1"><a class="header-anchor" href="#anything-about-you-specifically"><span>Anything about you specifically</span></a></h3>
+<p>No location. No device specs. No operating system version. No locale. No language settings. No system fingerprint.</p>
+<p>If two people are using Maida from the same household, the only thing the telemetry can tell me is that there are two random UUIDs. I don’t know they’re in the same household. I don’t know they’re in any country. I don’t know what hardware they have.</p>
+<hr>
+<h2 id="why-so-little" tabindex="-1"><a class="header-anchor" href="#why-so-little"><span>Why so little</span></a></h2>
+<p>Most software collects more telemetry than it needs. The reasoning is usually: maybe we’ll need it later. Maybe a new feature requires it. Maybe analytics will reveal something. Better to collect now than to have to instrument later.</p>
+<p>I disagreed with this reasoning when I was building Maida. The reasoning treats the user’s data as something to be extracted just-in-case. The user pays the cost (their data is collected, stored, exposed to breach risk) so that I can have optionality on possible future features.</p>
+<p>The math is wrong. The user’s privacy is a real cost. My future optionality is a hypothetical benefit. Asking the user to pay a real cost for a hypothetical benefit is not respectful.</p>
+<p>The three fields I do collect are the minimum I needed to know whether the project was worth maintaining. Are people still using it? Is there a long tail of users? The three fields answer those questions and stop there.</p>
+<hr>
+<h2 id="what-the-absence-enables" tabindex="-1"><a class="header-anchor" href="#what-the-absence-enables"><span>What the absence enables</span></a></h2>
+<p>The absence of telemetry is not just a privacy posture. It’s a design constraint.</p>
+<p>Because Maida doesn’t know what you played, it can’t make recommendations based on your play history. This is sometimes inconvenient. It also means the engine can’t drift toward optimizing for engagement, because there’s no engagement signal to optimize against.</p>
+<p>Because Maida doesn’t know how long you played, it can’t gamify. There’s no “you played 5 days in a row, keep your streak” mechanic. The features that exploit user attention require data Maida doesn’t have, by design.</p>
+<p>The three-field constraint is upstream of many decisions. If I’d chosen to collect more, I would have used more. The constraint protects the product from drifting toward extraction.</p>
+<hr>
+<h2 id="what-this-asks-of-the-user" tabindex="-1"><a class="header-anchor" href="#what-this-asks-of-the-user"><span>What this asks of the user</span></a></h2>
+<p>Trust, partially. You can read the code (Maida is open source) and verify the telemetry claim. The transmission is auditable. But for users who don’t read code, there’s a small leap of trust.</p>
+<p>The privacy posture is also part of the user experience. You don’t get a “your year in gaming” wrap-up. You don’t get insights about your habits. You don’t get cross-device sync. These features depend on data Maida doesn’t have.</p>
+<p>For users who want those features, Maida is the wrong tool. For users who’d rather have a tool that doesn’t watch them, this is the trade.</p>
+<hr>
+<h2 id="one-more-thing" tabindex="-1"><a class="header-anchor" href="#one-more-thing"><span>One more thing</span></a></h2>
+<p>The three-field telemetry is documented in the privacy policy and visible in the code. It’s not a marketing claim. The constraint is enforced by the small surface area of the network calls Maida makes.</p>
+<p>If you’ve been used to software that quietly collects everything, <a href="https://brightraven.world">Maida is a different default</a>. The minimum needed to maintain the project, nothing else.</p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>5 min read</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida is a free, open-source tool for choosing what to play tonight. <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">No newsletter. RSS or come back when you remember.</p>
+</footer>
+</body>
+</html>

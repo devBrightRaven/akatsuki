@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>23 · Anti-Recommendation: A Manifesto | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/F-23-anti-recommendation-manifesto/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/F-23-anti-recommendation-manifesto/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="23 · Anti-Recommendation: A Manifesto">
+
+<meta property="og:url" content="https://blog.brightraven.world/F-23-anti-recommendation-manifesto/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/">Bright Raven</a>
+  <nav aria-label="中文">
+    <a href="/akatsuki/zh/F-23-anti-recommendation-manifesto/" lang="zh-TW" hreflang="zh-TW">中文</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>23 · Anti-Recommendation: A Manifesto</h1>
+<p>Most of the software you use is in the business of recommending things. Spotify recommends songs. Netflix recommends shows. YouTube recommends videos. Amazon recommends products. Steam recommends games.</p>
+<p>The pattern is so universal that we’ve stopped questioning it. Recommendation is the default mode of how content reaches us.</p>
+<p>But recommendation is not neutral. It does specific things to your taste, your attention, and your relationship to choosing. Some of those things are bad. Most users have stopped noticing because the alternative is invisible.</p>
+<p>This is a case for noticing.</p>
+<hr>
+<h2 id="what-recommendation-optimizes-for" tabindex="-1"><a class="header-anchor" href="#what-recommendation-optimizes-for"><span>What recommendation optimizes for</span></a></h2>
+<p>Every recommendation system has a target. The target is usually some version of “engagement” or “click-through” or “session length.” These are proxies for “the user found this useful,” but they are not the same thing.</p>
+<p>A user who clicks every recommendation has high engagement. They might also be on a slow drift away from their own preferences, toward the platform’s preferences. The system can’t tell the difference between productive engagement and addictive engagement. Both look the same in the metrics.</p>
+<p>Over years, recommendation systems shape users in their image. Not maliciously. The system is doing what it was built to do. The shaping is a side effect.</p>
+<hr>
+<h2 id="what-you-lose" tabindex="-1"><a class="header-anchor" href="#what-you-lose"><span>What you lose</span></a></h2>
+<p>You lose the experience of choosing. Choosing is a small act of self-definition. When the algorithm chooses, you don’t perform that act. You consume what’s offered. The thing you got might be excellent, but you didn’t pick it. Over time, this changes who you are.</p>
+<p>You lose taste at the edges. The system narrows you toward your cluster. Things outside the cluster don’t get surfaced. Your sense of what you like contracts to what the system has decided you’ll click on.</p>
+<p>You lose the muscle of evaluation. If something is always pre-selected, you stop developing the ability to evaluate things yourself. The work has been outsourced. The capacity atrophies.</p>
+<p>You lose serendipity. The unrecommended thing, the random discovery, the friend’s strange suggestion: these don’t appear in algorithmic feeds. The algorithm prefers safe matches.</p>
+<hr>
+<h2 id="the-conviction" tabindex="-1"><a class="header-anchor" href="#the-conviction"><span>The conviction</span></a></h2>
+<p>The conviction behind Maida is that for some categories of activity, recommendation is the wrong default. Specifically: leisure activities where the act of choosing is part of the value, where taste is supposed to expand over time, where personal agency matters more than efficiency.</p>
+<p>Gaming is one of these categories. So is reading. So is music, sometimes. So is, arguably, most of how we spend our discretionary time.</p>
+<p>Recommendation is great for utility. Finding the cheapest flight, the best route home, the right product for a known need. For those, optimize freely.</p>
+<p>For leisure, recommendation is corrosive. It replaces the part of the experience where you decide what you want with a system that decides for you. The decision is the thing. Removing it removes the experience.</p>
+<hr>
+<h2 id="what-anti-recommendation-looks-like-in-practice" tabindex="-1"><a class="header-anchor" href="#what-anti-recommendation-looks-like-in-practice"><span>What anti-recommendation looks like in practice</span></a></h2>
+<p>Anti-recommendation is not “no surfacing.” That would be too much friction. Some surfacing is necessary; users can’t navigate raw libraries.</p>
+<p>Anti-recommendation is surfacing without preference. Maida shows you a game. The game is not picked because you’ll like it. It’s picked from the pool of installed games with mild behavioral weighting. The system is not trying to predict your preferences. It’s offering options without judgment.</p>
+<p>The user does the work of deciding. Try this tonight, or not now. If not now, see another. The system never says “but this one is better, look at it again.” The user remains the source of preference.</p>
+<p>This is slower than algorithmic recommendation. It’s also fundamentally different in what it produces. The user develops their own taste through the act of choosing. They don’t outsource the development to a system that has goals other than theirs.</p>
+<hr>
+<h2 id="what-this-requires-of-the-user" tabindex="-1"><a class="header-anchor" href="#what-this-requires-of-the-user"><span>What this requires of the user</span></a></h2>
+<p>Anti-recommendation requires more from the user than recommendation does. You have to decide. You have to know yourself enough to evaluate. You have to tolerate the friction of choosing.</p>
+<p>This is a feature. The friction is what builds the taste. The decision is what reinforces the agency. The user who has done this work has something the user who hasn’t doesn’t have: a relationship to their own preferences that’s their own, not borrowed from a system.</p>
+<hr>
+<h2 id="one-more-thing" tabindex="-1"><a class="header-anchor" href="#one-more-thing"><span>One more thing</span></a></h2>
+<p>Maida is a small, partial implementation of this idea. It only addresses one slice: choosing what to play tonight from already-installed games. It doesn’t try to fix the whole problem.</p>
+<p>But the principle scales. Wherever you find yourself reaching for a recommendation system, you can ask: would I rather be served, or would I rather choose? For some categories the answer is “served.” For others, “choose” is what you actually want, and you’ve been forgetting.</p>
+<p><a href="https://brightraven.world">Maida is here</a>. It’s a tool that respects you enough to let you choose.</p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>5 min read</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida is a free, open-source tool for choosing what to play tonight. <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">No newsletter. RSS or come back when you remember.</p>
+</footer>
+</body>
+</html>

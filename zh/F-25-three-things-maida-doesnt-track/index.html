@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>25 · Maida 不追蹤的三件事（以及為什麼） | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/zh/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="25 · Maida 不追蹤的三件事（以及為什麼）">
+
+<meta property="og:url" content="https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/zh/">Bright Raven</a>
+  <nav aria-label="English">
+    <a href="/akatsuki/F-25-three-things-maida-doesnt-track/" lang="en" hreflang="en">English</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>25 · Maida 不追蹤的三件事（以及為什麼）</h1>
+<p>Maida 全部、一輩子，發三條 telemetry。每次啟動發一次。</p>
+<p>一個隨機 UUID（讓我知道安裝數 vs 同一個人開十次 Maida）
+首次安裝以來的天數（讓我知道人們有沒有留下來）
+App 版本（讓我知道哪個版本在外面）</p>
+<p>就這樣。沒有 session 資料。沒有遊戲標題。沒有遊戲時長。沒有設備指紋。沒有 locale。沒有從 IP 推導的東西。沒有 analytics SDK。沒有第三方 tracker。</p>
+<p>這在現代軟體裡不尋常。值得解釋為什麼。</p>
+<hr>
+<h2 id="maida-%E4%B8%8D%E8%BF%BD%E8%B9%A4%E4%BB%80%E9%BA%BC%EF%BC%8C%E6%98%8E%E7%A2%BA%E5%88%97%E5%87%BA" tabindex="-1"><a class="header-anchor" href="#maida-%E4%B8%8D%E8%BF%BD%E8%B9%A4%E4%BB%80%E9%BA%BC%EF%BC%8C%E6%98%8E%E7%A2%BA%E5%88%97%E5%87%BA"><span>Maida 不追蹤什麼，明確列出</span></a></h2>
+<p>我會逐項列我不收集的資料類別，按人們聽到時驚訝程度排。</p>
+<h3 id="%E4%BD%A0%E6%9C%89%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2" tabindex="-1"><a class="header-anchor" href="#%E4%BD%A0%E6%9C%89%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2"><span>你有什麼遊戲</span></a></h3>
+<p>Maida 在本地讀你的遊戲庫存。它不傳輸任何部分。Steam 知道你擁有什麼遊戲，因為你透過 Steam 買了它們。Maida 是一個本地工具，操作在 Steam 給你電腦的資料上。那個資料留在你電腦上。</p>
+<p>沒有 Maida 伺服器持有你的遊戲清單。沒有排行榜。沒有彙總報告。你電腦上的遊戲清單在你跟 Steam 之間。</p>
+<h3 id="%E4%BD%A0%E7%8E%A9%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2" tabindex="-1"><a class="header-anchor" href="#%E4%BD%A0%E7%8E%A9%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2"><span>你玩什麼遊戲</span></a></h3>
+<p>當 Maida 顯示你一張卡你按 TRY，那個資訊留在你本地的 games.json 檔。它用來計算下一個要 surface 哪個遊戲。它從不被傳到任何地方。</p>
+<p>如果你玩一個遊戲玩了 40 小時，Maida 不知道。如果你五分鐘後放棄，Maida 不知道。TRY 信號是系統看到的唯一東西，而它只在本地看到。</p>
+<h3 id="%E4%BD%A0%E7%94%A8-maida-%E5%A4%9A%E4%B9%85" tabindex="-1"><a class="header-anchor" href="#%E4%BD%A0%E7%94%A8-maida-%E5%A4%9A%E4%B9%85"><span>你用 Maida 多久</span></a></h3>
+<p>沒有 session 計時器。沒有使用率報告。「首次安裝以來的天數」telemetry 是從安裝日期算的，不是從活躍 session 算的。不管你一個月開一次還是一天開十次，telemetry 一樣。</p>
+<p>這在現代軟體裡是比較容易追蹤的東西之一，多數工具預設追蹤。Maida 不。</p>
+<h3 id="%E9%97%9C%E6%96%BC%E4%BD%A0%E5%80%8B%E4%BA%BA%E7%9A%84%E4%BB%BB%E4%BD%95%E6%9D%B1%E8%A5%BF" tabindex="-1"><a class="header-anchor" href="#%E9%97%9C%E6%96%BC%E4%BD%A0%E5%80%8B%E4%BA%BA%E7%9A%84%E4%BB%BB%E4%BD%95%E6%9D%B1%E8%A5%BF"><span>關於你個人的任何東西</span></a></h3>
+<p>沒有位置。沒有設備規格。沒有 OS 版本。沒有 locale。沒有語言設定。沒有系統指紋。</p>
+<p>如果兩個人在同一個家用 Maida，telemetry 能告訴我的只有有兩個隨機 UUID。我不知道他們在同一個家。我不知道他們在任何國家。我不知道他們有什麼硬體。</p>
+<hr>
+<h2 id="%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E9%BA%BC%E5%B0%91" tabindex="-1"><a class="header-anchor" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E9%BA%BC%E5%B0%91"><span>為什麼這麼少</span></a></h2>
+<p>多數軟體收集比它需要的更多 telemetry。理由通常是：之後可能會需要。也許新 feature 需要。也許 analytics 會揭示什麼。先收比之後要 instrument 好。</p>
+<p>我建 Maida 時不同意這個推理。這個推理把使用者的資料當作可以「萬一」抽取的東西。使用者付成本（資料被收、被存、有外洩風險），讓我可以對未來可能 feature 有選項。</p>
+<p>算式錯了。使用者的隱私是真實成本。我未來的選項是假設的好處。要求使用者付真實成本來換假設好處不尊重。</p>
+<p>我收集的三個欄位是我需要知道專案是否值得維護的最低限度。人們還在用嗎？有 long tail 使用者嗎？三個欄位回答這些問題，到此為止。</p>
+<hr>
+<h2 id="%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84-telemetry-%E5%95%9F%E5%8B%95%E4%BB%80%E9%BA%BC" tabindex="-1"><a class="header-anchor" href="#%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84-telemetry-%E5%95%9F%E5%8B%95%E4%BB%80%E9%BA%BC"><span>不存在的 telemetry 啟動什麼</span></a></h2>
+<p>Telemetry 不存在不只是隱私姿態，是設計約束。</p>
+<p>因為 Maida 不知道你玩過什麼，它不能根據你的 play history 做推薦。這有時候不方便。它也意味著引擎不能漂向「優化 engagement」，因為沒有 engagement 信號可以優化。</p>
+<p>因為 Maida 不知道你玩多久，它不能 gamify。沒有「你連玩 5 天，保持你的 streak」機制。利用使用者注意力的 feature 需要 Maida 沒有的資料，by design。</p>
+<p>三欄位約束在很多決定上游。如果我選擇收更多，我會用更多。約束保護產品不漂向抽取。</p>
+<hr>
+<h2 id="%E9%80%99%E5%B0%8D%E4%BD%BF%E7%94%A8%E8%80%85%E8%A6%81%E6%B1%82%E4%BB%80%E9%BA%BC" tabindex="-1"><a class="header-anchor" href="#%E9%80%99%E5%B0%8D%E4%BD%BF%E7%94%A8%E8%80%85%E8%A6%81%E6%B1%82%E4%BB%80%E9%BA%BC"><span>這對使用者要求什麼</span></a></h2>
+<p>部分信任。你可以讀程式碼（Maida 開源）驗證 telemetry 的主張。傳輸是可審計的。但對不讀程式碼的使用者，有一個小信任跳躍。</p>
+<p>隱私姿態也是使用者體驗的一部分。你不會得到「你的遊戲年度回顧」。你不會得到關於你習慣的洞察。你不會得到跨設備同步。這些 feature 依賴 Maida 沒有的資料。</p>
+<p>對想要那些 feature 的使用者，Maida 是錯的工具。對寧願有一個不看著他們的工具的使用者，這是交易。</p>
+<hr>
+<h2 id="%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90" tabindex="-1"><a class="header-anchor" href="#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90"><span>順帶一提</span></a></h2>
+<p>三欄位 telemetry 在隱私政策裡有記錄，在程式碼裡看得到。這不是行銷主張。約束被 Maida 做的網路呼叫的小表面積強制執行。</p>
+<p>如果你習慣了悄悄收一切的軟體，<a href="https://brightraven.world">Maida 是不同的預設</a>。維持專案需要的最低限度，其他都沒有。</p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>4 分鐘</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida 是一個免費、開源的工具，幫你決定今晚玩什麼。 <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/zh/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">沒有電子報。用 RSS 訂閱，或想到再回來。</p>
+</footer>
+</body>
+</html>

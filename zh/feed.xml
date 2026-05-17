@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/zh/feed.xml">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/feed.xml">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/feed.xml">
+<link rel="alternate" type="application/rss+xml" href="/zh/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bright Raven">
+
+<meta property="og:url" content="https://blog.brightraven.world/zh/feed.xml">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/zh/">Bright Raven</a>
+  <nav aria-label="English">
+    <a href="/feed.xml" lang="en" hreflang="en">English</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-TW">
+<title>Bright Raven</title>
+<subtitle>關於決策疲勞、能動性與遊戲的筆記。</subtitle>
+<link href="https://blog.brightraven.world/zh/feed.xml" rel="self"/>
+<link href="https://blog.brightraven.world/zh/"/>
+<updated>2026-05-17T09:44:00Z</updated>
+<id>https://blog.brightraven.world/zh/</id>
+<author>
+  <name>Bertram (Bright Raven)</name>
+  <email>bertram@brightraven.world</email>
+</author>
+
+<entry>
+  <title>為什麼我沒把反思層做進 Maida</title>
+  <link href="https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/</id>
+  <content type="html">&lt;h1&gt;為什麼我沒把反思層做進 Maida&lt;/h1&gt;
+&lt;p&gt;最近做完一輪關於選擇焦慮的研究，挖了四層深度，發現一個明確的市場機會：&lt;strong&gt;多數使用者缺乏後設認知反思工具&lt;/strong&gt;。研究有實證、有競品分析、有市場 size 估算。&lt;/p&gt;
+&lt;p&gt;接著做產品對齊盤點，找到 Maida 跟這個機會的對齊度極高。Maida 服務的就是「選不出來」的痛點，加一個週反思層讓使用者看到自己的決策 pattern，似乎是順理成章的延伸。&lt;/p&gt;
+&lt;p&gt;我寫了一份 spec，13 個區塊，涵蓋為什麼存在、UX 規格、資料模型、i18n、紅線一致性檢核。&lt;/p&gt;
+&lt;p&gt;然後我認真讀了 Maida 自己的憲法。&lt;/p&gt;
+&lt;p&gt;讀完之後我把這份 spec 標記成 &lt;code&gt;status: rejected&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;這篇是這個決策的記錄。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%88%91%E5%AF%AB%E7%9A%84%E6%9D%B1%E8%A5%BF%E9%81%95%E5%8F%8D%E4%BA%86%E6%88%91%E8%87%AA%E5%B7%B1%E8%A8%82%E7%9A%84%E8%A6%8F%E7%9F%A9&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E6%88%91%E5%AF%AB%E7%9A%84%E6%9D%B1%E8%A5%BF%E9%81%95%E5%8F%8D%E4%BA%86%E6%88%91%E8%87%AA%E5%B7%B1%E8%A8%82%E7%9A%84%E8%A6%8F%E7%9F%A9&quot;&gt;&lt;span&gt;我寫的東西違反了我自己訂的規矩&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 的 &lt;code&gt;02_constitution.md&lt;/code&gt; 有一條叫「Five Immutable Rules」。我寫 spec 之前我以為自己記得這五條，所以 spec 第 11 區塊還做了「紅線一致性檢核」表，每條紅線打勾「Compatible」。&lt;/p&gt;
+&lt;p&gt;那個表是錯的。我來重做一次，這次認真讀憲法本體。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Rule III&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ma does not measure users. No scoring of user behavior. No tracking of play time. No analysis of user patterns. No telling you whether you’re “getting better” or “getting worse”.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我 spec 的核心是「系統觀察使用者上週做了什麼，提出一個對應的問題」。即使是純計數（「上週你拜訪 Subnautica 三次」），這就是 pattern analysis。憲法明文禁止。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Rule IV&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ma does not tell people what to do. AI must not persuade. Must not explain “why this suits you”. Must not predict your state. Must not make decisions for you.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我 spec 的 Triggered Actions 設計：如果使用者反思時選「這款不適合」，系統會加速這款遊戲的 decay。這意味著反思結果&lt;strong&gt;直接改變未來遊戲出現的機率&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;憲法 Part 5 有條 One-Sentence Test：「Does this allow a world to become more likely (or less likely) without TRY, NOT NOW, or time passing?」&lt;/p&gt;
+&lt;p&gt;我那個設計的答案是 YES。違反。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Rule V&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ma’s presence must be extremely low. No push notifications. No reminders.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我 spec 設計每週日 19:30 自動彈出反思 modal。這就是 reminder，即使只在 app 內。違反「extremely low presence」。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Part 3 的 Whitelist&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This system only allows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Present one game&lt;/li&gt;
+&lt;li&gt;Provide one prescription (when idle)&lt;/li&gt;
+&lt;li&gt;Wait for user decision&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Everything else is suspicious.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;反思 modal 不屬於這三項任一。違反 whitelist。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Part 7 的 Self-Destruct Clause&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If one day, this thing becomes “very smart,” “very considerate,” “very understanding,” that’s not success — that’s deviation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;反思層作為「很體貼、很理解你」的功能，被憲法本身明文認定為 deviation。&lt;/p&gt;
+&lt;p&gt;五處違反。我寫 spec 時都沒看到。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E4%BA%94%E8%99%95%E4%B8%8D%E8%83%BD%E4%BF%AE&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E4%BA%94%E8%99%95%E4%B8%8D%E8%83%BD%E4%BF%AE&quot;&gt;&lt;span&gt;為什麼這五處不能修&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我第一個反應是「surgical edit」。先請 AI 做了一輪 plan agent，agent 抓到 Rules 3 跟 4 的衝突，建議移除 Triggered Actions，把 observation 限縮成純計數。&lt;/p&gt;
+&lt;p&gt;我接著想自己再修一輪：把週期改成需要使用者主動觸發（解 Rule V）、把 observation 移除（解 Rule III）、不存 reflection data 給系統讀（避免間接違規）。&lt;/p&gt;
+&lt;p&gt;砍到一半發現一件事：&lt;strong&gt;砍完之後剩下的東西已經不是反思層了，是個空殼&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;具體的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不能主動 prompting → 沒有「每週提醒你反思」這層&lt;/li&gt;
+&lt;li&gt;不能系統生成 observation → 沒有「給你看你的決策 pattern」這層&lt;/li&gt;
+&lt;li&gt;不能儲存 reflection 給系統讀 → 沒有「累積成長軌跡」這層&lt;/li&gt;
+&lt;li&gt;不能根據 reflection 改變遊戲分數 → 沒有「反思影響未來」這層&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;研究找到的「後設認知反思」的價值核心，&lt;strong&gt;這四件事至少要有一件&lt;/strong&gt;。一件都沒有的話，那不叫反思層，叫「打開一個空 markdown 檔案寫字」。&lt;/p&gt;
+&lt;p&gt;這個發現很重要：&lt;strong&gt;不是設計沒做好。是 Maida 不是裝載這個功能的容器&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E3%80%8C%E5%AE%B9%E5%99%A8%E9%8C%AF%E4%BA%86%E3%80%8D%E9%80%99%E4%BB%B6%E4%BA%8B%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%99%95%E7%90%86&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E3%80%8C%E5%AE%B9%E5%99%A8%E9%8C%AF%E4%BA%86%E3%80%8D%E9%80%99%E4%BB%B6%E4%BA%8B%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%99%95%E7%90%86&quot;&gt;&lt;span&gt;「容器錯了」這件事該怎麼處理&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;研究確認的需求是真的。Maida 不能裝這個需求也是真的。兩件事都對。&lt;/p&gt;
+&lt;p&gt;第一個誘惑是把容器邊界往外推：「那我就改寫 Maida 憲法。」這聽起來合理但實際上是 self-destruct clause 在描述的事情——讓 Maida 變得「very considerate」就是把 Maida 殺掉。&lt;/p&gt;
+&lt;p&gt;第二個誘惑是放棄需求：「那這個需求不做了。」但研究是真的，使用者痛點是真的，市場機會也是真的。放棄等於浪費那四層研究。&lt;/p&gt;
+&lt;p&gt;正確的答案是第三條：&lt;strong&gt;換容器&lt;/strong&gt;。需求住到 Maida 之外。&lt;/p&gt;
+&lt;p&gt;這給我一個新的設計選項清單：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;做進 Asagiri（我另一個 idea generation 工具）裡，加一個 reflection mode&lt;/li&gt;
+&lt;li&gt;做成獨立 Obsidian plugin&lt;/li&gt;
+&lt;li&gt;做成完全獨立的新產品&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每個選項都有自己的 trade-off。最後選的路徑是&lt;strong&gt;三層 horizon&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;短期（這幾天）：用 Obsidian 既有的 plugin（Templater + Periodic Notes）組合出最輕量的反思流程，先驗證我自己用得起來不&lt;/li&gt;
+&lt;li&gt;中期（幾個月）：如果驗證成功，把它升級到 Asagiri 裡作為一個新 mode&lt;/li&gt;
+&lt;li&gt;長期（一年後）：如果中期也成功，再做獨立產品&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;每一層都用上一層的驗證數據決定要不要做。&lt;strong&gt;最快的可能停在第一層，永遠不需要第二、第三層&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E6%88%91%E8%A6%BA%E5%BE%97%E9%80%99%E6%AE%B5%E7%B4%80%E9%8C%84%E5%80%BC%E5%BE%97%E5%AF%AB%E5%87%BA%E4%BE%86&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%88%91%E8%A6%BA%E5%BE%97%E9%80%99%E6%AE%B5%E7%B4%80%E9%8C%84%E5%80%BC%E5%BE%97%E5%AF%AB%E5%87%BA%E4%BE%86&quot;&gt;&lt;span&gt;為什麼我覺得這段紀錄值得寫出來&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;兩個原因。&lt;/p&gt;
+&lt;p&gt;第一個原因：產品文化界很流行一個說法叫「研究找到需求就該補上去」。這條規則對的部分是「先驗證需求再做」，但有一個被忽略的條件——&lt;strong&gt;驗證的需求要由對的產品來補&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;如果你有一個哲學上嚴謹的產品（Maida 的「不替使用者決定」），它的市場範圍會被自己的哲學限定住。在那個範圍外的真實需求，正確的反應是承認「這在我的範圍外」，不是「我要把範圍往外擴張來包進去」。&lt;/p&gt;
+&lt;p&gt;範圍擴張是緩慢的自殺。Maida 加一個反思層，下次再加一個 mood tracker，再下次加一個社群分享，三年後它就變成 Notion-for-gamers，失去原本的可辨識性。&lt;/p&gt;
+&lt;p&gt;第二個原因：寫憲法不是為了在 PR review 時打勾，是為了在自己手上產生產品擴張的衝動時當作緊急煞車。&lt;strong&gt;這次的煞車真的踩下來了&lt;/strong&gt;——而且踩煞車的不是別人，是過去的自己。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;02_constitution.md&lt;/code&gt; 寫於 2025 年初，我寫 spec 寫於 2026 年 5 月，中間隔了一年多。一年前的我訂的規矩，一年後的我想違反，結果是一年前的我贏了。這就是憲法該長的樣子。&lt;/p&gt;
+&lt;h2 id=&quot;%E5%AF%AB%E7%9A%84%E6%99%82%E5%80%99%E4%B8%8D%E7%97%9B%E8%8B%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E5%AF%AB%E7%9A%84%E6%99%82%E5%80%99%E4%B8%8D%E7%97%9B%E8%8B%A6&quot;&gt;&lt;span&gt;寫的時候不痛苦&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我以為廢掉自己寫的 spec 會很挫折，但實際感覺反而是清爽的。原因可能是這個過程沒有人爭論、沒有 reviewer push back、沒有商業壓力，只有「規矩」跟「我」之間的對齊。發現不對齊，調整方向。&lt;/p&gt;
+&lt;p&gt;那份被廢掉的 spec 我保留下來，標記 &lt;code&gt;status: rejected&lt;/code&gt;，旁邊放一份 &lt;code&gt;19a_reflection-rejected.md&lt;/code&gt; 記錄為什麼。&lt;strong&gt;保留錯誤的設計&lt;/strong&gt;有意義：未來想加類似功能時，這份失敗 spec 是現成的反 pattern 範例。&lt;/p&gt;
+&lt;p&gt;說起來，產品文件最有價值的部分常常不是「我們做了什麼」，是「我們考慮過但拒絕做什麼」。後者比前者難寫，因為要承認失敗思路，但讀的時候資訊密度高很多。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%B5%90%E8%AA%9E%EF%BC%9A%E7%A0%94%E7%A9%B6%E7%9A%84%E6%88%90%E6%9E%9C%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%A6%81%E7%94%B1%E7%8F%BE%E6%9C%89%E7%94%A2%E5%93%81%E5%85%8C%E7%8F%BE&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-03-why-not-reflection-in-maida/#%E7%B5%90%E8%AA%9E%EF%BC%9A%E7%A0%94%E7%A9%B6%E7%9A%84%E6%88%90%E6%9E%9C%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%A6%81%E7%94%B1%E7%8F%BE%E6%9C%89%E7%94%A2%E5%93%81%E5%85%8C%E7%8F%BE&quot;&gt;&lt;span&gt;結語：研究的成果不一定要由現有產品兌現&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這趟下來最重要的學到的事，是把「研究找到的需求」跟「應該由 X 產品滿足」這兩件事&lt;strong&gt;分開&lt;/strong&gt;思考。&lt;/p&gt;
+&lt;p&gt;研究產出是市場面的東西：有人需要什麼、有多少人、付多少錢。產品判斷是哲學面的東西：我們是誰、我們守什麼、我們不做什麼。&lt;/p&gt;
+&lt;p&gt;兩個都對，但對不一定要相交。當研究找到的需求不能用現有任何產品滿足時，正確答案是&lt;strong&gt;做新的&lt;/strong&gt;，不是&lt;strong&gt;改現有的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;Maida 守住了自己。反思的需求改去別的容器找。下一篇我會寫那個別的容器長什麼樣。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;Maida 是免費的、開源的桌面工具，幫你決定今晚玩什麼。&lt;a href=&quot;https://github.com/devBrightRaven/maida/releases/latest&quot;&gt;下載連結&lt;/a&gt;，&lt;a href=&quot;https://github.com/devBrightRaven/maida&quot;&gt;原始碼&lt;/a&gt;，MIT 授權。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>為什麼 Maida 按鈕的 Space 鍵被故意 disable</title>
+  <link href="https://blog.brightraven.world/zh/G-02-space-key-disabled/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/G-02-space-key-disabled/</id>
+  <content type="html">&lt;h1&gt;為什麼 Maida 按鈕的 Space 鍵被故意 disable&lt;/h1&gt;
+&lt;p&gt;打開瀏覽器 DevTools，找一個 button，focus 它，按 Space。它會觸發。這是 HTML 標準行為。&lt;/p&gt;
+&lt;p&gt;Maida 違反這條。Maida 的按鈕 focus 之後按 Space 不會觸發任何事。寫在 &lt;a href=&quot;http://agents.md/&quot;&gt;AGENTS.md&lt;/a&gt; 紅線 7.3：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Space key is intentionally blocked on buttons. &lt;code&gt;useGameInput&lt;/code&gt; explicitly preventDefaults Space on &lt;code&gt;&amp;lt;button&amp;gt;&lt;/code&gt;. Reason: NVDA browse mode converts Space into a synthetic click (detail=1, identical to mouse) which would bypass long-press friction and launch a game unintentionally. Enter stays fully keyboard-accessible (short press = visit, 3s hold = anchor). Do not “fix” Space back to default.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;這是條反直覺的規則。多數 a11y 規範會說「鍵盤可達就是好」，按 Space 觸發按鈕是教科書答案。為什麼 Maida 故意違背？&lt;/p&gt;
+&lt;p&gt;值得拆給你看。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%91%A9%E6%93%A6%E4%B8%8D%E6%98%AF-bug&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#%E6%91%A9%E6%93%A6%E4%B8%8D%E6%98%AF-bug&quot;&gt;&lt;span&gt;摩擦不是 bug&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 的按鈕有兩個觸發時序：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;短按 300ms&lt;/strong&gt;：visit（拜訪這款遊戲）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;長按 3 秒&lt;/strong&gt;：anchor（鎖定，或在 Kamae 模式下提交移除）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;3 秒是刻意的長。設計上不希望你輕輕一碰就啟動遊戲。理由有兩個。&lt;/p&gt;
+&lt;p&gt;第一，&lt;strong&gt;啟動 Steam 遊戲是個有後果的動作&lt;/strong&gt;。一旦啟動，Steam client 開、Tauri 視窗失焦、過程不可逆地中斷你當下的注意力。萬一誤觸了，你不能「按 Esc 取消」就回到瀏覽狀態。所以摩擦要設計在「決定要不要啟動」這步，不是事後補救。&lt;/p&gt;
+&lt;p&gt;第二，&lt;strong&gt;Maida 是個遊戲庫工具，使用情境經常在掌機（ROG Ally、Steam Deck）&lt;/strong&gt;。掌機操作頻繁誤觸（搖桿被推到、手把放下時誤壓）。長按 3 秒是個簡單可靠的防誤觸機制，比複雜的「確認 dialog」UX 更不打擾。&lt;/p&gt;
+&lt;p&gt;長按 3 秒這層摩擦寫在紅線 7.4：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;These are the friction layer that protects the user from accidental state changes. Don’t shorten to “improve UX.” Lengthening requires product discussion.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;摩擦是保護不是 bug。&lt;/p&gt;
+&lt;h2 id=&quot;nvda-%E7%9A%84-space-%E9%8D%B5%E6%9C%83%E7%B9%9E%E9%81%8E%E6%91%A9%E6%93%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#nvda-%E7%9A%84-space-%E9%8D%B5%E6%9C%83%E7%B9%9E%E9%81%8E%E6%91%A9%E6%93%A6&quot;&gt;&lt;span&gt;NVDA 的 Space 鍵會繞過摩擦&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;接下來是真正反直覺的部分。&lt;/p&gt;
+&lt;p&gt;如果你裝過 NVDA（Windows 上最普及的開源螢幕閱讀器）跟它的兩種模式，你會知道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus mode&lt;/strong&gt;：鍵盤輸入直接送給網頁，跟一般鍵盤操作一樣。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Browse mode&lt;/strong&gt;（預設）：鍵盤輸入被 NVDA 攔截做為「閱讀網頁的導覽」用，例如 H 跳到下個標題、K 跳到下個連結。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Browse mode 對閱讀網頁很方便，但對「啟用控制項」這件事，NVDA 做了個特別的事：&lt;strong&gt;當你在 browse mode 對 button focus 並按 Space，NVDA 不送 Space 給網頁，它送一個 synthetic click（合成的點擊事件）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;這個 click 事件的 &lt;code&gt;detail&lt;/code&gt; 屬性是 1（跟滑鼠單擊一樣），目標的網頁程式碼分不出它是真實滑鼠還是 NVDA 合成。對普通網頁無感，這正是 NVDA 設計這條的目的：讓螢幕閱讀器使用者「啟用按鈕」這個動作行為跟視覺使用者一致。&lt;/p&gt;
+&lt;p&gt;問題來了。Maida 的長按 3 秒摩擦&lt;strong&gt;只攔截 keydown/keyup 事件&lt;/strong&gt;，它分不出「真實滑鼠點擊」跟「NVDA 送來的合成點擊」。如果 NVDA 使用者在 browse mode 按 Space，Maida 收到的是 click event，&lt;strong&gt;長按摩擦完全被繞過&lt;/strong&gt;，遊戲直接啟動。&lt;/p&gt;
+&lt;p&gt;對視覺使用者來說 Space 觸發按鈕是 UX 進步。對 NVDA browse mode 使用者來說，&lt;strong&gt;它會把保護摩擦變成觸發加速器，引發誤觸&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;紅線 7.3 的解法很直接：&lt;strong&gt;在 button 上明確 preventDefault Space，從源頭擋掉這個路徑&lt;/strong&gt;。Space 完全不做事。&lt;/p&gt;
+&lt;h2 id=&quot;enter-%E9%8D%B5%E4%BF%9D%E7%95%99&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#enter-%E9%8D%B5%E4%BF%9D%E7%95%99&quot;&gt;&lt;span&gt;Enter 鍵保留&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;那 NVDA 使用者怎麼啟用按鈕？&lt;/p&gt;
+&lt;p&gt;紅線 7.3 寫得很清楚：「Enter stays fully keyboard-accessible (short press = visit, 3s hold = anchor)」。&lt;/p&gt;
+&lt;p&gt;Enter 鍵 NVDA 不會做 synthetic click 那一套（這是 NVDA 的設計差異，Enter 走真實 keydown 事件）。所以：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;視覺使用者：滑鼠點 / 觸控點 / Tab+Enter / 手把按鍵&lt;/li&gt;
+&lt;li&gt;NVDA 使用者：Tab+Enter（短按 visit、長按 anchor）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;兩條路徑功能完全一致，摩擦時序也完全一致。Space 這條被砍掉，但功能不損失，因為 Enter 完整保留。&lt;/p&gt;
+&lt;p&gt;這個取捨在無障礙哲學裡叫「&lt;strong&gt;不同路徑，相同安全&lt;/strong&gt;」。Web 標準假設「相同 input 在不同輔助技術下行為一致」是 a11y 的目標。Maida 換了一個更深的目標：「&lt;strong&gt;所有使用者，包括輔助技術使用者，都得到一樣的摩擦保護&lt;/strong&gt;」。&lt;/p&gt;
+&lt;p&gt;當這兩個目標衝突，Maida 選後者。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%80%E5%80%8B%E6%9B%B4%E5%BB%A3%E7%9A%84%E5%8E%9F%E5%89%87&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#%E4%B8%80%E5%80%8B%E6%9B%B4%E5%BB%A3%E7%9A%84%E5%8E%9F%E5%89%87&quot;&gt;&lt;span&gt;一個更廣的原則&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;紅線 7.3 是個具體案例，但它在示範一個更廣的原則：&lt;strong&gt;無障礙不是「相同體驗」，是「對所有人都安全」&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;主流 a11y 標準（WCAG 2.1、ARIA Authoring Practices）多數時候講對齊：鍵盤可達、Space 跟 Enter 都要觸發、focus 順序要 reasonable、tab order 要可預測。這些都對。但它們有個盲點：&lt;strong&gt;當「對齊」會把某類使用者推進更高的誤觸風險，盲目對齊就反過來傷害他們&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;Maida 紅線 7.3 處理的就是這個盲點。NVDA 的 synthetic click 是個善意設計（讓 SR 使用者啟用按鈕跟 UI 視覺使用者一樣），但它跟「長按摩擦保護」的設計目標衝突。盲目遵循「Space 也該觸發按鈕」會讓 SR 使用者拿到比視覺使用者更弱的保護。&lt;/p&gt;
+&lt;p&gt;正確答案不是「砍掉長按摩擦讓所有人一致」，是「找出讓 SR 使用者保留摩擦的路徑」。在 Maida 的情境，這個路徑是 Enter，所以 Space 被砍。&lt;/p&gt;
+&lt;p&gt;這個取捨會出現在任何「保護性摩擦 vs 標準 a11y 預設」衝突的地方。沒有通用解，每個案例要單獨想清楚：保護要保護什麼？標準預設假設了什麼？兩者衝突時誰優先？&lt;/p&gt;
+&lt;p&gt;對 Maida 來說，「保護使用者免於誤觸啟動遊戲」優先於「Space 觸發按鈕的標準預設」。對另一個產品可能反過來。沒有對錯，只有取捨可不可見、可不可辯護。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E3%80%8C%E4%B8%8D%E8%83%BD-fix%E3%80%8D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E3%80%8C%E4%B8%8D%E8%83%BD-fix%E3%80%8D&quot;&gt;&lt;span&gt;為什麼這條規則「不能 fix」&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;紅線 7.3 的最後一句是「Do not ‘fix’ Space back to default」。為什麼用「fix」加引號？&lt;/p&gt;
+&lt;p&gt;因為這條規則對沒見過 NVDA browse mode synthetic click 細節的工程師看起來像 bug。一個善意的 PR 標題可能寫「fix: Space key not triggering buttons (a11y regression)」。要是 review 者也沒見過這個機制，這個 PR 會被 merge，紅線會被「修復」掉。&lt;/p&gt;
+&lt;p&gt;紅線文件存在的目的之一就是擋這種 PR。每條紅線都附「為什麼這條約束、為什麼不能改、改了會壞什麼」，因為&lt;strong&gt;約束不解釋就會被善意拆除&lt;/strong&gt;。這是 Patagonia 跟 37signals 在他們的價值文件裡反覆強調的：價值要寫成 couplet 形式，要描述張力，要說清楚哪條優先。否則組織會自然漂移。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%B5%90%E8%AA%9E&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-02-space-key-disabled/#%E7%B5%90%E8%AA%9E&quot;&gt;&lt;span&gt;結語&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 的 a11y 不是「能用 NVDA」這種勾選表式的合規，是「&lt;strong&gt;保護機制對所有使用者一致&lt;/strong&gt;」這種更深的承諾。Space 鍵被砍是這個承諾的具體實作。違反 web 標準直覺、可能讓沒讀紅線的工程師困惑，但對螢幕閱讀器使用者而言這個取捨救了他們的遊戲歷程。&lt;/p&gt;
+&lt;p&gt;下次你看到一個產品做了個你覺得「a11y 設計怪怪的」的決定，多想一秒：那個怪可能是有人替你想過的更深的保護。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;Maida 是免費的、開源的桌面工具，幫你決定今晚玩什麼。&lt;a href=&quot;https://github.com/devBrightRaven/maida/releases/latest&quot;&gt;下載連結&lt;/a&gt;，&lt;a href=&quot;https://github.com/devBrightRaven/maida&quot;&gt;原始碼&lt;/a&gt;，MIT 授權，NVDA 跟 Orca 部分測試過。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>為什麼 Maida 拒絕成為推薦系統</title>
+  <link href="https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/</id>
+  <content type="html">&lt;h1&gt;為什麼 Maida 拒絕成為推薦系統&lt;/h1&gt;
+&lt;p&gt;Maida 的程式碼裡有條紅線，寫在 &lt;a href=&quot;http://agents.md/&quot;&gt;AGENTS.md&lt;/a&gt; 第 7.1 條：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Maida is not a recommender. Maida &lt;strong&gt;presents&lt;/strong&gt; options, the user decides. Never write UI copy, docs, or release notes where Maida is the subject of &lt;code&gt;pick / chose / selected / suggested / recommended / showed you / 挑選 / 為你選 / 選びました / 提案&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;四種語言的 UI 文案都受這條規定管。任何 PR 想把「Maida 為你選了這款遊戲」放進介面都會被擋下來。&lt;/p&gt;
+&lt;p&gt;這條紅線聽起來像 UI 品味，其實是哲學立場。值得拆給你看。&lt;/p&gt;
+&lt;h2 id=&quot;%E5%B0%8D%E7%AB%8B%E9%9D%A2%E4%B8%8D%E6%98%AF%E6%BC%94%E7%AE%97%E6%B3%95%EF%BC%8C%E6%98%AF%E8%AE%93%E4%BA%BA%E8%90%8E%E7%B8%AE%E7%9A%84%E6%BC%94%E7%AE%97%E6%B3%95&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/#%E5%B0%8D%E7%AB%8B%E9%9D%A2%E4%B8%8D%E6%98%AF%E6%BC%94%E7%AE%97%E6%B3%95%EF%BC%8C%E6%98%AF%E8%AE%93%E4%BA%BA%E8%90%8E%E7%B8%AE%E7%9A%84%E6%BC%94%E7%AE%97%E6%B3%95&quot;&gt;&lt;span&gt;對立面不是演算法，是讓人萎縮的演算法&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 解決的問題很普通：你的 Steam 庫有 200 款遊戲，今晚不知道玩什麼。Spotify、Netflix、Instagram 都遇過這個問題，他們的答案是同一套：建個推薦系統，把演算法越調越準，讓你滑進來就有東西看。&lt;/p&gt;
+&lt;p&gt;這套答案在商業上很成功，但對你的腦子做了什麼，研究這幾年才開始爬清楚。&lt;/p&gt;
+&lt;p&gt;2024 年 Nature 系列的 Humanities and Social Sciences Communications 有一篇談個人化演算法決策對自主性的侵蝕，論證很乾淨。三條路徑：&lt;/p&gt;
+&lt;p&gt;第一條，&lt;strong&gt;演算法偏離你真實的自己&lt;/strong&gt;。它從你的點擊、停留、跳過去推測你想要什麼，但這些行為痕跡不等於你真實的意圖。你在累的時候滑了一支貓影片，它會以為你愛貓，下次再推一支，這是真的。但你其實只是累。&lt;/p&gt;
+&lt;p&gt;第二條，&lt;strong&gt;自我強化的循環會窄化你的自我&lt;/strong&gt;。推薦準了 → 你點了 → 訊號回去 → 推薦更準 → 你更不容易看到原本不會點的東西 → 你的「自己」變窄了。半年後你發現自己只看某幾個 YouTuber，這不是你變專注，是這個循環把你裁出來。&lt;/p&gt;
+&lt;p&gt;第三條，&lt;strong&gt;你自己選的能力會萎縮&lt;/strong&gt;。技能跟肌肉一樣，不用就退。當一個系統幫你選夠久，你不用練「我今晚想看什麼」這個判斷力，它就會退化。等你哪天想自己選，會發現選不出來。&lt;/p&gt;
+&lt;p&gt;這三條合起來不是「演算法不好」，是「&lt;strong&gt;會讓使用者萎縮的演算法不好&lt;/strong&gt;」。差別很重要。Maida 也用演算法，使用者每選一次都會記下權重影響未來呈現。但 Maida 的演算法每天衰減回中性，刻意避免那個自我強化循環。&lt;/p&gt;
+&lt;p&gt;對立面校準了：Maida 不是 anti-AI，是 anti-能力萎縮的 AI。&lt;/p&gt;
+&lt;h2 id=&quot;%E5%80%8B%E4%BA%BA%E5%8C%96%E4%B8%8D%E6%98%AF%E7%84%A6%E6%85%AE%E6%B8%9B%E8%BC%95%E5%8A%91%EF%BC%8C%E6%98%AF%E4%BE%9D%E8%B3%B4%E5%BB%BA%E7%AB%8B%E5%99%A8&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/#%E5%80%8B%E4%BA%BA%E5%8C%96%E4%B8%8D%E6%98%AF%E7%84%A6%E6%85%AE%E6%B8%9B%E8%BC%95%E5%8A%91%EF%BC%8C%E6%98%AF%E4%BE%9D%E8%B3%B4%E5%BB%BA%E7%AB%8B%E5%99%A8&quot;&gt;&lt;span&gt;個人化不是焦慮減輕劑，是依賴建立器&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;研究文獻裡有個發現一開始讓我意外。多篇實證指出：&lt;strong&gt;關掉個人化推薦會引發焦慮、倦怠，然後讓使用者離開平台&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;第一次看到時我以為這代表「個人化是好的，它在減輕焦慮」。後來才意識到這個解讀錯了。&lt;strong&gt;剝奪後的焦慮不證明它健康，那是戒斷反應&lt;/strong&gt;。抽菸的人不抽會焦慮，這不是抽菸對人好，是抽菸建立了依賴。&lt;/p&gt;
+&lt;p&gt;ScienceDirect 2024 一篇問題性網路使用研究有個關鍵發現：高風險使用組在 hedonic（享樂）跟 eudaimonic（活得有意義、有成長）兩種 well-being 都最低，不是「玩得開心但人生沒意義」這種單向。意思是依賴推薦的人，連短期的開心都拿不到滿分，更別說長期的意義感。&lt;/p&gt;
+&lt;p&gt;這把產品的衡量標準翻轉了。光看 NPS 跟使用時長判斷不出 well-being。要看的是：使用者&lt;strong&gt;不用這個產品時&lt;/strong&gt;會不會自己選？她的判斷力&lt;strong&gt;有沒有變強&lt;/strong&gt;？她跟人的真實連結&lt;strong&gt;有沒有受影響&lt;/strong&gt;？&lt;/p&gt;
+&lt;p&gt;Maida 的指標暗暗在做這件事。「每次選擇帶權重，每天衰減回中性」這條規則的反面是「不建立依賴」。User decides 這條規則的反面是「不替使用者萎縮」。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%B4%85%E7%B7%9A%E6%80%8E%E9%BA%BC%E6%B4%BB%E5%9C%A8%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A3%A1&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/#%E7%B4%85%E7%B7%9A%E6%80%8E%E9%BA%BC%E6%B4%BB%E5%9C%A8%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A3%A1&quot;&gt;&lt;span&gt;紅線怎麼活在程式碼裡&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;把哲學寫進程式碼是兩回事。Maida 的紅線在好幾層具體實作上：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;UI 文案層&lt;/strong&gt;：所有 4 種語言的 i18n 字串都被審。不准用「為你選」、「為你推薦」這類主動式描述 Maida 的動作。要描述 Maida 呈現遊戲，得用 passive 或 user-centric 講法：「一款遊戲從你的庫存出現」、「下一款出現」。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;互動時序層&lt;/strong&gt;：按鈕的長按閾值是 300ms 短按、3000ms 鎖定，刻意設計成不是輕碰就觸發。理由寫在紅線 7.4：「This is the friction layer that protects the user from accidental state changes. Don’t shorten to improve UX.」摩擦是保護不是 bug。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;輸入層&lt;/strong&gt;：Space 鍵在按鈕上被明確 disable。理由是 NVDA 螢幕閱讀器在 browse mode 會把 Space 轉成 synthetic click，會跳過長按摩擦把遊戲直接啟動。這跟典型「Space 也該觸發按鈕」的 UX 直覺反了，但是是為了保護螢幕閱讀器使用者免於誤觸。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Telemetry 層&lt;/strong&gt;：啟動時匿名 ping 三個欄位：random UUID、安裝後天數、版本號。沒有遊戲標題、沒有 session 資料、沒有裝置指紋、沒有 IP-推測的 locale。要擴張要走完整的隱私政策更新流程。&lt;/p&gt;
+&lt;p&gt;每一層都可以追溯到一條同樣的哲學承諾：&lt;strong&gt;Maida 增強你做決定的能力，不取代它&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%B0%8D%E4%BD%A0%E9%87%8D%E8%A6%81&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%B0%8D%E4%BD%A0%E9%87%8D%E8%A6%81&quot;&gt;&lt;span&gt;為什麼這對你重要&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;如果你已經對演算法疲勞有感受，這個立場應該不用我說服你。但有一群讀者會想問：可是推薦系統很方便啊，我選不出來時它幫我選有什麼錯。&lt;/p&gt;
+&lt;p&gt;兩件事可以講。&lt;/p&gt;
+&lt;p&gt;第一，&lt;strong&gt;短期方便跟長期能力是兩個維度&lt;/strong&gt;。推薦系統優化前者，會犧牲後者。你今晚不用想就有東西看，這個爽。但六個月後你發現自己沒有不開電視就會無聊，這個不爽。長期看，建立依賴對使用者不是中性的，它有實質代價。&lt;/p&gt;
+&lt;p&gt;第二，&lt;strong&gt;「我選不出來」這個經驗不是缺陷，是你跟自己對話的機會&lt;/strong&gt;。決策摩擦有時是糟糕介面造成的，這部分該移除。但有時是你還沒搞清楚自己今晚的心情，這部分&lt;strong&gt;不該被替你解決&lt;/strong&gt;，那是你自己要做的工作。Maida 的設計分得出這兩種摩擦，移除前者、保留後者。&lt;/p&gt;
+&lt;p&gt;哲學家 Harry Frankfurt 有個對自主性的定義：能基於理由跟意圖自願治理自己生活的能力，超越單純的刺激-反應或即時衝動。當一個系統替你連結刺激跟反應，繞過你的「治理」這層，它就是在剝奪你的自主性，不管它多有效率。&lt;/p&gt;
+&lt;p&gt;Maida 拒絕做這件事。它把選項擺給你，按鈕也設計成你要花至少 300ms 主動確認。你按下去那一刻，是你的決定，不是它的。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%8D%E6%98%AF%E5%8F%8D%E5%B0%8D%E6%8E%A8%E8%96%A6%EF%BC%8C%E6%98%AF%E5%8F%8D%E5%B0%8D%E8%AE%93%E4%BD%A0%E8%90%8E%E7%B8%AE%E7%9A%84%E6%8E%A8%E8%96%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/G-01-maida-not-a-recommender/#%E4%B8%8D%E6%98%AF%E5%8F%8D%E5%B0%8D%E6%8E%A8%E8%96%A6%EF%BC%8C%E6%98%AF%E5%8F%8D%E5%B0%8D%E8%AE%93%E4%BD%A0%E8%90%8E%E7%B8%AE%E7%9A%84%E6%8E%A8%E8%96%A6&quot;&gt;&lt;span&gt;不是反對推薦，是反對讓你萎縮的推薦&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;說清楚一下立場。我不是反對所有推薦系統，也不是反對所有個人化。Spotify 的 Discover Weekly 在我整理週末歌單時很好用。亞馬遜建議我這個鏡頭也許要買個對應的清潔組合很合理。&lt;/p&gt;
+&lt;p&gt;我反對的是&lt;strong&gt;把使用者的判斷力外包出去&lt;/strong&gt;這件事被當成 UX 進步。當推薦系統定位成「我幫你決定」，而不是「這裡有幾個選項提供參考」，它就跨過了那條線。&lt;/p&gt;
+&lt;p&gt;Maida 站在線的另一邊。它呈現選項，你來決定。它每天忘記你昨天的偏好，避免把你裁進去。它的程式碼裡寫死了它不准成為主詞，因為主詞是你。&lt;/p&gt;
+&lt;p&gt;這是條看起來很細的紅線。一旦你想用同一個視角看你每天用的工具，會發現大部分產品都在悄悄越過這條線。不是壞事，是值得知道。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;Maida 是免費的、開源的桌面工具，幫你決定今晚玩什麼。&lt;a href=&quot;https://github.com/devBrightRaven/maida/releases/latest&quot;&gt;下載連結&lt;/a&gt;，&lt;a href=&quot;https://github.com/devBrightRaven/maida&quot;&gt;原始碼&lt;/a&gt;，MIT 授權。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>Friction is protection：摩擦不是 bug</title>
+  <link href="https://blog.brightraven.world/zh/F-26-friction-is-protection/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/F-26-friction-is-protection/</id>
+  <content type="html">&lt;h1&gt;Friction is protection：摩擦不是 bug&lt;/h1&gt;
+&lt;p&gt;UX 設計圈有條約定俗成的規矩：摩擦是要清除的雜質。少一個 click、少一個 form field、少一次 confirm dialog 都是進步。Steve Krug 的「Don’t Make Me Think」是這條規矩的 manifesto。&lt;/p&gt;
+&lt;p&gt;這條規矩 80% 的時候是對的。&lt;strong&gt;問題出在剩下 20%&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;那 20% 的摩擦不是雜質，是產品本身的價值。砍掉等於把產品的靈魂砍掉。但因為它跟「真雜質」長得一模一樣（都讓使用者多按一次鍵），所以&lt;strong&gt;會被善意的 UX 設計師當成 bug 修掉&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;這篇是關於那 20% 怎麼辨認、怎麼守。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%80%E5%80%8B%E5%85%B7%E9%AB%94%E4%BE%8B%E5%AD%90%EF%BC%9Amaida-%E7%9A%84%E9%95%B7%E6%8C%89-3-%E7%A7%92&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E4%B8%80%E5%80%8B%E5%85%B7%E9%AB%94%E4%BE%8B%E5%AD%90%EF%BC%9Amaida-%E7%9A%84%E9%95%B7%E6%8C%89-3-%E7%A7%92&quot;&gt;&lt;span&gt;一個具體例子：Maida 的長按 3 秒&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 是個 Steam 遊戲庫工具，一次秀一款遊戲，玩或跳過。介面上的按鈕（試試看 / 先跳過）有個刻意的設計：&lt;strong&gt;短按 300 毫秒觸發、長按 3 秒觸發另一個動作&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;300 毫秒短按是「拜訪」（看詳情）。3 秒長按是「啟動遊戲」或「鎖定到型」。&lt;/p&gt;
+&lt;p&gt;3 秒。&lt;strong&gt;整整 3 秒&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;任何一個有 UX sense 的設計師看到這條第一反應都是「這太久了，砍到 800ms」。Maida 的程式碼裡明文擋掉這條善意修改：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tapThreshold = 300ms (short press)
+anchorThreshold = 3000ms (TRY hold = anchor / Kamae remove commit)&lt;/p&gt;
+&lt;p&gt;These are the friction layer that protects the user from accidental state changes. Don’t shorten to “improve UX.” Lengthening requires product discussion.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;理由是啟動一個 Steam 遊戲是個&lt;strong&gt;有後果的動作&lt;/strong&gt;。Steam client 開、Tauri 視窗失焦、注意力中斷。萬一誤觸，沒有「Esc 取消」可以回。所以摩擦要設計在「決定要不要啟動」這步，事後補不到。&lt;/p&gt;
+&lt;p&gt;加上 Maida 的使用情境經常在掌機（ROG Ally、Steam Deck），手把搖桿被推到、放下手把時誤壓很常見。3 秒長按是個簡單可靠的防誤觸。&lt;/p&gt;
+&lt;p&gt;把這 3 秒砍掉，介面變得「順手」，&lt;strong&gt;同時開始有誤觸啟動遊戲的情況&lt;/strong&gt;。從 UX metric 上看，砍掉之後「按鈕回應速度」進步，「session 平均長度」延長（因為使用者要花時間 alt-tab 出來），看起來像勝利。實際上是慢性的傷害。&lt;/p&gt;
+&lt;p&gt;這個 3 秒是&lt;strong&gt;保護&lt;/strong&gt;，不是 bug。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%80%8E%E9%BA%BC%E5%88%86%E8%BE%A8%E4%BF%9D%E8%AD%B7%E6%80%A7%E6%91%A9%E6%93%A6%E8%B7%9F%E6%87%B2%E7%BD%B0%E6%80%A7%E6%91%A9%E6%93%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E6%80%8E%E9%BA%BC%E5%88%86%E8%BE%A8%E4%BF%9D%E8%AD%B7%E6%80%A7%E6%91%A9%E6%93%A6%E8%B7%9F%E6%87%B2%E7%BD%B0%E6%80%A7%E6%91%A9%E6%93%A6&quot;&gt;&lt;span&gt;怎麼分辨保護性摩擦跟懲罰性摩擦&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我寫過一條哲學叫「friction is protection」，但這條太絕對，會被誤解成「所有摩擦都不能砍」。實際的判斷規則是這條：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果移除這個摩擦會降低&lt;strong&gt;決策品質&lt;/strong&gt;（不只是降低決策成本），這個摩擦是保護性的。
+如果只是降低決策成本沒影響品質，這個摩擦是懲罰性的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;兩個摩擦看起來像，但內裡完全不同。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;懲罰性摩擦範例&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;註冊要求重複輸入 email 兩次&lt;/li&gt;
+&lt;li&gt;取消訂閱前要看 5 個挽留頁面&lt;/li&gt;
+&lt;li&gt;表單分 4 頁，每頁只有兩個欄位&lt;/li&gt;
+&lt;li&gt;設定深埋在 3 層選單下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;砍掉這些不會讓使用者做更壞的決定，只是讓事情快一點。砍。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;保護性摩擦範例&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;銀行轉帳超過 NT$30,000 要二次驗證&lt;/li&gt;
+&lt;li&gt;刪除整個資料夾要打字輸入「DELETE」&lt;/li&gt;
+&lt;li&gt;Maida 啟動遊戲要長按 3 秒&lt;/li&gt;
+&lt;li&gt;Git commit 時跳出 editor 讓你寫訊息（vs 強制 &lt;code&gt;-m &amp;quot;msg&amp;quot;&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;砍掉這些會讓使用者做出他們&lt;strong&gt;後悔的決定&lt;/strong&gt;。決策品質下降。這些是價值，不是雜質。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%80%E5%80%8B%E6%B8%AC%E8%A9%A6%EF%BC%9A%E3%80%8C%E5%A6%82%E6%9E%9C%E9%80%99%E6%A2%9D-ux-%E6%94%B9%E4%BA%86%EF%BC%8C%E4%BD%BF%E7%94%A8%E8%80%85%E6%9C%83%E6%9B%B4%E5%BF%AB%E9%82%84%E6%98%AF%E6%9C%83%E6%9B%B4%E5%BE%8C%E6%82%94%E3%80%8D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E4%B8%80%E5%80%8B%E6%B8%AC%E8%A9%A6%EF%BC%9A%E3%80%8C%E5%A6%82%E6%9E%9C%E9%80%99%E6%A2%9D-ux-%E6%94%B9%E4%BA%86%EF%BC%8C%E4%BD%BF%E7%94%A8%E8%80%85%E6%9C%83%E6%9B%B4%E5%BF%AB%E9%82%84%E6%98%AF%E6%9C%83%E6%9B%B4%E5%BE%8C%E6%82%94%E3%80%8D&quot;&gt;&lt;span&gt;一個測試：「如果這條 UX 改了，使用者會更快還是會更後悔」&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我在 review 任何「砍摩擦」的提案時用這個測試：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;改了之後使用者&lt;strong&gt;更快達成目標&lt;/strong&gt; → 砍&lt;/li&gt;
+&lt;li&gt;改了之後使用者&lt;strong&gt;會做出他 5 分鐘後想撤回的動作&lt;/strong&gt; → 保留&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;第二種情況的關鍵指標是&lt;strong&gt;後悔率&lt;/strong&gt;，不是滿意度。NPS 測不到後悔，因為使用者自己常常意識不到「啊我剛剛是因為這 UX 太順手才誤觸的」。&lt;/p&gt;
+&lt;p&gt;這也是為什麼純看 metric 的產品團隊容易把保護性摩擦修掉——metric 看到 click 數下降、session 長度延長，這些都看起來像進步，但反映的是「使用者陷進去出不來」，不是「使用者得到他想要的」。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%80%E5%80%8B%E5%93%B2%E5%AD%B8%E5%B7%A5%E5%85%B7%EF%BC%9A%E5%83%B9%E5%80%BC%E5%AF%AB%E6%88%90-couplet-%E5%BD%A2%E5%BC%8F&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E4%B8%80%E5%80%8B%E5%93%B2%E5%AD%B8%E5%B7%A5%E5%85%B7%EF%BC%9A%E5%83%B9%E5%80%BC%E5%AF%AB%E6%88%90-couplet-%E5%BD%A2%E5%BC%8F&quot;&gt;&lt;span&gt;一個哲學工具：價值寫成 couplet 形式&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Patagonia 跟 37signals 在他們的 internal 價值文件裡有個共同特徵：&lt;strong&gt;核心價值不寫成單一句，寫成成對的句子&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;37signals 寫過：「Speed has value, AND friction has value too. The test is which decision is being made.」&lt;/p&gt;
+&lt;p&gt;Patagonia 寫過：「Quality, AND environmental impact. When they conflict, environmental impact wins.」&lt;/p&gt;
+&lt;p&gt;這個形式的關鍵是&lt;strong&gt;承認張力&lt;/strong&gt;。單一句的價值（「我們追求極簡」）會在跟另一個價值衝突時崩潰（「但極簡跟功能完整衝突時怎麼辦？」）。Couplet 形式直接把張力寫進去，並指明在衝突時哪邊優先。&lt;/p&gt;
+&lt;p&gt;我把 Maida 的紅線 7.4（長按 3 秒）改寫成 couplet：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Speed has value, friction has value. When they conflict,
+ask: does removing this friction reduce decision quality?
+If yes, friction wins.
+If no, speed wins.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這就是個可操作的判斷工具。下次有人提「砍 3 秒到 800ms」的 PR，這個 couplet 就是 review 時要打開的東西。砍 3 秒會不會降低決策品質？會（誤觸啟動遊戲是 5 分鐘無法撤回的後果）。所以 friction wins，PR 駁回。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E8%B7%9F%E4%B8%BB%E6%B5%81-ux-%E6%80%9D%E7%B6%AD%E5%8F%8D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E8%B7%9F%E4%B8%BB%E6%B5%81-ux-%E6%80%9D%E7%B6%AD%E5%8F%8D&quot;&gt;&lt;span&gt;為什麼這條規則跟主流 UX 思維反&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;主流 UX 的祖師爺 Don Norman 跟 Jakob Nielsen 強調「降低 cognitive load」「removing barriers」「making things invisible」。這些原則 80% 的場合是對的。&lt;/p&gt;
+&lt;p&gt;但這些原則隱含一個假設：&lt;strong&gt;使用者知道自己要什麼，介面只是中間的橋&lt;/strong&gt;。如果橋愈順、使用者愈快達成目標，就是好設計。&lt;/p&gt;
+&lt;p&gt;問題在於，有一類產品的使用者&lt;strong&gt;不確定自己要什麼&lt;/strong&gt;——他們是來搞清楚自己要什麼的。這類產品包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;反思工具（你來這裡是因為不確定該怎麼想）&lt;/li&gt;
+&lt;li&gt;決策工具（你來這裡是因為不確定該選什麼）&lt;/li&gt;
+&lt;li&gt;學習工具（你來這裡是因為不知道該學什麼）&lt;/li&gt;
+&lt;li&gt;治療工具（你來這裡是因為不確定該感受什麼）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;對這類使用者，「順手」就是危險。介面太順、使用者就照當下的衝動行動，繞過了他&lt;strong&gt;來這裡的目的&lt;/strong&gt;——搞清楚自己想要什麼。&lt;/p&gt;
+&lt;p&gt;Maida 屬於這類。Maida 服務「選不出來」的使用者。如果 Maida 太順手，使用者按一下就啟動遊戲，那他根本沒「選」，是衝動。Maida 的價值就消失了。&lt;/p&gt;
+&lt;p&gt;所以 Maida 的長按 3 秒不是壞的 UX 設計，是&lt;strong&gt;為這類使用者刻意設計的保護&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%8A%8A%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E5%BB%B6%E4%BC%B8%E5%88%B0%E7%94%A2%E5%93%81%E7%AD%96%E7%95%A5&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E6%8A%8A%E9%80%99%E6%A2%9D%E8%A6%8F%E5%89%87%E5%BB%B6%E4%BC%B8%E5%88%B0%E7%94%A2%E5%93%81%E7%AD%96%E7%95%A5&quot;&gt;&lt;span&gt;把這條規則延伸到產品策略&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;「friction is protection」這條延伸出去，會推導出幾個非主流結論：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 訂閱型 SaaS 的「無痛 onboarding」可能在傷害使用者&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;如果你的產品讓使用者 30 秒就上手，他可能 30 天後也離開——因為他沒投入過 cognitive load，沒形成 mental model，沒判斷過「這對我有用嗎」。&lt;strong&gt;有些產品的 onboarding 摩擦是篩出對的使用者的機制&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 強制等待時間有時是好的&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;Amazon 一鍵下單方便，但&lt;strong&gt;衝動消費率也高&lt;/strong&gt;。如果加 60 秒「review your cart」步驟，部分使用者會發現「啊我其實不需要這個」。對使用者好，對 Amazon 短期營收不好——所以 Amazon 不加。但如果你不是 Amazon，你可以加。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 預設值勝過 toggle 開關&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;給使用者很多開關叫做 “user empowerment”，實際上是把判斷負擔推給使用者。&lt;strong&gt;好的預設值是替使用者做了基本的判斷&lt;/strong&gt;，這是減少摩擦的正確版本。增加開關才是真正的摩擦（即使每個開關都「方便」單獨用）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4. 隱私設定的摩擦是必要的&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;「Sign in with Google」一鍵授權所有資料訪問，方便。但這個方便等於使用者放棄審慎判斷。如果改成「你要授權什麼？逐項勾選」，摩擦增加，&lt;strong&gt;但每個勾選都是一個主動決定&lt;/strong&gt;，保護使用者免於日後被廣告 retargeting 才驚覺「我授權過這個？」&lt;/p&gt;
+&lt;h2 id=&quot;%E7%B5%90%E8%AA%9E%EF%BC%9A%E6%91%A9%E6%93%A6%E7%9A%84%E6%94%BF%E6%B2%BB&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-26-friction-is-protection/#%E7%B5%90%E8%AA%9E%EF%BC%9A%E6%91%A9%E6%93%A6%E7%9A%84%E6%94%BF%E6%B2%BB&quot;&gt;&lt;span&gt;結語：摩擦的政治&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;把摩擦當雜質的 UX 思維有個沒講的政治立場：&lt;strong&gt;使用者要快，平台要 engagement metrics 上升，沒人想要慢&lt;/strong&gt;。這個立場下，所有摩擦都是 bug。&lt;/p&gt;
+&lt;p&gt;但有些使用者是來慢的。他們希望 Spotify 不要 autoplay 下一首讓他可以好好聽完這首、希望 Netflix 不要倒數播下一集讓他可以決定要不要關掉、希望購物網站不要記住信用卡讓他每次都重新確認「真的要買嗎」。&lt;/p&gt;
+&lt;p&gt;對這群使用者，&lt;strong&gt;摩擦不是要被 UX 設計師清除的對手，是他們花錢買的服務&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;Maida 的 3 秒長按是這群人會付錢買的東西。Patagonia 不打折是這群人會付錢買的東西。37signals 的 Basecamp 不加 AI 是這群人會付錢買的東西。&lt;/p&gt;
+&lt;p&gt;下次當你看到產品做了個你覺得「UX 怪怪的」決定，多想一秒：那個怪可能是有人替使用者想過的更深的保護。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>個人化是依賴建立器，不是焦慮減輕劑</title>
+  <link href="https://blog.brightraven.world/zh/C-29-personalization-as-dependency/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/C-29-personalization-as-dependency/</id>
+  <content type="html">&lt;h1&gt;個人化是依賴建立器，不是焦慮減輕劑&lt;/h1&gt;
+&lt;p&gt;一個多月前我做選擇焦慮的研究，掉進一個我以為的關鍵發現：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;多項實證研究顯示：&lt;strong&gt;關閉個人化推薦會引發焦慮、倦怠，並導致使用者離開平台&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;第一次讀到這條我心裡的劇本是：「啊，所以個人化是好的。它在減輕焦慮，不是放大焦慮。我之前以為的『AI 推薦越準焦慮越大』是錯的。」&lt;/p&gt;
+&lt;p&gt;接著我把這個解讀寫進研究文件、改寫產品策略、廢掉一條原本的核心假設。&lt;/p&gt;
+&lt;p&gt;然後過了一天，我重讀那段引文的時候才意識到我誤讀了。&lt;/p&gt;
+&lt;p&gt;那不是「個人化減輕焦慮」的證據。那是&lt;strong&gt;依賴的證據&lt;/strong&gt;。剝奪後引發的焦慮叫&lt;strong&gt;戒斷反應&lt;/strong&gt;，不叫「失去原本的好處」。&lt;/p&gt;
+&lt;p&gt;這篇是關於那個誤讀，以及它怎麼改變我看演算法推薦的方式。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%88%92%E6%96%B7%E4%B8%8D%E8%AD%89%E6%98%8E%E5%AE%83%E5%81%A5%E5%BA%B7&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E6%88%92%E6%96%B7%E4%B8%8D%E8%AD%89%E6%98%8E%E5%AE%83%E5%81%A5%E5%BA%B7&quot;&gt;&lt;span&gt;戒斷不證明它健康&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;抽菸的人不抽會焦慮。這不是「抽菸對人好」的證據。是「抽菸建立了依賴」的證據。&lt;/p&gt;
+&lt;p&gt;咖啡因、糖、社群媒體 scroll、video game loot box 都是這個 pattern。一個東西讓你停了之後不舒服，&lt;strong&gt;不代表它在你用的時候在做好的事&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;個人化推薦完全是這個 pattern。Netflix、Spotify、Instagram、YouTube 用一段時間之後，把推薦關掉，使用者會：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不知道接下來該看什麼&lt;/li&gt;
+&lt;li&gt;焦慮自己錯過好東西&lt;/li&gt;
+&lt;li&gt;跳到別的平台或重新打開推薦&lt;/li&gt;
+&lt;li&gt;對「自己挑」失去信心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;實證研究記錄了這些反應，因為它們是真實的、可量測的。但&lt;strong&gt;這些反應是依賴的症狀，不是個人化在做價值貢獻的證據&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E5%80%8B%E4%BA%BA%E5%8C%96%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%B8%89%E4%BB%B6%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E5%80%8B%E4%BA%BA%E5%8C%96%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%B8%89%E4%BB%B6%E4%BA%8B&quot;&gt;&lt;span&gt;個人化真正在做的三件事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;2024 年 Nature 系列的 Humanities and Social Sciences Communications 有一篇談個人化演算法決策對自主性的影響，論證很清楚。三條侵蝕路徑：&lt;/p&gt;
+&lt;h3 id=&quot;%E8%B7%AF%E5%BE%91-1%EF%BC%9A%E5%81%8F%E9%9B%A2%E4%BD%A0%E7%9C%9F%E5%AF%A6%E7%9A%84%E8%87%AA%E6%88%91&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E8%B7%AF%E5%BE%91-1%EF%BC%9A%E5%81%8F%E9%9B%A2%E4%BD%A0%E7%9C%9F%E5%AF%A6%E7%9A%84%E8%87%AA%E6%88%91&quot;&gt;&lt;span&gt;路徑 1：偏離你真實的自我&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;演算法從你的行為痕跡推斷你想要什麼。但行為痕跡跟真實意圖&lt;strong&gt;不是同一件事&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;你累的時候滑了一支貓影片，演算法以為你愛貓。下次再推一支。再下次。三個月後你的 feed 一半是貓。&lt;/p&gt;
+&lt;p&gt;你其實只是累了那兩天。&lt;/p&gt;
+&lt;p&gt;這個落差不只是 noise 跟訊號的問題。是&lt;strong&gt;演算法的「你」跟你真實的「你」之間漸行漸遠&lt;/strong&gt;。演算法的「你」是它從你疲倦、無聊、走神時的行為推測出來的，而那些時刻的你&lt;strong&gt;最不像你自己&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;長期下來，你打開 app 看到的是「演算法版本的你」想看的東西，不是「你想看的東西」。差別微妙但累積起來顯著。&lt;/p&gt;
+&lt;h3 id=&quot;%E8%B7%AF%E5%BE%91-2%EF%BC%9A%E8%87%AA%E6%88%91%E5%BC%B7%E5%8C%96%E7%9A%84%E5%BE%AA%E7%92%B0%E6%9C%83%E7%AA%84%E5%8C%96%E4%BD%A0%E7%9A%84%E8%87%AA%E6%88%91&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E8%B7%AF%E5%BE%91-2%EF%BC%9A%E8%87%AA%E6%88%91%E5%BC%B7%E5%8C%96%E7%9A%84%E5%BE%AA%E7%92%B0%E6%9C%83%E7%AA%84%E5%8C%96%E4%BD%A0%E7%9A%84%E8%87%AA%E6%88%91&quot;&gt;&lt;span&gt;路徑 2：自我強化的循環會窄化你的自我&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;演算法準了 → 你點了 → 訊號回去 → 推薦更窄 → 你更不容易看到原本不會點的東西 → 演算法的「你」更窄。&lt;/p&gt;
+&lt;p&gt;半年後你發現自己只看某幾個 YouTuber、只聽某幾首歌、只買某幾個牌子的東西。&lt;strong&gt;這不是「你變專注」，是這個循環把你裁出來&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;你以前可能會點兩個範疇的東西。但兩個範疇互相沒有 transition signal，所以演算法選一個出來推。那個沒被選的範疇變稀少。久了你忘記自己原本喜歡那個。&lt;/p&gt;
+&lt;p&gt;「自我」變窄了。但&lt;strong&gt;因為這個變窄是漸進的、無痛的&lt;/strong&gt;，你不會意識到。直到某天遇到一個朋友推薦了 feed 之外的東西，你聽完想「我以前其實也喜歡這種啊」。&lt;/p&gt;
+&lt;p&gt;那一刻就是路徑 2 的 receipt。&lt;/p&gt;
+&lt;h3 id=&quot;%E8%B7%AF%E5%BE%91-3%EF%BC%9A%E4%BD%A0%E8%87%AA%E5%B7%B1%E9%81%B8%E7%9A%84%E8%83%BD%E5%8A%9B%E6%9C%83%E8%90%8E%E7%B8%AE&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E8%B7%AF%E5%BE%91-3%EF%BC%9A%E4%BD%A0%E8%87%AA%E5%B7%B1%E9%81%B8%E7%9A%84%E8%83%BD%E5%8A%9B%E6%9C%83%E8%90%8E%E7%B8%AE&quot;&gt;&lt;span&gt;路徑 3：你自己選的能力會萎縮&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;技能跟肌肉一樣。不用就退。&lt;/p&gt;
+&lt;p&gt;當演算法替你選夠久（夠久 = 6 個月到 2 年），你不用練「我今晚想看什麼」「我今天適合什麼音樂」這些判斷力。它退化。&lt;/p&gt;
+&lt;p&gt;等你某天想自己選——關掉演算法、看一個沒推薦的目錄——你會發現選不出來。&lt;/p&gt;
+&lt;p&gt;這個選不出來的感覺很糟，所以你會立刻打開推薦。&lt;strong&gt;這就是戒斷反應&lt;/strong&gt;。但這個戒斷不是因為「沒推薦就活不下去」，是因為&lt;strong&gt;你的判斷力被外包出去太久了&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;外包出去的判斷力可以收回來，但要時間。三個月的離線使用後，多數人的判斷力會慢慢恢復。但很少人撐得了三個月。&lt;/p&gt;
+&lt;h2 id=&quot;hedonic-vs-eudaimonic&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#hedonic-vs-eudaimonic&quot;&gt;&lt;span&gt;Hedonic vs eudaimonic&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;ScienceDirect 2024 一篇關於問題性網路使用的研究有個關鍵發現，我第一次看的時候沒看懂：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;高風險使用組在 hedonic（享樂） AND eudaimonic（活得有意義、有成長）兩種 well-being 都最低。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Hedonic well-being 是「當下開心嗎」。Eudaimonic 是「活得有意義嗎、有在成長嗎」。&lt;/p&gt;
+&lt;p&gt;「個人化讓你開心，但讓你活得沒意義」是一種版本的批評（hedonic 高、eudaimonic 低）。但&lt;strong&gt;這篇研究找到的是更糟的版本&lt;/strong&gt;：高度依賴推薦的人&lt;strong&gt;連短期開心都拿不到&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;意思是依賴個人化推薦的使用者：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不像他們以為的那麼開心（hedonic 低）&lt;/li&gt;
+&lt;li&gt;也沒有長期意義感（eudaimonic 低）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;兩邊都輸&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;為什麼？因為依賴本身耗心力。每次打開 app 都有一點「不知道該看什麼」的焦慮（即使一秒）。每次被推薦演算法選中你不真想看的東西都有一點失望。每次滑了 30 分鐘起來覺得「啊我又浪費時間了」都有一點羞愧。&lt;/p&gt;
+&lt;p&gt;這些微小的負面情感累積起來，比演算法給你的短期愉悅更多。&lt;strong&gt;淨值是負的&lt;/strong&gt;，但因為單次體驗看起來是「方便、節省判斷力」，使用者自己常常意識不到淨值。&lt;/p&gt;
+&lt;h2 id=&quot;%E9%82%A3%E3%80%8C%E5%B0%8D%E6%8A%97%E6%BC%94%E7%AE%97%E6%B3%95%E3%80%8D%E6%98%AF%E7%AD%94%E6%A1%88%E5%97%8E&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E9%82%A3%E3%80%8C%E5%B0%8D%E6%8A%97%E6%BC%94%E7%AE%97%E6%B3%95%E3%80%8D%E6%98%AF%E7%AD%94%E6%A1%88%E5%97%8E&quot;&gt;&lt;span&gt;那「對抗演算法」是答案嗎&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;讀到這裡你可能會想：「所以解法是關掉所有個人化推薦？」&lt;/p&gt;
+&lt;p&gt;我曾經這樣想。後來發現這個答案太簡單了。&lt;/p&gt;
+&lt;p&gt;第一，&lt;strong&gt;對抗演算法的成本高到多數人受不了&lt;/strong&gt;。你要從零學會「自己挑」。從零建立 mental model。三個月戒斷期。多數人撐不了一週。&lt;/p&gt;
+&lt;p&gt;第二，&lt;strong&gt;演算法本身不是邪惡的&lt;/strong&gt;。Spotify 的 Discover Weekly 在我週末整理歌單時很有用——它告訴我「跟你最近聽的類似的，可能會喜歡」。亞馬遜建議我這顆鏡頭也許要買個對應的清潔組合很合理。&lt;strong&gt;演算法作為「工具」是好的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;第三，&lt;strong&gt;真正的問題不是演算法本身，是演算法的位置&lt;/strong&gt;。當演算法被定位成「我幫你決定」，它跨過了那條線。當它被定位成「這幾個選項提供參考」，它在線的另一邊。&lt;/p&gt;
+&lt;p&gt;兩者的差別不在技術，在&lt;strong&gt;敘事跟介面&lt;/strong&gt;。同一個推薦演算法，配「為你推薦」標籤就傷人，配「你可能想看看」標籤就沒事。前者把使用者放在被動接收的位置。後者把選擇權留給使用者。&lt;/p&gt;
+&lt;h2 id=&quot;%E4%B8%80%E5%80%8B%E5%8F%AF%E6%93%8D%E4%BD%9C%E7%9A%84%E6%B8%AC%E8%A9%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E4%B8%80%E5%80%8B%E5%8F%AF%E6%93%8D%E4%BD%9C%E7%9A%84%E6%B8%AC%E8%A9%A6&quot;&gt;&lt;span&gt;一個可操作的測試&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我給自己訂了個測試，每次用一個個人化推薦產品時問：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;「如果我把這個推薦關掉用一個月，我的生活會變好還是變差？」&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果答案是「變好（會看到更多範圍的東西）」→ 這個推薦是淨負，該關
+如果答案是「變差（會錯過真正有用的）」→ 這個推薦是淨正，留著用
+如果答案是「我不知道，我從來沒試過」→ &lt;strong&gt;這就是依賴的訊號&lt;/strong&gt;，至少試一個月看看&lt;/p&gt;
+&lt;p&gt;實際試之後我關掉了 YouTube 首頁推薦（淨負）、Netflix 自動播下一集（淨負）、Spotify Discover Weekly（淨正，留著）、亞馬遜 frequently bought together（淨正，留著）。&lt;/p&gt;
+&lt;p&gt;不是所有推薦都關，也不是都留。是看&lt;strong&gt;那個推薦對「我選什麼」這件事是補強還是替代&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;%E5%B0%8D%E7%94%A2%E5%93%81%E8%A8%AD%E8%A8%88%E7%9A%84%E5%90%AB%E6%84%8F&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E5%B0%8D%E7%94%A2%E5%93%81%E8%A8%AD%E8%A8%88%E7%9A%84%E5%90%AB%E6%84%8F&quot;&gt;&lt;span&gt;對產品設計的含意&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;如果你做產品，這條規則延伸出幾個設計選擇：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 個人化要明確標示是「建議」不是「答案」&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;「為你推薦」改成「你可能想看看」是小調整大差別。前者把使用者放在 passive recipient，後者把選擇權留下。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 提供「stop personalizing」的明確路徑&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;很多產品的個人化是默認開、深埋設定才能關。改成第一次使用就讓使用者選「要不要個人化」是禮貌（但會掉一些 metric，所以多數產品不做）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 不要懲罰使用者切換&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;當使用者關掉個人化，戒斷期很難。如果你的產品在那段時間什麼都不顯示（「沒有推薦了，自己挑吧」），使用者會立刻打開回去。&lt;/p&gt;
+&lt;p&gt;替代設計：戒斷期顯示一個 randomized 或 curated（人類編輯）內容池。給使用者「重新練習選擇」的腳手架，而不是直接丟進無重力空間。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4. 量測 eudaimonic 不只 hedonic&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;純看 NPS、retention、session length 抓不到我們在意的 well-being。要量測：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用者一個月後比一個月前&lt;strong&gt;更會自己選&lt;/strong&gt;嗎？&lt;/li&gt;
+&lt;li&gt;使用者離開產品時有沒有覺得&lt;strong&gt;更有能力&lt;/strong&gt;？&lt;/li&gt;
+&lt;li&gt;使用者推薦這個產品給朋友的時候是說「它替我選好了」還是「它幫我選更好」？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;這些 metric 難量但重要。如果你做的是長期跟使用者真實關係的產品，這些 metric 比 DAU 重要。&lt;/p&gt;
+&lt;h2 id=&quot;%E7%B5%90%E8%AA%9E%EF%BC%9A%E4%BD%A0%E6%83%B3%E8%A6%81%E4%BB%80%E9%BA%BC%E6%A8%A3%E7%9A%84%E4%BE%9D%E8%B3%B4&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-29-personalization-as-dependency/#%E7%B5%90%E8%AA%9E%EF%BC%9A%E4%BD%A0%E6%83%B3%E8%A6%81%E4%BB%80%E9%BA%BC%E6%A8%A3%E7%9A%84%E4%BE%9D%E8%B3%B4&quot;&gt;&lt;span&gt;結語：你想要什麼樣的依賴&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;人對工具產生依賴是正常的。我依賴 Google Maps，依賴 iPhone，依賴我的眼鏡。這些依賴讓我能力&lt;strong&gt;外延&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;不健康的依賴讓我能力&lt;strong&gt;萎縮&lt;/strong&gt;。社群媒體 scroll 讓我注意力萎縮。短影片讓我耐心萎縮。某些個人化推薦讓我審美萎縮。&lt;/p&gt;
+&lt;p&gt;兩種依賴從外面看一樣（都是「離不開」），裡面完全不同。差別在：&lt;strong&gt;你停下的時候，你的能力跟著保留還是消失&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;下次當你在判斷一個工具值不值得用時，這個問題比「它好用嗎」更重要：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;如果我用了它一年後停下，我的能力會比一年前更強還是更弱？&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果答案是更強，那它是好工具。如果是更弱，那它是依賴建立器。&lt;/p&gt;
+&lt;p&gt;個人化推薦的真實價值，要用這個尺去量。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>25 · Maida 不追蹤的三件事（以及為什麼）</title>
+  <link href="https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/</id>
+  <content type="html">&lt;h1&gt;25 · Maida 不追蹤的三件事（以及為什麼）&lt;/h1&gt;
+&lt;p&gt;Maida 全部、一輩子，發三條 telemetry。每次啟動發一次。&lt;/p&gt;
+&lt;p&gt;一個隨機 UUID（讓我知道安裝數 vs 同一個人開十次 Maida）
+首次安裝以來的天數（讓我知道人們有沒有留下來）
+App 版本（讓我知道哪個版本在外面）&lt;/p&gt;
+&lt;p&gt;就這樣。沒有 session 資料。沒有遊戲標題。沒有遊戲時長。沒有設備指紋。沒有 locale。沒有從 IP 推導的東西。沒有 analytics SDK。沒有第三方 tracker。&lt;/p&gt;
+&lt;p&gt;這在現代軟體裡不尋常。值得解釋為什麼。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;maida-%E4%B8%8D%E8%BF%BD%E8%B9%A4%E4%BB%80%E9%BA%BC%EF%BC%8C%E6%98%8E%E7%A2%BA%E5%88%97%E5%87%BA&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#maida-%E4%B8%8D%E8%BF%BD%E8%B9%A4%E4%BB%80%E9%BA%BC%EF%BC%8C%E6%98%8E%E7%A2%BA%E5%88%97%E5%87%BA&quot;&gt;&lt;span&gt;Maida 不追蹤什麼，明確列出&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我會逐項列我不收集的資料類別，按人們聽到時驚訝程度排。&lt;/p&gt;
+&lt;h3 id=&quot;%E4%BD%A0%E6%9C%89%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E4%BD%A0%E6%9C%89%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2&quot;&gt;&lt;span&gt;你有什麼遊戲&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Maida 在本地讀你的遊戲庫存。它不傳輸任何部分。Steam 知道你擁有什麼遊戲，因為你透過 Steam 買了它們。Maida 是一個本地工具，操作在 Steam 給你電腦的資料上。那個資料留在你電腦上。&lt;/p&gt;
+&lt;p&gt;沒有 Maida 伺服器持有你的遊戲清單。沒有排行榜。沒有彙總報告。你電腦上的遊戲清單在你跟 Steam 之間。&lt;/p&gt;
+&lt;h3 id=&quot;%E4%BD%A0%E7%8E%A9%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E4%BD%A0%E7%8E%A9%E4%BB%80%E9%BA%BC%E9%81%8A%E6%88%B2&quot;&gt;&lt;span&gt;你玩什麼遊戲&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;當 Maida 顯示你一張卡你按 TRY，那個資訊留在你本地的 games.json 檔。它用來計算下一個要 surface 哪個遊戲。它從不被傳到任何地方。&lt;/p&gt;
+&lt;p&gt;如果你玩一個遊戲玩了 40 小時，Maida 不知道。如果你五分鐘後放棄，Maida 不知道。TRY 信號是系統看到的唯一東西，而它只在本地看到。&lt;/p&gt;
+&lt;h3 id=&quot;%E4%BD%A0%E7%94%A8-maida-%E5%A4%9A%E4%B9%85&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E4%BD%A0%E7%94%A8-maida-%E5%A4%9A%E4%B9%85&quot;&gt;&lt;span&gt;你用 Maida 多久&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;沒有 session 計時器。沒有使用率報告。「首次安裝以來的天數」telemetry 是從安裝日期算的，不是從活躍 session 算的。不管你一個月開一次還是一天開十次，telemetry 一樣。&lt;/p&gt;
+&lt;p&gt;這在現代軟體裡是比較容易追蹤的東西之一，多數工具預設追蹤。Maida 不。&lt;/p&gt;
+&lt;h3 id=&quot;%E9%97%9C%E6%96%BC%E4%BD%A0%E5%80%8B%E4%BA%BA%E7%9A%84%E4%BB%BB%E4%BD%95%E6%9D%B1%E8%A5%BF&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E9%97%9C%E6%96%BC%E4%BD%A0%E5%80%8B%E4%BA%BA%E7%9A%84%E4%BB%BB%E4%BD%95%E6%9D%B1%E8%A5%BF&quot;&gt;&lt;span&gt;關於你個人的任何東西&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;沒有位置。沒有設備規格。沒有 OS 版本。沒有 locale。沒有語言設定。沒有系統指紋。&lt;/p&gt;
+&lt;p&gt;如果兩個人在同一個家用 Maida，telemetry 能告訴我的只有有兩個隨機 UUID。我不知道他們在同一個家。我不知道他們在任何國家。我不知道他們有什麼硬體。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E9%BA%BC%E5%B0%91&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E9%BA%BC%E5%B0%91&quot;&gt;&lt;span&gt;為什麼這麼少&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;多數軟體收集比它需要的更多 telemetry。理由通常是：之後可能會需要。也許新 feature 需要。也許 analytics 會揭示什麼。先收比之後要 instrument 好。&lt;/p&gt;
+&lt;p&gt;我建 Maida 時不同意這個推理。這個推理把使用者的資料當作可以「萬一」抽取的東西。使用者付成本（資料被收、被存、有外洩風險），讓我可以對未來可能 feature 有選項。&lt;/p&gt;
+&lt;p&gt;算式錯了。使用者的隱私是真實成本。我未來的選項是假設的好處。要求使用者付真實成本來換假設好處不尊重。&lt;/p&gt;
+&lt;p&gt;我收集的三個欄位是我需要知道專案是否值得維護的最低限度。人們還在用嗎？有 long tail 使用者嗎？三個欄位回答這些問題，到此為止。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84-telemetry-%E5%95%9F%E5%8B%95%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84-telemetry-%E5%95%9F%E5%8B%95%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;不存在的 telemetry 啟動什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Telemetry 不存在不只是隱私姿態，是設計約束。&lt;/p&gt;
+&lt;p&gt;因為 Maida 不知道你玩過什麼，它不能根據你的 play history 做推薦。這有時候不方便。它也意味著引擎不能漂向「優化 engagement」，因為沒有 engagement 信號可以優化。&lt;/p&gt;
+&lt;p&gt;因為 Maida 不知道你玩多久，它不能 gamify。沒有「你連玩 5 天，保持你的 streak」機制。利用使用者注意力的 feature 需要 Maida 沒有的資料，by design。&lt;/p&gt;
+&lt;p&gt;三欄位約束在很多決定上游。如果我選擇收更多，我會用更多。約束保護產品不漂向抽取。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%99%E5%B0%8D%E4%BD%BF%E7%94%A8%E8%80%85%E8%A6%81%E6%B1%82%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E9%80%99%E5%B0%8D%E4%BD%BF%E7%94%A8%E8%80%85%E8%A6%81%E6%B1%82%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;這對使用者要求什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;部分信任。你可以讀程式碼（Maida 開源）驗證 telemetry 的主張。傳輸是可審計的。但對不讀程式碼的使用者，有一個小信任跳躍。&lt;/p&gt;
+&lt;p&gt;隱私姿態也是使用者體驗的一部分。你不會得到「你的遊戲年度回顧」。你不會得到關於你習慣的洞察。你不會得到跨設備同步。這些 feature 依賴 Maida 沒有的資料。&lt;/p&gt;
+&lt;p&gt;對想要那些 feature 的使用者，Maida 是錯的工具。對寧願有一個不看著他們的工具的使用者，這是交易。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-25-three-things-maida-doesnt-track/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;三欄位 telemetry 在隱私政策裡有記錄，在程式碼裡看得到。這不是行銷主張。約束被 Maida 做的網路呼叫的小表面積強制執行。&lt;/p&gt;
+&lt;p&gt;如果你習慣了悄悄收一切的軟體，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 是不同的預設&lt;/a&gt;。維持專案需要的最低限度，其他都沒有。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>24 · 「Bring back your agency」到底是什麼意思</title>
+  <link href="https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/</id>
+  <content type="html">&lt;h1&gt;24 · 「Bring back your agency」到底是什麼意思&lt;/h1&gt;
+&lt;p&gt;Maida 的 tagline 是「Bring back your agency」。&lt;/p&gt;
+&lt;p&gt;每個字都在做工。人們有時候把它讀作行銷文案，然後彈開。但這是我能寫的對產品最誠實的描述，每個字都精準。&lt;/p&gt;
+&lt;p&gt;每個字的意義如下。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8Cagency%E3%80%8D%EF%BC%88%E8%83%BD%E5%8B%95%E6%80%A7%EF%BC%89&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E3%80%8Cagency%E3%80%8D%EF%BC%88%E8%83%BD%E5%8B%95%E6%80%A7%EF%BC%89&quot;&gt;&lt;span&gt;「Agency」（能動性）&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;能動性是「做出源自你自己、而不是被外部系統塑造的選擇」的能力。是「你想要而選一個遊戲」跟「演算法引導你到那裡」的差別。&lt;/p&gt;
+&lt;p&gt;具體在遊戲裡，能動性包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;刻意地選玩什麼&lt;/li&gt;
+&lt;li&gt;知道你買一個遊戲時為什麼想要它&lt;/li&gt;
+&lt;li&gt;想停就停，不是遊戲說該停才停&lt;/li&gt;
+&lt;li&gt;跟你的庫存有一個自己的關係，不是 platform 中介的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;多數現代遊戲軟體侵蝕能動性。Steam 推薦。Discord 施壓。成就把它變遊戲。訂閱貨幣化。每一個可以有用，但合在一起把使用者跟遊戲的關係，從「我想要什麼」推向「系統想我想要什麼」。&lt;/p&gt;
+&lt;p&gt;能動性侵蝕是漸進的。你不會察覺。你只察覺你不像以前那樣享受遊戲。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8Cyour%E3%80%8D%EF%BC%88%E4%BD%A0%E7%9A%84%EF%BC%89&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E3%80%8Cyour%E3%80%8D%EF%BC%88%E4%BD%A0%E7%9A%84%EF%BC%89&quot;&gt;&lt;span&gt;「Your」（你的）&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;那個能動性是你的，特定的你的。不是泛泛的能動性。不是抽象的選擇概念。你的能動性，「你，正在讀這個的人，可以做出是你的決定」這個意義上。&lt;/p&gt;
+&lt;p&gt;這很重要，因為替代品常常在抽象上談能動性，但實際上拿走它。「我們給你控制權」但把控制埋在十二個選單下。「你決定」但演算法已經預選了三個選項。系統版本的能動性是空的。個人版本，你的那個，需要實際的自主。&lt;/p&gt;
+&lt;p&gt;「你」是一個提醒：這不是哲學。這是關於你，今晚，坐下來玩，為自己決定什麼值得你的時間。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8Cback%E3%80%8D%EF%BC%88%E5%9B%9E%E4%BE%86%EF%BC%89&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E3%80%8Cback%E3%80%8D%EF%BC%88%E5%9B%9E%E4%BE%86%EF%BC%89&quot;&gt;&lt;span&gt;「Back」（回來）&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;能動性是你曾經有的。然後它被一系列讓事情變容易的系統慢慢拿走。推薦引擎拿走它，交換你不需要選。通知拿走它，交換你不需要記得。成就拿走它，交換那個小獎勵。&lt;/p&gt;
+&lt;p&gt;「回來」暗示有一個之前。有的。你曾經對你的遊戲時間有能動性。多數成人記得一個只是玩遊戲的自己版本，沒有優化層、沒有社交壓力、沒有未完成東西的罪惡感。&lt;/p&gt;
+&lt;p&gt;那個版本可以恢復。不是完美地，但部分地。拿走能動性的系統可以一個一個 opt out。預設可以改。&lt;/p&gt;
+&lt;p&gt;「Bring back」不是烏托邦。是有目標的。有一個你曾經有的特定東西，你可以再有它，需要努力。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8Cbring%E3%80%8D%EF%BC%88%E5%B8%B6%EF%BC%89&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E3%80%8Cbring%E3%80%8D%EF%BC%88%E5%B8%B6%EF%BC%89&quot;&gt;&lt;span&gt;「Bring」（帶）&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;動詞是主動的。不是「找」、不是「發現」、不是「重新發現」。是「帶」。某個被拿走的東西，你正帶它回來。動作是你的。工具幫忙，但帶是你做的。&lt;/p&gt;
+&lt;p&gt;Maida 不替你恢復能動性。它讓恢復容易。選擇、決定、注意自己偏好的工作，還是你的。工具移除一些摩擦，你帶回來的能動性是你自己的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E5%BE%88%E9%87%8D%E8%A6%81%E4%BD%9C%E7%82%BA%E4%B8%80%E5%80%8B-tagline&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E5%BE%88%E9%87%8D%E8%A6%81%E4%BD%9C%E7%82%BA%E4%B8%80%E5%80%8B-tagline&quot;&gt;&lt;span&gt;為什麼這個很重要作為一個 tagline&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Tagline 告訴你 Maida 是為了什麼。它不是為了讓你更快選遊戲。不是為了管理你的 backlog。不是為了顯示你已經有什麼。它是為了恢復一個你跟你的遊戲之間特定的關係，那個關係已經被其他系統磨損。&lt;/p&gt;
+&lt;p&gt;如果那不是你想要的關係，Maida 不是工具。有很棒的推薦系統跟庫存管理工具。Steam 的探索佇列建得不錯。Playnite 全面。如果它們適合你，用它們。&lt;/p&gt;
+&lt;p&gt;如果「bring back your agency」描述某個你實際感受過失去的東西，那 Maida 是為你建的。整個產品是從那四個字下游而來。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-24-what-bring-back-your-agency-means/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我先寫 tagline，因為產品從它流出來。Maida 每個 feature 決定都對著這個 tagline 檢查。這個 feature 支持使用者的能動性嗎？或它把能動性吸進系統？&lt;/p&gt;
+&lt;p&gt;那個檢查產生那些奇怪的決定：沒有 library view、沒有推薦引擎、沒有完成度追蹤、沒有 telemetry 超出三個匿名欄位。這些每一個如果不做都比較容易發行。每一個如果做了都會侵蝕 tagline 試著保護的東西。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它是一個小工具。Tagline 是整個重點。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>23 · 反推薦：一篇宣言</title>
+  <link href="https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/</id>
+  <content type="html">&lt;h1&gt;23 · 反推薦：一篇宣言&lt;/h1&gt;
+&lt;p&gt;你用的多數軟體在做的是推薦東西。Spotify 推薦歌曲。Netflix 推薦劇。YouTube 推薦影片。Amazon 推薦商品。Steam 推薦遊戲。&lt;/p&gt;
+&lt;p&gt;這個 pattern 普及到我們已經停止質疑。推薦是內容到達我們的預設模式。&lt;/p&gt;
+&lt;p&gt;但推薦不是中立的。它對你的品味、你的注意力、你跟「選擇」的關係做特定的事。其中一些是壞的。多數使用者已經停止注意，因為替代是看不見的。&lt;/p&gt;
+&lt;p&gt;這篇文章是關於「注意」。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%8E%A8%E8%96%A6%E5%9C%A8%E5%84%AA%E5%8C%96%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E6%8E%A8%E8%96%A6%E5%9C%A8%E5%84%AA%E5%8C%96%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;推薦在優化什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;每個推薦系統有目標。目標通常是某種「engagement」、「點擊率」或「session 長度」的版本。這些是「使用者覺得有用」的代理，但不是同一件事。&lt;/p&gt;
+&lt;p&gt;點每個推薦的使用者有高 engagement。他們可能也在慢慢漂離他們自己的偏好，朝向 platform 的偏好。系統分不出有生產力的 engagement 跟成癮的 engagement。兩個在 metrics 看起來一樣。&lt;/p&gt;
+&lt;p&gt;多年下來，推薦系統把使用者塑造成它的形狀。不是惡意的，系統在做它被建來做的事。塑造是副作用。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BD%A0%E5%A4%B1%E5%8E%BB%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E4%BD%A0%E5%A4%B1%E5%8E%BB%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;你失去什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你失去「選擇」這個體驗。選擇是一個小小的自我定義動作。當演算法選的時候，你不執行那個動作。你消費被提供的東西。你拿到的東西可能很棒，但你沒挑。久了，這改變你是誰。&lt;/p&gt;
+&lt;p&gt;你失去邊緣的品味。系統把你縮窄到 cluster 裡。Cluster 外的東西不會被 surface。你對「我喜歡什麼」的感覺收縮到系統決定你會點的東西。&lt;/p&gt;
+&lt;p&gt;你失去評估的肌肉。如果某個東西總是被預先選好，你停止發展自己評估東西的能力。工作被 outsource 了。能力萎縮。&lt;/p&gt;
+&lt;p&gt;你失去 serendipity。沒被推薦的東西、隨機的發現、朋友奇怪的建議：這些不出現在演算法 feed 裡。演算法偏好安全配對。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BF%A1%E5%BF%B5&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E4%BF%A1%E5%BF%B5&quot;&gt;&lt;span&gt;信念&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 背後的信念是：對某些活動類別，推薦是錯的預設。具體：選擇行為本身就是價值的一部分的休閒活動，品味應該隨時間擴展的活動，個人能動性比效率重要的活動。&lt;/p&gt;
+&lt;p&gt;遊戲是其中之一。閱讀也是。音樂，有時候。可說，多數我們花可自由支配時間的方式都是。&lt;/p&gt;
+&lt;p&gt;推薦對效用很棒。找最便宜的機票、回家最好的路徑、為已知需要的對的產品。為這些自由優化。&lt;/p&gt;
+&lt;p&gt;對休閒，推薦是腐蝕的。它把「你決定你想要什麼」這個體驗的部分換成一個替你決定的系統。決定就是那個東西。移除它就是移除那個體驗。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%8F%8D%E6%8E%A8%E8%96%A6%E5%9C%A8%E5%AF%A6%E8%B8%90%E8%A3%A1%E7%9C%8B%E8%B5%B7%E4%BE%86%E5%83%8F%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E5%8F%8D%E6%8E%A8%E8%96%A6%E5%9C%A8%E5%AF%A6%E8%B8%90%E8%A3%A1%E7%9C%8B%E8%B5%B7%E4%BE%86%E5%83%8F%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;反推薦在實踐裡看起來像什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;反推薦不是「不 surface」。那會是太多摩擦。某種 surface 是必要的，使用者沒辦法 navigate 原始庫存。&lt;/p&gt;
+&lt;p&gt;反推薦是不帶偏好的 surface。Maida 給你看一個遊戲。那個遊戲不是因為你會喜歡而被挑。它是從已安裝遊戲池中以輕微的行為加權挑出來的。系統不嘗試預測你的偏好，它在不評斷地提供選項。&lt;/p&gt;
+&lt;p&gt;使用者做決定的工作。今晚試這個，或不要。不要的話看下一個。系統永遠不說「但這個比較好，再看一次」。使用者保持是偏好的來源。&lt;/p&gt;
+&lt;p&gt;這比演算法推薦慢。它在「產生什麼」上面也根本不同。使用者透過「選擇」這個動作發展自己的品味。他們不把發展 outsource 給有跟自己不同目標的系統。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%99%E8%A6%81%E6%B1%82%E4%BD%BF%E7%94%A8%E8%80%85%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E9%80%99%E8%A6%81%E6%B1%82%E4%BD%BF%E7%94%A8%E8%80%85%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;這要求使用者什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;反推薦比推薦要求使用者更多。你必須決定。你必須夠認識自己以評估。你必須容忍選擇的摩擦。&lt;/p&gt;
+&lt;p&gt;這是 feature。摩擦是建立品味的東西。決定是強化能動性的東西。做了這個工作的使用者，有了一個沒做的使用者沒有的東西：跟自己的偏好的關係，是他們自己的，不是從一個系統借來的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-23-anti-recommendation-manifesto/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 是這個想法的一個小、部分的實作。它只處理一片：從已安裝遊戲選今晚玩什麼。它不嘗試修整個問題。&lt;/p&gt;
+&lt;p&gt;但原則可以放大。每當你發現自己在伸手找推薦系統，你可以問：我比較想被服務，還是比較想選？對某些類別答案是「服務」。對其他，「選」是你真正想要的，而你忘了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它是一個尊重你到讓你選的工具。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>22 · 為什麼我做了一個沒有 library view 的遊戲啟動器</title>
+  <link href="https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/</id>
+  <content type="html">&lt;h1&gt;22 · 為什麼我做了一個沒有 library view 的遊戲啟動器&lt;/h1&gt;
+&lt;p&gt;對 Maida 最常見的反應是：library view 在哪？&lt;/p&gt;
+&lt;p&gt;每個其他的遊戲啟動器都有一個。Steam 的庫存是中心畫面。Playnite、GOG Galaxy、EA App、Epic。它們都把你的收藏顯示成 grid 或 list。你滑、你排序、你過濾、你點。&lt;/p&gt;
+&lt;p&gt;Maida 沒有這個。你不能在 Maida 裡面瀏覽你的庫存。沒有 grid，沒有 list，沒有排序。介面一次給你看一個遊戲，問你今晚要不要試。&lt;/p&gt;
+&lt;p&gt;這是一個刻意的限制。原因如下。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;library-view-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E9%80%A0%E6%88%90%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/#library-view-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E9%80%A0%E6%88%90%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;Library View 實際上造成什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Library view 是 decision paralysis 發生的地方。你帶著要玩的意圖打開它。你看到一百個遊戲。你開始評估。你不 commit。你離開。&lt;/p&gt;
+&lt;p&gt;Library view 被當作方便選擇的方法賣。實際上，它是阻止選擇的摩擦。你看到越多，越難挑。&lt;/p&gt;
+&lt;p&gt;這不是一個你可以靠加更好的 filter 解決的 UI 問題。Filter 邊際幫助。根本問題是人類不擅長從大的、未排序的集合裡選。加排序選項把問題推到下一層，沒有溶解它。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%A7%BB%E9%99%A4-library-view-%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/#%E7%A7%BB%E9%99%A4-library-view-%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;移除 library view 做了什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;如果你不能瀏覽，你不能比較。如果你不能比較，你不能糾結。如果你不能糾結，你只能玩或不玩。決策空間 collapse 成二元。&lt;/p&gt;
+&lt;p&gt;第一次用 Maida，這感覺錯。你期待一個清單。沒有清單感覺像工具壞了或不夠。第三或第四個 session 之後，沒有清單開始感覺像鬆了一口氣。&lt;/p&gt;
+&lt;p&gt;Library view 是 bottleneck。移除它移除 bottleneck。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%8F%8D%E5%B0%8D%EF%BC%9A%E3%80%8C%E4%BD%86%E6%98%AF%E6%88%91%E6%83%B3%E9%81%B8%E3%80%8D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/#%E5%8F%8D%E5%B0%8D%EF%BC%9A%E3%80%8C%E4%BD%86%E6%98%AF%E6%88%91%E6%83%B3%E9%81%B8%E3%80%8D&quot;&gt;&lt;span&gt;反對：「但是我想選」&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這是最常見的反對。人們覺得沒有 library view 是剝奪了他們的能動性。他們想從庫存挑，刻意地。&lt;/p&gt;
+&lt;p&gt;兩個回答。&lt;/p&gt;
+&lt;p&gt;第一：實際上，多數人在 library view 前做的事不是刻意選擇。他們滑到某個東西感覺對，然後再次猜疑、看別的東西。「選擇」大部分是漂流。移除 library view 不是拿走選擇，是拿走漂流。&lt;/p&gt;
+&lt;p&gt;第二：當你真的想刻意選的時候，Kamae（一個分開的 view）在那裡。Kamae 是給 curate 的，不是給今晚的選擇。兩個活動是不同的，分開有好處。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BD%A0%E6%94%BE%E6%A3%84%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/#%E4%BD%A0%E6%94%BE%E6%A3%84%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;你放棄什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你放棄看到你收藏的視覺愉悅。看到一面牆的封面有某種滿足。Maida 不提供。&lt;/p&gt;
+&lt;p&gt;你放棄方便的參考：「我又有什麼了？」Maida 假設你可以用 Steam 查那個，這是公平的。&lt;/p&gt;
+&lt;p&gt;你放棄對什麼會出現的細粒控制。引擎挑。你可以透過 Kamae 限制，但你不是每次從選單挑。&lt;/p&gt;
+&lt;p&gt;對某些人這些是 deal-breaker。他們想要那面牆和控制。對他們來說 Maida 不適合。&lt;/p&gt;
+&lt;p&gt;對其他人，移除這些就是整個重點。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;排除 library view 的決定是 Maida 的奠基決定。其他一切都從它下游。如果你把那個決定拿掉，你有一個不同的產品，那種產品已經存在很多次了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 免費&lt;/a&gt;。Library view 的不存在不是失蹤的 feature，是 feature。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>21 · 為什麼退款讓你有罪惡感</title>
+  <link href="https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/</id>
+  <content type="html">&lt;h1&gt;21 · 為什麼退款讓你有罪惡感&lt;/h1&gt;
+&lt;p&gt;你買了一個遊戲，玩了一小時，不喜歡。你還在 Steam 退款窗口內。你猶豫。&lt;/p&gt;
+&lt;p&gt;猶豫不是經濟上的。退款是免費的。猶豫是別的東西。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%8C%B6%E8%B1%AB%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E9%97%9C%E6%96%BC%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/#%E7%8C%B6%E8%B1%AB%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E9%97%9C%E6%96%BC%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;猶豫實際上是關於什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;要求退款意味著承認你犯了一個錯誤。那次購買是一個小錯誤的判斷。退款是承認那個錯誤。&lt;/p&gt;
+&lt;p&gt;對某些人，這沒問題。他們無儀式地退。&lt;/p&gt;
+&lt;p&gt;對其他人，承認的動作帶著重量。購買是對遊戲跟你自己判斷的信任投票。退款感覺像把兩票都收回。你不信任開發者（小不忠誠），你不信任自己的選擇（小自我修正）。&lt;/p&gt;
+&lt;p&gt;不舒服不是關於錢。是關於以小可見的方式錯了，兩次。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%B8%8D%E9%80%80%E6%AC%BE%E4%BD%A0%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%9C%A8%E4%BB%98%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/#%E4%B8%8D%E9%80%80%E6%AC%BE%E4%BD%A0%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%9C%A8%E4%BB%98%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;不退款你實際上在付什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不退一個你不想要的遊戲，是付全價買儲存空間。那個遊戲坐在你的硬碟上，佔了可以給你會玩的東西的空間。它也佔心理空間：每次你在庫存看到它，你想起你沒有退它。&lt;/p&gt;
+&lt;p&gt;不退款的成本累積。它教你為你不會用的東西付錢。多年下來，這塑造你的庫存跟花錢 pattern。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%B0%8D%E7%9A%84%E6%A1%86%E6%9E%B6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/#%E5%B0%8D%E7%9A%84%E6%A1%86%E6%9E%B6&quot;&gt;&lt;span&gt;對的框架&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Steam 的退款窗口存在是有原因的。兩小時夠評估一個遊戲會不會打到你。窗口是 feature，不是道德測試。&lt;/p&gt;
+&lt;p&gt;用窗口是正常的。要求退款是消費者做的事，在任何健康的購買關係裡。賣家有退貨政策，你身為買家的工作是適當時候用它。&lt;/p&gt;
+&lt;p&gt;那個羞恥是從退貨困難或被污名化的脈絡借來的。Steam 退款不是那些脈絡。它們容易、自動化、不被追蹤。摩擦完全是心理的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;事先決定你的退款門檻。買之前設一個規則：如果 90 分鐘後我沒享受，我就退。事先決定，當算式清楚的時候。然後在你打到門檻的時候執行那個規則。&lt;/p&gt;
+&lt;p&gt;買了 48 小時內退款，不管感覺怎樣。你等越久，退款心理上越重。早點撕 OK 蹦。&lt;/p&gt;
+&lt;p&gt;不要對自己正當化。退款不需要故事。你買了，你不喜歡，你退了。Steam 不問為什麼。如果第一個小時清楚是錯的，不要建構「我應該再給它時間」的敘事。&lt;/p&gt;
+&lt;p&gt;注意退款羞恥什麼時候在你的庫存留下一個遊戲。如果你有買了、不喜歡、因為羞恥沒退的遊戲，那些遊戲是「迴避這個不舒服」的成本的證據。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-21-why-you-feel-bad-about-refunding/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不會幫你退款。但它 surface 庫存裡的東西，可以是一個安靜的檢查：如果一個遊戲一直在 Maida 出現你一直說 not now，你可能就是不想要它。那個資訊有用，是一年前會正當化退款的、但你當時沒有的數據。&lt;/p&gt;
+&lt;p&gt;退款窗口已經過了，但教訓可以塑造未來購買。&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>20 · 你沒落後，沒有比賽</title>
+  <link href="https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/</id>
+  <content type="html">&lt;h1&gt;20 · 你沒落後，沒有比賽&lt;/h1&gt;
+&lt;p&gt;一個新遊戲發行了。第一個週末，社群媒體都是它。Discord 伺服器活躍。實況主在實況。人們在貼截圖、理論、tier list。&lt;/p&gt;
+&lt;p&gt;你沒在玩。你在工作、忙、或就是累。&lt;/p&gt;
+&lt;p&gt;到了週二，你感到一點害怕。其他人都在前面。討論已經往前走。等你玩的時候，劇透到處都是、熱門評論已經寫過了。&lt;/p&gt;
+&lt;p&gt;這個感覺是 FOMO 在特定文化節奏下的版本。它也是虛構的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%99%BC%E8%A1%8C%E9%80%B1%E7%9A%84%E5%B9%BB%E8%A6%BA&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/#%E7%99%BC%E8%A1%8C%E9%80%B1%E7%9A%84%E5%B9%BB%E8%A6%BA&quot;&gt;&lt;span&gt;發行週的幻覺&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;網路獎勵早。第一個熱評論、第一個 tier list、第一個速通、第一個反應。Platform surface 早期的東西，因為那是討論在的地方。&lt;/p&gt;
+&lt;p&gt;這製造一種「所有人都在玩這個新遊戲，現在，而你錯過了」的印象。印象是錯的。多數擁有遊戲的人發行週沒在玩。多數玩家在發行後幾週幾個月才追上。發行炒作是一小片，被可見度放大。&lt;/p&gt;
+&lt;p&gt;但因為那一小片就是你看到的，你感覺火車正在沒有你的情況下開走。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BD%A0%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%9C%A8%E9%8C%AF%E9%81%8E%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/#%E4%BD%A0%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%9C%A8%E9%8C%AF%E9%81%8E%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;你實際上在錯過什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;發行週玩有一些好處。你可以參與 live 討論。不用閃劇透。社群最活躍。&lt;/p&gt;
+&lt;p&gt;它也有缺點。發行版本比較 buggy。下個月會有 patch。社群論述在它最激烈最不反思的時候。劇透到處都是正是因為高 engagement。&lt;/p&gt;
+&lt;p&gt;耐心玩家得到 patched 版本、比較冷靜的社群，跟更豐富的二手評論。他們放棄了 live 屬於那個瞬間的快感。&lt;/p&gt;
+&lt;p&gt;這些不是更好或更差，只是不同。「錯過」這個框架暗示是單向損失。其實沒有。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E8%80%90%E5%BF%83%E5%BE%88%E9%9B%A3&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%80%90%E5%BF%83%E5%BE%88%E9%9B%A3&quot;&gt;&lt;span&gt;為什麼耐心很難&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;損失感覺真實，因為錯過是顯著的，耐心版本的好處是抽象的。你可以想像你不在的 discord 對話。你不能想像還沒出的 patch。&lt;/p&gt;
+&lt;p&gt;這是 loss aversion 在跟你作對。可見的損失被高估，看不見的好處被低估。組合創造了那個沒有實際所指的「被拋下」感覺。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;事先定義你跟新發行的關係。「我發行月不玩遊戲」是一個一致的立場。「我每季玩一個新發行」也是。事先決定把每次發行的緊迫感拿掉。&lt;/p&gt;
+&lt;p&gt;在炒作週期 mute 或 unfollow。如果你不玩那個遊戲，你不需要看到它的論述。在 Twitter mute 關鍵字、在 Discord mute channel、跳過評論。FOMO 依賴可見度。&lt;/p&gt;
+&lt;p&gt;注意感到落後的瞬間。問：我落後在什麼，到底？答案通常是「落後在一個我其實不想要有的對話上」。那不是問題，那是一個你想成問題的非事件。&lt;/p&gt;
+&lt;p&gt;相信長尾。遊戲會留下來好。2018 年那個當時很棒的遊戲現在還是很棒。你沒錯過。你只是延遲了它，那是 OK 的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-20-youre-not-behind-no-race/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不知道發行日期。它不 surface「熱門」遊戲。它不在乎一個遊戲是新的還是八歲。它只看到什麼裝了，跟你的行為信號是什麼。一個 2017 年的遊戲跟一個 2026 年的遊戲是等價的。&lt;/p&gt;
+&lt;p&gt;如果發行週的壓力讓你的遊戲時間感覺像比賽，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它把每個遊戲當作可用的，不是緊急的。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>19 · Save Scumming 是關於你的人生，不是關於遊戲</title>
+  <link href="https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/</id>
+  <content type="html">&lt;h1&gt;19 · Save Scumming 是關於你的人生，不是關於遊戲&lt;/h1&gt;
+&lt;p&gt;你在玩一個遊戲。一個選擇結果不對，你讀檔重來。你做這件事五次直到結果感覺對。&lt;/p&gt;
+&lt;p&gt;偶爾這樣是 OK 的。當這變成跨多個遊戲的 pattern，它就不是關於遊戲了。是關於別的事。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;save-scumming-%E5%9C%A8%E5%84%AA%E5%8C%96%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/#save-scumming-%E5%9C%A8%E5%84%AA%E5%8C%96%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;Save Scumming 在優化什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這個行為在遊戲層級是理性的。你想最大化 run 的結果。更好的資源、更好的劇情分支、更好的數值。讀檔是免費的。&lt;/p&gt;
+&lt;p&gt;但成本是真的。你失去了遊戲被設計的體驗。設計師把選擇和後果建在系統裡。你 undo 每個後果，等於在玩跟你開始的不一樣的遊戲：一個決定不重要、目標是最佳 save state 的遊戲。&lt;/p&gt;
+&lt;p&gt;多數重度 save scummer 報告他們不那麼享受遊戲。讀檔 pattern 把「結果感覺值得」那部分剝掉。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%82%84%E6%98%AF%E7%B9%BC%E7%BA%8C&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%82%84%E6%98%AF%E7%B9%BC%E7%BA%8C&quot;&gt;&lt;span&gt;為什麼還是繼續&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;理由不是 save scummer 沒注意到。他們常常注意到。他們繼續做是因為衝動其實不是關於遊戲。&lt;/p&gt;
+&lt;p&gt;對很多人來說，save scumming 是一個更大 pattern 的小表現：想要 undo、重來、完美的渴望。同樣的本能讓你在對話沒順利之後在腦袋裡重播。同樣的本能讓你希望可以倒帶工作上的一個決定。&lt;/p&gt;
+&lt;p&gt;人生裡，你不能讀檔。遊戲裡，你可以。遊戲變成一個練習 undo 的地方，那個 undo 是其他生活拒絕給你的。&lt;/p&gt;
+&lt;p&gt;這是可理解的。也不是遊戲設計的目的，也不滿足那個更深的需求。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%BA%95%E4%B8%8B%E6%98%AF%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/#%E5%BA%95%E4%B8%8B%E6%98%AF%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;底下是什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;要完美每個選擇的驅動力，常常跟對非遊戲脈絡裡後果的焦慮相關。如果遊戲裡的小錯誤感覺難以忍受，值得問遊戲外的小錯誤是不是也難以忍受。&lt;/p&gt;
+&lt;p&gt;工作其實不在遊戲層級。是辨識「不完美的結果是事情實際展開的方式」，遊戲裡和遊戲外都是。容忍不完美的 run、次優的 save，是給容忍其他生活裡同樣事情的練習。&lt;/p&gt;
+&lt;p&gt;這不是快速修復。但這才是真正的槓桿。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%9C%A8%E9%81%8A%E6%88%B2%E5%B1%A4%E7%B4%9A%E6%9C%89%E5%B9%AB%E5%8A%A9%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/#%E5%9C%A8%E9%81%8A%E6%88%B2%E5%B1%A4%E7%B4%9A%E6%9C%89%E5%B9%AB%E5%8A%A9%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;在遊戲層級有幫助的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;偶爾玩永久死亡或單存檔 run。Roguelike 為這個設計。限制逼你接受結果，剛開始不舒服然後變解放。&lt;/p&gt;
+&lt;p&gt;設一個規則：每 session 最多讀一次檔。之後選擇就成立。壞結果的不舒服是練習。&lt;/p&gt;
+&lt;p&gt;注意讀檔的衝動。不要壓抑，只要注意。「我想讀檔因為我犯了一個小錯誤。」常常，命名它就足以選擇不同。&lt;/p&gt;
+&lt;p&gt;注意哪些遊戲觸發大量 save scumming。這個 pattern 不是所有遊戲都一致。最觸發它的遊戲在告訴你你跟「後果」的關係。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-19-save-scumming-is-about-life/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 看不到 save scumming。它只看到你啟動了什麼遊戲。但 Maida 的設計哲學跟解藥安靜地對齊：TRY/NOT NOW 決定是一次性的。沒有讀檔。你決定，你 commit，下一張卡來。你不能 rollback 今晚要玩這個遊戲的選擇，你只能下次選不一樣的。&lt;/p&gt;
+&lt;p&gt;如果讀檔的渴望出現在你的生活裡，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。30 秒承諾很小但很真。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>18 · 你沒辦法同時玩三款遊戲</title>
+  <link href="https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/</id>
+  <content type="html">&lt;h1&gt;18 · 你沒辦法同時玩三款遊戲&lt;/h1&gt;
+&lt;p&gt;你有三個進行中的遊戲。你開了一個 50 小時 RPG，有一個多人競技在輪換，邊邊還做著一個敘事遊戲。&lt;/p&gt;
+&lt;p&gt;你兩週沒在任何一個上面有進度了。&lt;/p&gt;
+&lt;p&gt;這是 multitasking 陷阱套用在休閒上。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E5%B9%B3%E8%A1%8C%E9%81%8A%E6%88%B2%E4%BA%92%E7%9B%B8%E5%8D%A1%E4%BD%8F&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%B9%B3%E8%A1%8C%E9%81%8A%E6%88%B2%E4%BA%92%E7%9B%B8%E5%8D%A1%E4%BD%8F&quot;&gt;&lt;span&gt;為什麼平行遊戲互相卡住&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;每個遊戲需要一個 context：你在遊戲裡是誰、你的技能是什麼、你的目標是什麼、你上次到哪。為一個遊戲保持 context 是輕的。為三個保持 context 是指數級重的。&lt;/p&gt;
+&lt;p&gt;當你坐下來玩，第一個決定是哪一個。然後第二個決定是你今晚是不是真的想要那一個，還是該換。兩個決定都消耗你。等你決定完，你想花在玩上面的能量已經花在選擇上了。&lt;/p&gt;
+&lt;p&gt;所以你哪一個都沒玩。三個遊戲互相阻擋，因為它們競爭同一個晚上。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%B2%E5%BA%A6%E7%9A%84%E5%B9%BB%E8%A6%BA&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/#%E9%80%B2%E5%BA%A6%E7%9A%84%E5%B9%BB%E8%A6%BA&quot;&gt;&lt;span&gt;進度的幻覺&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;三個遊戲輪換感覺像生產力。三個東西都有進度。三個不同心情都有覆蓋。&lt;/p&gt;
+&lt;p&gt;實際情況不一樣。三個裡面有兩個 context 流失的速度比你加上去的快。每個你跳過它們的 session，resumption friction 變大。最後其中一個過某個門檻，你需要重新開始才能回去，於是你放棄它。&lt;/p&gt;
+&lt;p&gt;算式：三個遊戲 33% engagement，比一個遊戲 100% engagement 差。分散的注意力產生較少完成的 session、較不滿足的玩、抛架上更多的半完成遊戲。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;挑一個。Commit 一段時間。兩週、四個 session、一個可完成的 arc。其他遊戲可以等。你的注意力是有限的，集中它產生比分配它更好的結果。&lt;/p&gt;
+&lt;p&gt;有一個 comfort fallback。一個遊戲，熟悉、低 context，可以在你沒能量給主遊戲時開。這不是第三個遊戲，是釋壓閥。&lt;/p&gt;
+&lt;p&gt;抗拒在進行中遊戲還沒完的時候開新遊戲。新發行三週後還會在。先完成或正式放棄手上的。&lt;/p&gt;
+&lt;p&gt;刻意定義「進行中」。一個遊戲玩過一次然後停了，不是進行中。它是個遺物。最多兩個遊戲應該同時算「進行中」。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%B9%B3%E8%A1%8C%E6%9C%89%E6%84%8F%E7%BE%A9%E7%9A%84%E6%99%82%E5%80%99&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/#%E5%B9%B3%E8%A1%8C%E6%9C%89%E6%84%8F%E7%BE%A9%E7%9A%84%E6%99%82%E5%80%99&quot;&gt;&lt;span&gt;平行有意義的時候&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;某些配置有效。一個長期單機遊戲加一個 30 分鐘多人給社交 session。一個豐富單機加一個 roguelike 給短 session。規則是遊戲應該佔不同的時間和能量 slot，不要為同一個競爭。&lt;/p&gt;
+&lt;p&gt;如果三個遊戲都想要你最佳的晚上一小時，你會輸掉其中兩個。挑你要輸掉哪兩個。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/E-18-cant-be-playing-three-games-at-once/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 輕輕推向專注。Anchor feature 讓你 commit 一個遊戲幾天，引擎尊重那個 commitment。當你 anchor 的時候，你在說：就是這一個。score 系統還在追蹤你其他遊戲，但 Anchor 優先。&lt;/p&gt;
+&lt;p&gt;如果你拋接著比你的注意力承載的更多遊戲，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。Anchor 是它符合你情況的那部分。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>17 · 晚上 9 點的決策疲勞</title>
+  <link href="https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/</id>
+  <content type="html">&lt;h1&gt;17 · 晚上 9 點的決策疲勞&lt;/h1&gt;
+&lt;p&gt;你 9 點想挑一個遊戲。你挑不出來。你滑、你 hover、你關掉啟動器。&lt;/p&gt;
+&lt;p&gt;這不是個人缺陷。這是你的大腦做大腦會做的事。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%99%9A%E4%B8%8A%E5%81%9A%E9%81%B8%E6%93%87%E7%9A%84%E7%94%9F%E7%90%86%E5%AD%B8&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/#%E6%99%9A%E4%B8%8A%E5%81%9A%E9%81%B8%E6%93%87%E7%9A%84%E7%94%9F%E7%90%86%E5%AD%B8&quot;&gt;&lt;span&gt;晚上做選擇的生理學&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你的前額葉皮質負責刻意的決定，靠葡萄糖跑。每個非平凡的決定消耗預算。等到工作日結束，預算大部分沒了。&lt;/p&gt;
+&lt;p&gt;剩下的夠 autopilot。夠跟著食譜、看熟悉的劇、滑 feed。不夠評估二十個新選項對著你晚上的心情。&lt;/p&gt;
+&lt;p&gt;9 點的遊戲 session 是要求你的前額葉皮質在它最低容量的時候做最難的工作。它做不到，所以它不做。&lt;/p&gt;
+&lt;p&gt;早上玩的人沒這個問題。他們在新鮮預算上選。同一個讓你 9 點癱瘓的庫存，9 點是可航行的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E6%9B%B4%E5%A4%9A%E8%87%AA%E5%BE%8B%E3%80%8D%E4%BF%AE%E4%B8%8D%E4%BA%86&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/#%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E6%9B%B4%E5%A4%9A%E8%87%AA%E5%BE%8B%E3%80%8D%E4%BF%AE%E4%B8%8D%E4%BA%86&quot;&gt;&lt;span&gt;為什麼「更多自律」修不了&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;「我應該對晚上的遊戲更自律」這個框架誤解了限制。自律也是從前額葉預算抽出來的。花自律來克服決策疲勞，是付兩次同一種資源的錢。&lt;/p&gt;
+&lt;p&gt;有效的不是自律。有效的是把決策負擔降到符合被耗盡的預算。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E6%AD%A3%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/#%E7%9C%9F%E6%AD%A3%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;真正有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;事先決定。當天稍早，當你還有預算的時候，挑你今晚會玩的。需要的話寫下來。等到 9 點，決定已經做了，你只需要執行。&lt;/p&gt;
+&lt;p&gt;限制候選池。如果你的庫存有 80 個遊戲，你有 80 個微決策。如果你已經事先 curate 到 5 個候選，你有 5 個。算式寬容很多。&lt;/p&gt;
+&lt;p&gt;用隨機選擇器。處理決策疲勞最有效的 hack 是把決定授權給隨機。出來什麼就是你玩什麼。你不是在挑，你在接受。&lt;/p&gt;
+&lt;p&gt;降低風險。告訴自己選擇是可逆的。20 分鐘後不對你可以停、可以換。可逆性把初始選擇的壓力拿掉。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%B2%92%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/#%E6%B2%92%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;沒用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;更努力。容量不在那裡。&lt;/p&gt;
+&lt;p&gt;加更多選項。當你選不出來，直覺以為你需要更多候選。相反才是真的。&lt;/p&gt;
+&lt;p&gt;逼自己。最後你會挫敗地挑一個東西，挫敗會跟你進入 session。Session 不會恢復。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-17-decision-fatigue-at-9pm/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 是為 9 點建的。每張卡的決定時間是 30 秒。沒有滑動，沒有比較。池子已經被「什麼裝了」預先過濾。選擇被授權給引擎，不是你。&lt;/p&gt;
+&lt;p&gt;如果 9 點是擊敗你遊戲的那部分一天，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>16 · 那句「玩 30 分鐘就好」是個謊言</title>
+  <link href="https://blog.brightraven.world/zh/D-16-the-30-minute-lie/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/D-16-the-30-minute-lie/</id>
+  <content type="html">&lt;h1&gt;16 · 那句「玩 30 分鐘就好」是個謊言&lt;/h1&gt;
+&lt;p&gt;你坐下來，有一小時。你告訴自己：我就玩 30 分鐘。&lt;/p&gt;
+&lt;p&gt;實際發生的事，幾乎永遠是這兩件之一。你玩了三小時，忘記時間。或者你完全沒玩，因為 30 分鐘不夠激起 motivation 開始。&lt;/p&gt;
+&lt;p&gt;那個 30 分鐘的承諾是你騙自己讓開始變容易的謊。它沒有描述真正會發生的事。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC-30-%E5%88%86%E9%90%98%E7%9A%84%E6%A1%86%E6%9E%B6%E5%A4%B1%E6%95%97&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-16-the-30-minute-lie/#%E7%82%BA%E4%BB%80%E9%BA%BC-30-%E5%88%86%E9%90%98%E7%9A%84%E6%A1%86%E6%9E%B6%E5%A4%B1%E6%95%97&quot;&gt;&lt;span&gt;為什麼 30 分鐘的框架失敗&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;啟動一個遊戲有固定成本。你打開執行檔。你瀏覽選單。你載讀檔。你重新定位自己。等你真的在玩了，已經過了十分鐘。&lt;/p&gt;
+&lt;p&gt;一旦你在玩，停下來有它自己的成本。你在某個戰鬥、某個目標、某個關卡的中間。在人為的 30 分鐘標記停下來，意味著放棄一個你剛剛花十分鐘建立的狀態。最小阻力的路徑是繼續。&lt;/p&gt;
+&lt;p&gt;所以 30 分鐘結構上很難達成。它比零長，但被一個跟任何實際遊戲節奏不匹配的任意時鐘限制。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BD%A0%E8%AA%AA%E3%80%8C30-%E5%88%86%E9%90%98%E3%80%8D%E7%9A%84%E6%99%82%E5%80%99%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-16-the-30-minute-lie/#%E4%BD%A0%E8%AA%AA%E3%80%8C30-%E5%88%86%E9%90%98%E3%80%8D%E7%9A%84%E6%99%82%E5%80%99%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;你說「30 分鐘」的時候真正在做的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;30 分鐘的框架是 System 2 給 System 1 的允許單。System 2 警惕打開 Steam 因為時間承諾。System 1 想玩。妥協是「小承諾，容易逃」。&lt;/p&gt;
+&lt;p&gt;這個妥協很少撐住。一旦 System 1 跟遊戲 engage，原本的 30 分鐘界線變成記憶，不是限制。&lt;/p&gt;
+&lt;p&gt;這不壞。30 分鐘框架做了它的工作：讓你開始。你玩了三小時這件事，是你真正想要的結果，你只是沒辦法事先承認。&lt;/p&gt;
+&lt;p&gt;但也有些晚上，30 分鐘框架反向失敗。你估算啟動成本，結論是「為了只玩 30 分鐘不值得」。所以你不開始。30 分鐘框架說服你不要開始。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%AF%94%E8%BC%83%E5%A5%BD%E7%9A%84%E6%A1%86%E6%9E%B6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-16-the-30-minute-lie/#%E6%AF%94%E8%BC%83%E5%A5%BD%E7%9A%84%E6%A1%86%E6%9E%B6&quot;&gt;&lt;span&gt;比較好的框架&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要跟自己討價還價時長。把實際的問題說出來。&lt;/p&gt;
+&lt;p&gt;「我今晚想開始玩嗎？」要的話，開始。時長會自己解決。&lt;/p&gt;
+&lt;p&gt;「我有能量負擔啟動成本嗎？」有的話，開始。Session 會落到它落到的地方。&lt;/p&gt;
+&lt;p&gt;「我在試圖說服自己這是 OK 的嗎？」是的話，答案可能是你累了，想看書或看影片，不是玩遊戲。&lt;/p&gt;
+&lt;p&gt;30 分鐘的框架是一個假特定性。實際的決定是二元的：開始或不開始。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-16-the-30-minute-lie/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要事先估算 session 長度。決定要不要開始，然後讓 session 跑到它跑到的地方。如果你必須在某個時間停，設鬧鐘，但不要預測時長。&lt;/p&gt;
+&lt;p&gt;注意「我有時間」跟「我想玩」之間的差別。有時候你有時間但不想玩。那是一個好的答案。庫存明天還在。&lt;/p&gt;
+&lt;p&gt;降低啟動成本。如果啟動一個遊戲要十分鐘的選單瀏覽，找方法剪掉那段。快速讀檔載入、控制器已配對、耳機在伸手能拿到的地方。啟動越低，你越不需要跟自己討價還價。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-16-the-30-minute-lie/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 把啟動縮短很多。決定是 30 秒。啟動是一鍵。沒有滑動，沒有比較購物，沒有讀檔要找。你要嘛試這個遊戲，要嘛不要。要試的話，一分鐘內你在遊戲裡。&lt;/p&gt;
+&lt;p&gt;如果這個 30 分鐘的謊讓你無法開始，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它把討價還價拿掉了。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>15 · 為什麼回頭玩老遊戲不是偷懶</title>
+  <link href="https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/</id>
+  <content type="html">&lt;h1&gt;15 · 為什麼回頭玩老遊戲不是偷懶&lt;/h1&gt;
+&lt;p&gt;你下班，你坐下來玩。你有 80 個沒玩的遊戲。你打開那個你已經重玩三年的同一個遊戲。&lt;/p&gt;
+&lt;p&gt;你對這件事有一點不好意思。有一個聲音在說你應該試新的東西。沒玩的遊戲就在那裡。重玩感覺像是在迴避成長。&lt;/p&gt;
+&lt;p&gt;那個聲音是錯的。Comfort gaming 有它的功能，那個功能是真實的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;comfort-gaming-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/#comfort-gaming-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;Comfort Gaming 實際上做了什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;當你重玩一個熟悉的遊戲，你跳過遊戲最高摩擦的部分。你不需要學新操作。你不需要評估你喜不喜歡。你不需要理解一個陌生的世界。認知負荷接近零。&lt;/p&gt;
+&lt;p&gt;你交換得到的是一個已知的量。這個遊戲會大致按照上次的方式打到你。沒有失望的風險，沒有那個晚上被一個結果不好的東西浪費掉的可能。&lt;/p&gt;
+&lt;p&gt;對一個你儲備低的晚上，這正好是對的交易。當你有能量吸收的時候，新體驗有價值。當你沒有的時候，熟悉體驗有價值。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%82%A3%E5%80%8B%E8%AA%AA%E9%80%99%E6%98%AF%E9%8C%AF%E7%9A%84%E6%96%87%E5%8C%96%E8%81%B2%E9%9F%B3&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/#%E9%82%A3%E5%80%8B%E8%AA%AA%E9%80%99%E6%98%AF%E9%8C%AF%E7%9A%84%E6%96%87%E5%8C%96%E8%81%B2%E9%9F%B3&quot;&gt;&lt;span&gt;那個說這是錯的文化聲音&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Comfort gaming 被編碼成「懶」，因為它不適合生產力框架。你不在探索、不在學習、不在擴展品味。你在做你上週做的同樣事。&lt;/p&gt;
+&lt;p&gt;但是娛樂不是生產力。一個晚上玩遊戲的重點不是讓你成長為一個人。重點是睡前感覺 OK。Comfort gaming 在這件事上非常有效。那 80 個沒玩的遊戲不會。&lt;/p&gt;
+&lt;p&gt;附在 comfort gaming 上的羞恥是一個分類錯誤。我們把生產力價值套在休閒活動上，算錯了。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%AF%A6%E9%9A%9B%E7%9A%84%E6%A1%88%E4%BE%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/#%E5%AF%A6%E9%9A%9B%E7%9A%84%E6%A1%88%E4%BE%8B&quot;&gt;&lt;span&gt;實際的案例&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;那些 guilt-free 玩 comfort game 的人，整體玩比較多遊戲，不是比較少。Comfort session 提供穩定。當你不依賴每個 session 都要遞送，探索 session 比較容易承擔。&lt;/p&gt;
+&lt;p&gt;那些對抗 comfort gaming 的人，往往會滑庫存、無法 commit、最後什麼都不玩。他們錯失了 comfort 也錯失了探索。對 comfort 的羞恥侵蝕了試任何東西的意願。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;當你打開那個 comfort game，刻意做。「今晚是 comfort 之夜。」說出來。不要像偷偷做有罪的快樂一樣溜進去。&lt;/p&gt;
+&lt;p&gt;注意觸發 comfort gaming 的能量狀態。累？壓力大？決策疲勞？知道觸發讓你更能預測自己的需求。&lt;/p&gt;
+&lt;p&gt;把那個 comfort game 留著裝。不要為了「釋放空間」把它移除。它的功能是在你需要的時候 available。&lt;/p&gt;
+&lt;p&gt;相信探索會在你有資源的時候自然發生。Comfort gaming 不是一個你要打破的習慣。是一個你要讓它一直 available 的工具。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-15-why-comfort-gaming-isnt-lazy/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不會推你去 comfort gaming 也不會推你離開。score 系統往兩個方向都有效：你一直開的遊戲會得到更高權重，但引擎裡的 variety 確保新遊戲還是規律 surface。如果你想要 comfort，引擎會尊重那個 pattern。如果你想要 variety，引擎會提供。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它把 comfort 跟探索當作晚上的同樣有效的用途。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>14 · 你沒有時間問題，你有心情問題</title>
+  <link href="https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/</id>
+  <content type="html">&lt;h1&gt;14 · 你沒有時間問題，你有心情問題&lt;/h1&gt;
+&lt;p&gt;成人玩家最常說的一句話是「我沒時間了」。有時候是真的。常常不是。真實的情況是：可用的時間跟可用的心情對不上。&lt;/p&gt;
+&lt;p&gt;晚餐後你有一小時。那個小時存在。但你的神經系統在錯誤的配置上面，去玩你庫存裡的那些遊戲。你累了，但不是適合那個慢策略遊戲的累法。你警覺，但沒有專注到適合那個解謎遊戲。你 available，但不是 present。&lt;/p&gt;
+&lt;p&gt;那個小時花在 YouTube 或無止境的滑動上，你叫它時間問題。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%BF%83%E6%83%85%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/#%E5%BF%83%E6%83%85%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;心情實際上是什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;心情是你的注意力、能量、情緒基線的配置。不同遊戲需要不同配置。&lt;/p&gt;
+&lt;p&gt;Roguelike 需要敏銳的專注和對失敗的容忍。敘事遊戲需要可以坐著讓事情展開。多人競技需要腎上腺素和社交頻寬。經營遊戲需要對系統的耐心。&lt;/p&gt;
+&lt;p&gt;這些不是可互換的。如果你有一小時，但是在「敘事遊戲心情」，你的策略遊戲庫存不是候選，即使它們裝著。&lt;/p&gt;
+&lt;p&gt;「可用」跟「可安裝」之間的不匹配，才是多數成人玩家真正的瓶頸。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E5%88%86%E6%95%A3%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E3%80%8D%E6%B2%92%E6%9C%89%E8%A7%A3%E6%B1%BA%E9%80%99%E5%80%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/#%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E5%88%86%E6%95%A3%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E3%80%8D%E6%B2%92%E6%9C%89%E8%A7%A3%E6%B1%BA%E9%80%99%E5%80%8B&quot;&gt;&lt;span&gt;為什麼「分散你的庫存」沒有解決這個&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;直覺解法是為每種可能的心情都裝遊戲。一個 roguelike 給銳利的晚上，一個敘事給軟的，一個多人給社交的，一個經營遊戲給慢的。&lt;/p&gt;
+&lt;p&gt;這部分有用。但它增加了一個新問題：你現在有四倍的庫存可選，而你在被耗盡的狀態下選。多樣化幫了「匹配」，但傷了「決定」。&lt;/p&gt;
+&lt;p&gt;更深的解法是把你的心情認識得夠好，能快速過濾。如果你能在不思考的情況下認得「我現在在軟敘事心情」，你可以從四十個候選過濾到兩個。技能不是有更多選項，是讀懂自己。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;把心情大聲說出來。如果你能說清你今晚到底想要從遊戲那裡得到什麼，你可以乾淨地過濾你的庫存。「我想要一個我可以失敗但沒有後果的東西」。「我想要一個故事，不會跟我要任何東西」。「我想當一個聰明人一個小時」。&lt;/p&gt;
+&lt;p&gt;刻意地建立一個小庫存。三到五個已安裝的遊戲，覆蓋你常常經驗的心情。再多就有噪音。再少就匹配不到。&lt;/p&gt;
+&lt;p&gt;接受某些晚上你的庫存裡沒有匹配。那是 OK 的。那些晚上是給別的事情。你不需要硬塞一個心情不匹配的遊戲。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/D-14-mood-problem-not-time-problem/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 沒辦法幫你讀心情。那還是你的事。但它可以幫第二部分：一旦你知道你想要什麼，Maida 一次給你看一個遊戲，你決定。沒有庫存滑動，匹配比較快。&lt;/p&gt;
+&lt;p&gt;如果可用時間跟可用心情之間的落差讓你受挫，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它沒辦法修心情，但它把搜尋拿掉了。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>13 · Demo 是你給自己設下的陷阱</title>
+  <link href="https://blog.brightraven.world/zh/C-13-demos-are-a-trap/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/C-13-demos-are-a-trap/</id>
+  <content type="html">&lt;h1&gt;13 · Demo 是你給自己設下的陷阱&lt;/h1&gt;
+&lt;p&gt;Steam Next Fest 開始了。你排了六個 demo 要試。你花一個晚上每個玩 30 分鐘。你把三個加進願望清單。你帶著「有所成就」的感覺去睡覺。&lt;/p&gt;
+&lt;p&gt;三個月後，你買了其中一個。你還沒玩。&lt;/p&gt;
+&lt;p&gt;那個 demo 不是 sample，是替代品。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E8%A9%A6%E6%96%B0%E6%9D%B1%E8%A5%BF%E7%9A%84%E5%A4%9A%E5%B7%B4%E8%83%BA&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-13-demos-are-a-trap/#%E8%A9%A6%E6%96%B0%E6%9D%B1%E8%A5%BF%E7%9A%84%E5%A4%9A%E5%B7%B4%E8%83%BA&quot;&gt;&lt;span&gt;試新東西的多巴胺&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;試新東西給你一個小獎勵。這跟 wishlisting 讓人覺得有生產力是同一個迴路。你在沒有承諾的情況下穿越新奇，你的大腦把這個視為愉快。&lt;/p&gt;
+&lt;p&gt;一個 demo session 是一個晚上六個新開始。六次多巴胺擊中，沒有一個需要你 commit 任何東西。一個晚上結束，你滿足了那個「今晚想玩遊戲」的部分，但沒有在任何有意義的層面上玩到一個遊戲。&lt;/p&gt;
+&lt;p&gt;完整遊戲會要求你更多。會要求你硬撐第一小時的緩慢。會要求你忍受不理解所有東西。Demo 沒有這些。它給了你開胃菜，包裝成主餐。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;demo-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%B8%AC%E4%BA%86%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-13-demos-are-a-trap/#demo-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%B8%AC%E4%BA%86%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;Demo 實際上測了什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;一個 30 分鐘的 demo 可以告訴你你覺得操作是不是滿意，跟美術風格是不是對你胃口。它幾乎完全沒辦法告訴你你會不會享受 20 小時的這個遊戲。&lt;/p&gt;
+&lt;p&gt;一個好遊戲的慢燒常常發生在 demo 結束之後。前 30 分鐘感覺還可以的機制，可能在第 5 小時感覺空洞，也可能變得有深度。Demo 沒辦法揭示是哪一個。&lt;/p&gt;
+&lt;p&gt;Demo 評估是遊戲評估最表面的形式。把它當作購買決定的基礎是一個分類錯誤。Demo 是一個行銷產物，不是公平的樣本。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-13-demos-are-a-trap/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要排 demo。從 festival 挑一個遊戲，玩得比 demo 允許的更深。沒 demo 的話，看一個 20 分鐘的評論決定。&lt;/p&gt;
+&lt;p&gt;對「試」的預設不一樣。不要「我會試這個 demo 20 分鐘」，試「我會玩這個 demo 直到不有趣，即使是 5 分鐘」。截斷那個「為了禮貌玩完 demo」的禮貌。你的時間比 demo 的步調有價值。&lt;/p&gt;
+&lt;p&gt;注意這個替代。如果你花了一個晚上在 demo 上，發現你其實沒玩到遊戲，問自己你想玩遊戲還是想感覺自己玩了遊戲。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-13-demos-are-a-trap/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 只知道你實際安裝了的遊戲。Demo 算，如果它裝了。完整遊戲也算。決定是一樣的：在 30 秒的決定裡啟動進入 30 分鐘或三小時的 session，或者跳過。&lt;/p&gt;
+&lt;p&gt;如果這個 demo 迴圈在替代真實遊戲時間，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。它不獎勵排隊。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>12 · 那個說「你一定要玩這個」的朋友</title>
+  <link href="https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/</id>
+  <content type="html">&lt;h1&gt;12 · 那個說「你一定要玩這個」的朋友&lt;/h1&gt;
+&lt;p&gt;你的朋友剛玩完一個遊戲。他們愛它。他們跟你講了一小時。然後他們說了：「你一定要玩這個。」&lt;/p&gt;
+&lt;p&gt;你把它加進願望清單。你感受到一個小小的義務感的脈衝。這個遊戲現在在一個你隱性同意要 engage 的清單上。如果你不玩，最後你的朋友會問，你會感到一點羞愧。&lt;/p&gt;
+&lt;p&gt;這是把不適合你的遊戲加進你的庫存最可靠的方法之一。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E5%BF%85%E7%8E%A9%E3%80%8D%E6%8E%A8%E8%96%A6%E6%9C%83%E5%A4%B1%E6%95%97&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/#%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E5%BF%85%E7%8E%A9%E3%80%8D%E6%8E%A8%E8%96%A6%E6%9C%83%E5%A4%B1%E6%95%97&quot;&gt;&lt;span&gt;為什麼「必玩」推薦會失敗&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你的朋友的體驗是在他們的特定狀態、特定時刻、特定脈絡下發生的。他們在某個特定的心情、剛剛玩過特定歷史的遊戲、有讓那個遊戲打到他們的特定生活情境。&lt;/p&gt;
+&lt;p&gt;當他們說「你一定要玩這個」，他們把自己的體驗投射到你的未來自己身上。他們在說：我有了很棒的體驗，你也會有很棒的體驗。&lt;/p&gt;
+&lt;p&gt;這幾乎從來不是真的。&lt;/p&gt;
+&lt;p&gt;對一個人很棒的遊戲，對多數人是還可以，有時候很棒，有時候挫折，有時候「我朋友為什麼喜歡這個」。變異是大的。「必玩」這個框架抹除了變異。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%B4%AF%E7%A9%8D%E6%95%88%E6%87%89&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/#%E7%B4%AF%E7%A9%8D%E6%95%88%E6%87%89&quot;&gt;&lt;span&gt;累積效應&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;每個必玩都加進你的願望清單或你擁有但沒玩的收藏。多年累積，朋友疊加。你最後得到一個其他人愛的遊戲庫存，那跟你愛的遊戲庫存不是同一回事。&lt;/p&gt;
+&lt;p&gt;有些會是好的，多數不會。比例不那麼重要，重要的是社交壓力把你的庫存推離了你自己的品味。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%8E%A8%E8%96%A6%E7%9A%84%E8%AA%A0%E5%AF%A6%E7%89%88%E6%9C%AC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/#%E6%8E%A8%E8%96%A6%E7%9A%84%E8%AA%A0%E5%AF%A6%E7%89%88%E6%9C%AC&quot;&gt;&lt;span&gt;推薦的誠實版本&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;朋友推薦比較好的版本聽起來像這樣：「我很享受 X。我覺得你可能也會，因為 Y。如果兩個小時不抓住你，丟掉它。」&lt;/p&gt;
+&lt;p&gt;這個版本尊重你的時間、包含理由、給你不完成的允許。它把遊戲當作 tip，不是義務。&lt;/p&gt;
+&lt;p&gt;當你是推薦的人，試這個版本。當你是接收的人，在心裡把懶惰的「必玩」改寫成這個形式，再決定要不要 engage。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要立刻把必玩加進願望清單。等一週。如果你還想要，再加。如果你已經忘記，那個推薦對你個人沒有足夠的力量。&lt;/p&gt;
+&lt;p&gt;告訴你的朋友你不接受必玩推薦。告訴他們為什麼。多數人會尊重。不能尊重的，是在給你資料，告訴你他們的推薦實際上怎麼被傳達的。&lt;/p&gt;
+&lt;p&gt;對自己揭露你的偏見。你喜歡這個朋友，所以你比一個陌生人更相信這個推薦。那個信任是人際的，不是資訊的。朋友的品味是部分資訊，不是權威。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-12-friend-says-you-have-to-play/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 忽略所有這些。它不看你的朋友推薦了什麼。它不知道哪些遊戲被評論家讚美。它只知道什麼裝了、你的行為信號是什麼。&lt;/p&gt;
+&lt;p&gt;如果社交壓力悄悄塑造你的庫存違反你的品味，用一個不在乎社交脈絡的工具是一個安靜的恢復方法。&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>11 · 為什麼 Game Pass 讓你覺得有壓力</title>
+  <link href="https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/</id>
+  <content type="html">&lt;h1&gt;11 · 為什麼 Game Pass 讓你覺得有壓力&lt;/h1&gt;
+&lt;p&gt;Game Pass 應該是天堂。幾百個遊戲一個月一個價錢。不再為買哪個糾結。裝了就玩。&lt;/p&gt;
+&lt;p&gt;對某些人這個確實有用。對多數人，它增加了一種他們以前沒有的壓力。&lt;/p&gt;
+&lt;p&gt;如果你感受過，你知道我在說什麼。打開 Game Pass 感覺到的不是自由，是壓力。一個你不擁有但又欠著的庫存。將會輪掉的遊戲在倒數。為一個你沒在用滿的東西付錢的模糊罪惡感。&lt;/p&gt;
+&lt;p&gt;為什麼會這樣。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%90%83%E5%88%B0%E9%A3%BD-buffet-%E7%9A%84%E5%BF%83%E7%90%86%E5%AD%B8&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/#%E5%90%83%E5%88%B0%E9%A3%BD-buffet-%E7%9A%84%E5%BF%83%E7%90%86%E5%AD%B8&quot;&gt;&lt;span&gt;吃到飽 buffet 的心理學&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;訂閱改變了你對價值做的算術。當你買一個遊戲，問題是「這對我值 X 美金嗎」。一旦擁有，問題變成「我今晚想玩這個嗎」。這是不一樣的問題，第二個不被第一個污染。&lt;/p&gt;
+&lt;p&gt;當你有訂閱，問題變成「我有得到我付的錢的價值嗎」。這個問題不會消失，它在每個遊戲 session 的背景跑著。你在玩一個遊戲，但你知道有 200 個其他的也付了錢在等。你不只是在遊戲之間選，你在「選遊戲」的同時還要正當化這個訂閱。&lt;/p&gt;
+&lt;p&gt;這個正當化的框架是耗能的。它把休閒變成會計。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E8%BC%AA%E6%8F%9B%E7%9A%84%E5%A3%93%E5%8A%9B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/#%E8%BC%AA%E6%8F%9B%E7%9A%84%E5%A3%93%E5%8A%9B&quot;&gt;&lt;span&gt;輪換的壓力&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Game Pass 加遊戲也移除遊戲。這製造人為的稀缺。你一直想試 X，X 兩週後會離開服務。現在出現一個你不付錢時不存在的急迫感。&lt;/p&gt;
+&lt;p&gt;輪換被設計來驅動 engagement。它有效。它也讓你覺得自己被應該是放鬆的活動的 deadline 追著跑。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%93%81%E6%9C%89%E8%B7%9F%E7%A7%9F%E7%94%A8%E7%9A%84%E6%B7%B7%E6%B7%86&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/#%E6%93%81%E6%9C%89%E8%B7%9F%E7%A7%9F%E7%94%A8%E7%9A%84%E6%B7%B7%E6%B7%86&quot;&gt;&lt;span&gt;擁有跟租用的混淆&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;擁有一個遊戲讓它成為你生活的一部分。你可以三年後回來。慢燒是關係的一部分。&lt;/p&gt;
+&lt;p&gt;訂閱遊戲不會以同樣方式進入你的生活。你付錢的時候玩它們。你停付，它們就消失。這對遊戲本身創造了不同的關係，比較像看一個 TV show，不像建立一個收藏。&lt;/p&gt;
+&lt;p&gt;對某些遊戲這是 OK 的。對其他遊戲，沒有擁有權創造了永久的表面 engagement。你玩過一次，你沒有 access 了，你不會再想到它。那個遊戲在你生命中是被消費的內容，不是你擁有的東西。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要再追蹤你在 Game Pass「應該玩」什麼。可用遊戲的清單不是你欠注意力的清單。它是任何一個晚上的選項菜單，跟你的 Steam 庫存沒有不同。&lt;/p&gt;
+&lt;p&gt;根據真實有什麼來訂閱跟取消。如果某個季沒有讓你心動的東西，不要付那個 access。等有讓你心動的再回來。&lt;/p&gt;
+&lt;p&gt;把訂閱當作 discovery 工具，不是 backlog 製造機。Game Pass 很適合試你不會買的東西。當你把試用庫存當作義務時，它就變成壓力。&lt;/p&gt;
+&lt;p&gt;注意算式什麼時候在傷害你。如果「我有得到我付錢的價值嗎」讓你玩你不享受的遊戲，你沒有得到你付錢的價值。休閒整個的重點就是停止優化。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-11-why-game-pass-stresses-you-out/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 跟任何已安裝的東西配合，不管它從哪裡來。一個 Game Pass 遊戲跟一個買來的遊戲對它看起來一樣。介面裡沒有 Game Pass 計時器，沒有「即將過期」的壓力。如果你裝了，它就是候選。&lt;/p&gt;
+&lt;p&gt;如果訂閱焦慮滲進了你的遊戲時間，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 免費在這裡&lt;/a&gt;。它把你的庫存，不管怎麼組合的，當作就是一個庫存。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>10 · 演算法正在讓你的品味變小</title>
+  <link href="https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/</id>
+  <content type="html">&lt;h1&gt;10 · 演算法正在讓你的品味變小&lt;/h1&gt;
+&lt;p&gt;推薦系統很擅長找你會點的東西。聽起來跟「找你會喜歡的東西」是同一件事。其實不是。&lt;/p&gt;
+&lt;p&gt;每個現代推薦引擎，包括 Steam 的，optimization target 都是「使用者下一個 session engage 的機率」。引擎看你最近玩了什麼，找出旁邊的東西。如果你玩 roguelike，它推更多 roguelike。如果你晚上 11 點打開，它推「11 點打開的人喜歡的東西」。&lt;/p&gt;
+&lt;p&gt;每個推薦都「合理」。沒有一個是「意外」。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;surprise-%E5%B0%8D%E5%93%81%E5%91%B3%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/#surprise-%E5%B0%8D%E5%93%81%E5%91%B3%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;Surprise 對品味做了什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;品味是靠「接觸到你目前喜歡的邊緣」來建立的。第五個 roguelike 教你的東西比一個你不會自己挑的策略遊戲少。第二個回合制 JRPG 縮窄你。一部紀錄片、一部電影、一段對話把你推向意料之外的東西，會擴展你。&lt;/p&gt;
+&lt;p&gt;推薦引擎不會優化擴展。它們優化「不要失去你」。兩件事相關但不一樣。一個從來不接觸到自己 cluster 之外東西的使用者，engagement 高、成長為零。&lt;/p&gt;
+&lt;p&gt;兩年讓演算法選擇之後，你的品味已經被悄悄漏斗化了。你不會察覺，因為每個個別的推薦都「對」。漏斗的形狀，從漏斗裡面是看不出來的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%99%E5%9C%A8%E5%93%AA%E8%A3%A1%E9%A1%AF%E7%8F%BE&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/#%E9%80%99%E5%9C%A8%E5%93%AA%E8%A3%A1%E9%A1%AF%E7%8F%BE&quot;&gt;&lt;span&gt;這在哪裡顯現&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你開始覺得新遊戲都一樣。它們不是。你被秀的是窄窄的一片。&lt;/p&gt;
+&lt;p&gt;你覺得自己「過了」某個類型，其實只是用完了演算法以為你想要的那一片。&lt;/p&gt;
+&lt;p&gt;你被朋友推薦買了某個東西，發現自己愛它，那個感覺是演算法在過去幾個月秀給你的東西沒有達到的。那是演算法在對你藏東西。&lt;/p&gt;
+&lt;p&gt;你滑你的庫存，發現你不記得為什麼有清單最下面那些遊戲，那些演算法開始過濾之前你買的東西。那些是你當初好奇的東西。比較新的那些是被優化過 click probability 的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;刻意逆著演算法 curate。每個月挑一個你不常玩的類型的遊戲。讓自己有不喜歡的權利，那是一個真實的數據點。有時候你會發現一個你不知道自己想要的類別。&lt;/p&gt;
+&lt;p&gt;用不是要把你留在 platform 上的推薦來源。一個朋友、一個 podcast、一個論壇、一本雜誌。他們的興趣會滲到你身上，跟「跟你類似的使用者也買了」是不同種類的推薦。&lt;/p&gt;
+&lt;p&gt;記得「我不喜歡 JRPG」這個結論可能是五年前根據三個遊戲形成的。當時的品味不是現在的品味。偶爾測試一下。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/C-10-algorithm-making-taste-smaller/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不嘗試推薦。它根據你過去的行為從已安裝庫存挑，但它不知道哪個遊戲跟哪個類似。引擎裡沒有藏「跟你類似的使用者也玩了」。如果你裝了它，它就有資格。隨機是 feature。&lt;/p&gt;
+&lt;p&gt;這不是偶然真的。整個產品建立在「演算法推薦是娛樂的錯誤預設」這個信念上。&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 免費在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>09 · 你不是變廢了，你只是變大了</title>
+  <link href="https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/</id>
+  <content type="html">&lt;h1&gt;09 · 你不是變廢了，你只是變大了&lt;/h1&gt;
+&lt;p&gt;你以前一個晚上玩四個小時不會去想。現在玩 45 分鐘就覺得夠了。你以前會強行通過遊戲裡困難的部分。現在你會默默切到簡單模式，或者直接停。&lt;/p&gt;
+&lt;p&gt;某個東西變了。多數人解讀為衰退。他們擔心反應變慢、注意力縮短、對遊戲的愛在消失。&lt;/p&gt;
+&lt;p&gt;不是這樣。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E6%AD%A3%E6%94%B9%E8%AE%8A%E7%9A%84%E6%98%AF%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/#%E7%9C%9F%E6%AD%A3%E6%94%B9%E8%AE%8A%E7%9A%84%E6%98%AF%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;真正改變的是什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;成人生活每天做的決策數量大概比青少年時期多一個量級。等你坐下來玩，你已經不是滿載狀態。你的神經系統一整天在跑帳。&lt;/p&gt;
+&lt;p&gt;老的大腦不是比較差，是比較有效率地分配能量。能量被導離可有可無的活動，導向身體判斷必要的東西。遊戲是可有可無的，它在預算戰中輸給疲勞、晚餐、那段沒講完的對話、那封沒回的郵件。&lt;/p&gt;
+&lt;p&gt;「我以前玩比較多」這個感覺不是關於遊戲。是關於遊戲周圍的一切都擴大了。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%8F%8D%E6%87%89%E8%AE%8A%E6%85%A2%E7%9A%84%E8%BF%B7%E6%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/#%E5%8F%8D%E6%87%89%E8%AE%8A%E6%85%A2%E7%9A%84%E8%BF%B7%E6%80%9D&quot;&gt;&lt;span&gt;反應變慢的迷思&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你的反應其實沒有變多少。「我玩不了難遊戲了」這個感覺，主要是關於失敗的成本。你 18 歲的時候，在難打的戰鬥死掉的成本是重來 20 分鐘。可以接受。你 35 歲的時候，那 20 分鐘是從你晚上唯一可用的一小時裡偷走的。錯誤的成本變高了，即使你的原始技術沒變。&lt;/p&gt;
+&lt;p&gt;簡單模式不是投降。簡單模式是成本的重新校準。你每分鐘的晚上都在付機會成本，難模式三倍它，簡單模式維持它。算式是對的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%99%E5%B0%8D%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E6%84%8F%E5%91%B3%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/#%E9%80%99%E5%B0%8D%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E6%84%8F%E5%91%B3%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;這對你的庫存意味什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你在「四小時晚上」買的遊戲，跟你的「45 分鐘晚上」不合。這不是你的錯。是你過去買東西的自己跟現在玩遊戲的自己之間的不匹配。&lt;/p&gt;
+&lt;p&gt;那些遊戲有些永遠不會被玩。這是準確的，不是遺憾的。買它們的版本的你，不是有時間玩它們的版本的你。它們是出於善意被買的，沒辦法通過行程約束。&lt;/p&gt;
+&lt;p&gt;把它們當作過去生活的化石記錄，不是義務。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;挑符合你實際晚上的遊戲，不是符合你願景晚上的遊戲。一個 20 小時故事驅動的 indie 遊戲，比一個 200 小時開放世界 RPG，對多數成人行程來說是更好的 fit。&lt;/p&gt;
+&lt;p&gt;用簡單模式，不要罪惡感。成就感是「啟動遊戲並 engage 它」，不是難度曲線。&lt;/p&gt;
+&lt;p&gt;不滿意就早點放棄遊戲。你的時間比第一小時的沉沒成本有價值。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-09-youre-not-playing-worse-just-older/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 是為成人晚上設計的。它假設你的時間短、決策能力低。它給你看一個遊戲、要求 30 秒的決定，然後讓開。&lt;/p&gt;
+&lt;p&gt;如果「我以前玩遊戲」和「我想玩遊戲但現在很難」之間的落差讓你困擾，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>08 · 為什麼你會在特賣買永遠不會玩的遊戲</title>
+  <link href="https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/</id>
+  <content type="html">&lt;h1&gt;08 · 為什麼你會在特賣買永遠不會玩的遊戲&lt;/h1&gt;
+&lt;p&gt;Steam 夏季特賣開始了，你感受到一個熟悉的拉力。你滑過折扣，一個遊戲抓住你的眼睛，七五折。你不確定會不會玩。你還是買了。&lt;/p&gt;
+&lt;p&gt;六個月之後，那個遊戲還沒安裝。看到它你會有一點罪惡感。下次特賣你可能會再買一個。&lt;/p&gt;
+&lt;p&gt;這個 pattern 不是自制力的失敗，是特賣設計裡的一個 feature。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%89%B9%E8%B3%A3%E8%AE%93%E4%BD%A0%E5%9B%9E%E7%AD%94%E7%9A%84%E9%82%A3%E5%80%8B%E5%95%8F%E9%A1%8C&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/#%E7%89%B9%E8%B3%A3%E8%AE%93%E4%BD%A0%E5%9B%9E%E7%AD%94%E7%9A%84%E9%82%A3%E5%80%8B%E5%95%8F%E9%A1%8C&quot;&gt;&lt;span&gt;特賣讓你回答的那個問題&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;當你不在特賣的時候，你的大腦對一個潛在遊戲問的問題是：「我想玩這個嗎？」&lt;/p&gt;
+&lt;p&gt;當你在特賣的時候，問題變成：「我願意錯過這個折扣嗎？」&lt;/p&gt;
+&lt;p&gt;這是兩個完全不同的問題。第一個很難得到肯定的答案，因為大多數遊戲你不是急切地想玩。第二個容易得到肯定的答案，因為折扣有 deadline、價格感覺低。&lt;/p&gt;
+&lt;p&gt;特賣的框架改變了比較組。你不再把這個遊戲跟「沒有它」比較，你在把折扣價跟原價比較。後者的比較幾乎總是傾向買。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;loss-aversion-%E9%81%87%E5%88%B0%E6%84%9F%E7%9F%A5%E7%A8%80%E7%BC%BA&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/#loss-aversion-%E9%81%87%E5%88%B0%E6%84%9F%E7%9F%A5%E7%A8%80%E7%BC%BA&quot;&gt;&lt;span&gt;Loss Aversion 遇到感知稀缺&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;兩個有充分文獻記載的偏誤在這裡疊加。Loss aversion 讓「錯過特賣」這個選項感覺比實際更糟。Perceived scarcity（特賣 24 小時後結束）把急迫感拉到評估之上。它們合作，把決定推向「買」，根本沒有 engage 到「我會玩嗎」這個問題。&lt;/p&gt;
+&lt;p&gt;Steam 介面強化兩個偏誤。倒數計時器。限時優惠。願望清單通知。每一個設計元素都優化「買」，不是「把遊戲匹配到你真正的需求」。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E6%AD%A3%E8%A2%AB%E5%84%AA%E5%8C%96%E7%9A%84%E6%98%AF%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/#%E7%9C%9F%E6%AD%A3%E8%A2%AB%E5%84%AA%E5%8C%96%E7%9A%84%E6%98%AF%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;真正被優化的是什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Steam 的營收，當然。但也包括你「我是個聰明買家」的感覺。你 10 美金買到一個 40 美金的遊戲，你贏了。那個遊戲現在存在你的庫存裡，是這個贏的證據。會不會玩它，是一個分開的、比較不顯著的問題。&lt;/p&gt;
+&lt;p&gt;買帶來滿足感。玩應該帶來更多滿足感，但需要力氣，而滿足感已經被收走了。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要沒有清單就逛特賣。事先決定你要什麼，只看那些東西。不要讓「發現」和「折扣」同時發生。&lt;/p&gt;
+&lt;p&gt;把願望清單當作冷卻期。任何吸引你的加進願望清單，不要第一眼買。一週之後再決定。讓購買感覺必要的那種急迫感會消散，到時候你可以冷靜評估你是不是真的想要，多數時候答案是不要。&lt;/p&gt;
+&lt;p&gt;重新框架那個算式。問題不是「10 美金買一個 40 美金的遊戲是不是好價格」。問題是「我願意花 10 美金在下個月玩這個嗎」。如果答案是不，你不是在省錢，你是在花 10 美金買儲存空間。&lt;/p&gt;
+&lt;p&gt;算 cost-per-played-hour。如果你去年在 Steam 特賣花了 200 美金，玩了 20 小時，你花 10 美金每小時得到的是你大部分不享受的娛樂。特賣個別感覺便宜，加總起來其實昂貴。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-08-why-you-buy-games-during-sales/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 只看已安裝的東西。Steam 特賣動不到它。那些你買了但沒裝的遊戲完全不在 Maida 的選擇範圍裡。這是一個 feature：「裝」這個摩擦逼出了一個小小的承諾，「買」這個動作沒有逼出。&lt;/p&gt;
+&lt;p&gt;如果這個特賣購買的迴圈讓你困擾，把「擁有」和「已安裝」分開來，是一個安靜的方法把特賣從等式裡拿掉。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>07 · 「Pile of Shame」是你騙自己的詞</title>
+  <link href="https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/</id>
+  <content type="html">&lt;h1&gt;07 · 「Pile of Shame」是你騙自己的詞&lt;/h1&gt;
+&lt;p&gt;「Pile of shame」這個詞進入遊戲圈的詞彙，大概是在數位商店興起的時候。在 Steam 特賣和 Humble Bundle 之前，你必須實體買每個遊戲。你的庫存會自我設限。後來，摩擦消失了，庫存的成長速度超過了遊玩時間。&lt;/p&gt;
+&lt;p&gt;「pile」是承認那個落差的方法。「shame」是表演對它感到不好意思。&lt;/p&gt;
+&lt;p&gt;第一個部分沒問題，庫存就是長了。第二個部分是問題。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E6%A1%86%E6%9E%B6%E6%98%AF%E9%8C%AF%E7%9A%84&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E6%A1%86%E6%9E%B6%E6%98%AF%E9%8C%AF%E7%9A%84&quot;&gt;&lt;span&gt;為什麼這個框架是錯的&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這個詞暗示沒玩的遊戲是道德上的失敗。錢花了、時間答應了，你沒有 follow through。你是一個玩不來遊戲的玩家。&lt;/p&gt;
+&lt;p&gt;但這個框架從別的領域借了價值觀。床頭沒讀完的一堆書是「不好」的，因為閱讀對你有益、因為你說過要自我提升。地下室一堆沒做完的專案是「不好」的，因為你應該有生產力。&lt;/p&gt;
+&lt;p&gt;遊戲屬於不同的類別。它們是娛樂。一個 2 美金特賣買了沒玩的遊戲，數學是：你花了 2 美金，得到零娛樂。這不是道德失敗，這是一個你沒去退費的退費級購買。&lt;/p&gt;
+&lt;p&gt;沒有任何一個版本的事實裡面，你欠那些沒玩的遊戲什麼。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%82%A3%E4%B8%80%E5%A0%86%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E4%BB%80%E9%BA%BC&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/#%E9%82%A3%E4%B8%80%E5%A0%86%E5%AF%A6%E9%9A%9B%E4%B8%8A%E6%98%AF%E4%BB%80%E9%BA%BC&quot;&gt;&lt;span&gt;那一堆實際上是什麼&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;如果你誠實地重新框架那一堆，那裡面有：&lt;/p&gt;
+&lt;p&gt;一個比任何個人需要的都要大的選項庫。對任何一個晚上的保險，因為其中一個遊戲會適合你的心情。過去版本的你想要不同東西的收據。一些真正不好的購買混在好的裡面，這在每個購買類別都是真的。&lt;/p&gt;
+&lt;p&gt;這些描述沒有一個牽涉到 shame。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;shame-%E6%98%AF%E5%95%8F%E9%A1%8C%EF%BC%8C%E4%B8%8D%E6%98%AF%E9%82%A3%E4%B8%80%E5%A0%86&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/#shame-%E6%98%AF%E5%95%8F%E9%A1%8C%EF%BC%8C%E4%B8%8D%E6%98%AF%E9%82%A3%E4%B8%80%E5%A0%86&quot;&gt;&lt;span&gt;Shame 是問題，不是那一堆&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;那一堆本身是無害的。附在那一堆上的 shame 才是創造迴避迴圈的東西。你不打開 Steam，因為你會看到沒玩的遊戲。你不試新遊戲，因為你會增加數字。你還是繼續買遊戲，因為買的動作是滿足的，而玩的動作現在被污染了。&lt;/p&gt;
+&lt;p&gt;如果你拿掉 shame，那一堆會變成一個 feature。你會打開 Steam，看到你的庫存，挑一個適合心情的，玩，關掉。有些遊戲永遠不會被玩。那會是 OK 的。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%AF%A6%E9%9A%9B%E7%9A%84%E9%87%8D%E6%96%B0%E6%A1%86%E6%9E%B6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/#%E5%AF%A6%E9%9A%9B%E7%9A%84%E9%87%8D%E6%96%B0%E6%A1%86%E6%9E%B6&quot;&gt;&lt;span&gt;實際的重新框架&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;不要再叫它 pile of shame。這個詞帶著你沒選擇的重量。叫它庫存、收藏、backlog 如果你必須，但不要叫它 pile，不要叫它 shame。&lt;/p&gt;
+&lt;p&gt;不要再數沒玩的遊戲。那個數字告訴你的東西沒用，它只告訴你收藏多大，那不是道德指標。&lt;/p&gt;
+&lt;p&gt;不要在對話裡為它道歉。你不欠其他玩家對你沒玩的庫存解釋。他們也有一個。&lt;/p&gt;
+&lt;p&gt;把每個遊戲當作可能性，不是義務。下次你滑過一個沒玩的遊戲，問題不是「我為什麼還沒玩」。問題是「我今晚想玩這個嗎」。要的話，玩。不要的話，滑過去，不需要評論。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-07-pile-of-shame-is-a-lie/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 是圍繞這個重新框架建的。沒有「沒玩遊戲」的計數。沒有進度追蹤。沒有完成度百分比。Maida 知道的只有「什麼裝了」和「你的行為信號」。那一堆，連同它想像出來的所有重量，沒有出現在介面任何地方。&lt;/p&gt;
+&lt;p&gt;如果那一堆讓你困擾，用一個不承認它存在的工具可能會有幫助。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>06 · 你不欠那個遊戲一個結局</title>
+  <link href="https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/</id>
+  <content type="html">&lt;h1&gt;06 · 你不欠那個遊戲一個結局&lt;/h1&gt;
+&lt;p&gt;你三週前開了一個遊戲，玩了十小時。然後生活發生了一些事，你沒有再回去，但也沒有刪掉。每次你在庫存看到它，會有一個小小的刺痛。&lt;/p&gt;
+&lt;p&gt;那個遊戲沒事。那個遊戲不需要從你這裡得到什麼。它是放在硬碟上的軟體，沒有能力被失望。&lt;/p&gt;
+&lt;p&gt;但是某個時候，你內化了「沒有玩完一個遊戲就是失敗」這個概念。這從哪裡來。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8C%E5%AE%8C%E6%88%90%E7%BD%AA%E6%83%A1%E6%84%9F%E3%80%8D%E7%9A%84%E4%BE%86%E6%BA%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/#%E3%80%8C%E5%AE%8C%E6%88%90%E7%BD%AA%E6%83%A1%E6%84%9F%E3%80%8D%E7%9A%84%E4%BE%86%E6%BA%90&quot;&gt;&lt;span&gt;「完成罪惡感」的來源&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;「該完成你開始的事」這個想法是從別的脈絡借來的。書，特別是學校讀的那些文學書，帶著一個道德框架：完成是美德、放棄是軟弱。長時間的媒介，因為要求持續注意力，文化上累積了「認真的人會看完」的重量。&lt;/p&gt;
+&lt;p&gt;遊戲繼承了這個框架，但沒有掙得它。一個遊戲不是小說。它不是你報名的課程。它不是你承諾跑完的馬拉松。它是你買的一個娛樂品，因為某個時候它對你有吸引力。那次購買的條款不包括義務。&lt;/p&gt;
+&lt;p&gt;業界的行銷強化了這個錯誤。成就、完成度百分比、true ending、後遊戲內容。每一個機制都被設計來從你這裡多榨一點時間，框架是「你欠它」。&lt;/p&gt;
+&lt;p&gt;你不欠。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%80%99%E5%80%8B%E8%AC%8A%E7%9A%84%E4%BB%A3%E5%83%B9&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/#%E9%80%99%E5%80%8B%E8%AC%8A%E7%9A%84%E4%BB%A3%E5%83%B9&quot;&gt;&lt;span&gt;這個謊的代價&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;完成強迫症是有代價的。它讓開始新遊戲變得更難，因為每個新開始都帶著「要完成」的隱性承諾。pile of shame 變大，正是因為附在它身上的 shame。&lt;/p&gt;
+&lt;p&gt;跟「沒有玩完」和平共處的人，反而玩比較多遊戲，不是比較少。他們輕鬆地開始東西。不享受了就停。沒有儀式地往下走。&lt;/p&gt;
+&lt;p&gt;擺脫不掉那個義務的人，會癱瘓。他們不開始，因為他們沒辦法承受清單上又多一個半完成的條目。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E5%AF%A6%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/#%E7%9C%9F%E5%AF%A6%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;真實的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;一個遊戲對你來說「完成」，是當你從它那裡得到了你想要的東西。有時候這跟跑工作人員字幕對齊，常常不對齊。你可以在第三小時完成一個遊戲，因為你看到了你需要看到的部分。你可以在第四十小時完成一個遊戲，在官方結局之後，在某個「我夠了」的瞬間，遊戲對這件事沒有意見。&lt;/p&gt;
+&lt;p&gt;跑字幕是一個文化標記，不是道德標記。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/B-06-you-dont-owe-the-game-an-ending/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不追蹤完成度，不顯示進度條，不問你有沒有玩完。它記的分數是二元的：你今晚啟動了沒有。其他的事，你跟遊戲之間。&lt;/p&gt;
+&lt;p&gt;這是刻意的。追蹤完成度會讓罪惡感從側門又回來。Maida 沒辦法幫你完成東西，它也不嘗試。它做的是讓「開始」變容易，那才是真正的問題。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡，免費&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>05 · 別再等那個「對的時間」開始那款 RPG</title>
+  <link href="https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/</id>
+  <content type="html">&lt;h1&gt;05 · 別再等那個「對的時間」開始那款 RPG&lt;/h1&gt;
+&lt;p&gt;那款 80 小時的 RPG 在你的庫存裡。半年前特賣買的。它是一款好遊戲，你知道它是一款好遊戲，你只聽過讚美。但你還沒開始。&lt;/p&gt;
+&lt;p&gt;你給自己的理由：你在等對的時間。一個長假、一段安靜的週末、一連串平靜的晚上。一旦有了那個，你就會認真投入，你會對得起它。&lt;/p&gt;
+&lt;p&gt;那段時間從來不會到。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E3%80%8C%E5%B0%8D%E7%9A%84%E6%99%82%E9%96%93%E3%80%8D%E9%80%99%E5%80%8B%E5%B9%BB%E6%83%B3&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/#%E3%80%8C%E5%B0%8D%E7%9A%84%E6%99%82%E9%96%93%E3%80%8D%E9%80%99%E5%80%8B%E5%B9%BB%E6%83%B3&quot;&gt;&lt;span&gt;「對的時間」這個幻想&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;「對的時間」是你的想像構建出來的虛構時段。它有這些特性：&lt;/p&gt;
+&lt;p&gt;你有無限的晚上。你不累。沒有東西爭奪注意力。你正好在適合 60 小時史詩的心情。你 commit 到要看完它。&lt;/p&gt;
+&lt;p&gt;這個人不存在。你沒有無限的晚上，你會在某些晚上是累的，會有東西爭奪，你的心情會變化，你的承諾會動搖。這些全部都是真的，而且永遠都會是真的。&lt;/p&gt;
+&lt;p&gt;「等對的時間」的計畫，就是「永遠不開始」的計畫。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%95%B7%E9%81%8A%E6%88%B2%E7%89%B9%E5%88%A5%E6%9C%83%E8%A7%B8%E7%99%BC%E9%80%99%E5%80%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%95%B7%E9%81%8A%E6%88%B2%E7%89%B9%E5%88%A5%E6%9C%83%E8%A7%B8%E7%99%BC%E9%80%99%E5%80%8B&quot;&gt;&lt;span&gt;為什麼長遊戲特別會觸發這個&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;短遊戲沒這個問題。你可以隨便試試。一個四小時的 indie 遊戲今晚就可以開，不需要什麼儀式。&lt;/p&gt;
+&lt;p&gt;一個 80 小時的 RPG 帶著合約的重量。開始它感覺像簽了什麼。如果你不確定能不能玩完，你的腦袋會推論：比較安全的是不要開始。一旦開始就放棄，這個遊戲就「浪費了」。比較好的是把它留在那個保持完美未來的架上。&lt;/p&gt;
+&lt;p&gt;這是 loss aversion 套用在時間投資上。對「開始而沒完成」的恐懼蓋過「永遠不玩」的確定。後者其實正在發生，但因為它是預設狀態而隱形。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/#%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;從一個你願意輸掉的 session 開始。&lt;/p&gt;
+&lt;p&gt;告訴自己：今晚我玩這個 45 分鐘。如果不喜歡，我就停了。如果喜歡，可能會多玩一點。不管哪一種，那 45 分鐘是 OK 的。&lt;/p&gt;
+&lt;p&gt;你不是簽 80 小時。你是簽 45 分鐘。合約很小。&lt;/p&gt;
+&lt;p&gt;多數試這招的人會發現兩件事其中一件。要嘛他們發現這個遊戲其實不適合自己，那他們就省下了 79 小時的罪惡感。要嘛他們發現自己喜歡這個遊戲，那下一個 session 就不再是合約，因為他們已經開始了。&lt;/p&gt;
+&lt;p&gt;那個 80 小時幻想是障礙。45 分鐘的試 session 是解藥。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-05-stop-waiting-perfect-time/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 不在乎遊戲多長。它給你看一個已安裝的遊戲，你決定今晚要不要試。如果要，你不需要承諾要玩完。你承諾的是啟動它。&lt;/p&gt;
+&lt;p&gt;那個比較小的承諾，其實才是大部分決定真正的樣子，把未來自己的焦慮拿掉之後。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 免費在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>04 · 為什麼你有 80 個沒玩的遊戲還想要新的</title>
+  <link href="https://blog.brightraven.world/zh/A-04-why-you-want-new-games/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/A-04-why-you-want-new-games/</id>
+  <content type="html">&lt;h1&gt;04 · 為什麼你有 80 個沒玩的遊戲還想要新的&lt;/h1&gt;
+&lt;p&gt;你滑過你的庫存，沒有東西讓你心動，於是你打開 Steam 商店。你瀏覽。你把幾個東西加進願望清單。你覺得有生產力。&lt;/p&gt;
+&lt;p&gt;二十分鐘之後，你的願望清單多了兩個遊戲，遊玩時間多了零小時。你剛才在迴避的庫存還是同樣大，加上你現在多了兩個候選等著加入那個你沒辦法處理的庫存。&lt;/p&gt;
+&lt;p&gt;這不是研究問題。這是逃避。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E5%95%86%E5%BA%97%E6%84%9F%E8%A6%BA%E6%AF%94%E5%BA%AB%E5%AD%98%E5%A5%BD&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-04-why-you-want-new-games/#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%95%86%E5%BA%97%E6%84%9F%E8%A6%BA%E6%AF%94%E5%BA%AB%E5%AD%98%E5%A5%BD&quot;&gt;&lt;span&gt;為什麼商店感覺比庫存好&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;商店感覺比庫存好的理由，跟「計畫」感覺比「做」好的理由是同一個。&lt;/p&gt;
+&lt;p&gt;庫存：滿是義務。每個遊戲都代表一個過去的決定、花掉的錢、佔掉的硬碟空間。它們暗暗在說「玩我」。每個你滑過去的標題都是一個小小的指控。&lt;/p&gt;
+&lt;p&gt;商店：純粹的可能性。那些遊戲還沒進入你的責任範圍。瀏覽它們是無後果的。甚至買一個都某種程度上沒後果，因為「買」這個動作本身就是會帶來滿足感的部分，遊戲本身不需要被玩，多巴胺已經先放出來了。&lt;/p&gt;
+&lt;p&gt;你不是真的在找新遊戲。你是在找一個逃避，逃離那個你沒辦法面對的庫存。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E8%BF%B4%E5%9C%88%E6%9C%83%E7%B9%BC%E7%BA%8C&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-04-why-you-want-new-games/#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%80%99%E5%80%8B%E8%BF%B4%E5%9C%88%E6%9C%83%E7%B9%BC%E7%BA%8C&quot;&gt;&lt;span&gt;為什麼這個迴圈會繼續&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這個迴圈就是 backlog 怎麼長大的。每次商店之旅就多兩個遊戲到那一堆。那一堆變大。迴避變強。商店變成比實際遊戲更可靠的多巴胺來源。&lt;/p&gt;
+&lt;p&gt;Steam 特賣加速這件事。框架改變了你正在回答的問題。你不再評估「我會玩這個嗎」，你在評估「我願意錯過這個折扣嗎」。這是兩個完全不同的問題。第一個可能讓你不買；第二個通常讓你買。&lt;/p&gt;
+&lt;p&gt;這就是為什麼擁有 500 個遊戲庫存的人還是繼續買。不是因為他們不理性，而是這個系統在它正在評估的層次上是理性的，只是不是真正重要的那個層次。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E6%AD%A3%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-04-why-you-want-new-games/#%E7%9C%9F%E6%AD%A3%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B&quot;&gt;&lt;span&gt;真正有用的事&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;把商店時間框起來。事先決定：星期六早上我瀏覽，平日晚上我玩。不要讓瀏覽和玩的決定發生在同一個時間。它們是不同的活動，當作不同的房間對待。&lt;/p&gt;
+&lt;p&gt;加進願望清單，不要買。願望清單是最便宜的承諾裝置。它捕捉 System 1 的興趣，但不動到你的錢包。一週之後再來看，那種讓購買感覺必要的緊迫感已經消散，你可以冷靜評估你是不是真的想要那個遊戲，多數時候答案是不要。&lt;/p&gt;
+&lt;p&gt;重新框架那個算式。問題不是「10 美金買一個原價 40 美金的遊戲是好的價格嗎」。問題是「我願意花 10 美金在下個月玩這個嗎」。如果答案是不，你不是在省錢，你是在花 10 美金買儲存空間。&lt;/p&gt;
+&lt;p&gt;算 cost-per-played-hour。如果你去年在 Steam 特賣花了 200 美金，玩了 20 小時，你花 10 美金每小時得到的是你大部分不享受的娛樂。特賣個別感覺便宜，加總起來其實昂貴。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-04-why-you-want-new-games/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 只看已安裝的東西。Steam 特賣動不到它。那些你買了但沒裝的遊戲完全不在 Maida 的選擇範圍裡。這是一個 feature：「裝」這個摩擦逼出了一個小小的承諾，「買」這個動作沒有逼出。&lt;/p&gt;
+&lt;p&gt;如果這個特賣購買的迴圈讓你困擾，把「擁有」和「已安裝」分開來，是一個安靜的方法把特賣從等式裡拿掉。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>03 · 為什麼昨天的遊戲今天提不起興趣</title>
+  <link href="https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/</id>
+  <content type="html">&lt;h1&gt;03 · 為什麼昨天的遊戲今天提不起興趣&lt;/h1&gt;
+&lt;p&gt;你昨天玩了一個遊戲，玩得很開心，睡前還在想它。&lt;/p&gt;
+&lt;p&gt;今晚你坐下來，回到那個遊戲的念頭卻有點重。你不討厭它，你只是不想要它。你在庫存裡滑過它，看別的東西。&lt;/p&gt;
+&lt;p&gt;你不是在反覆無常。你的大腦在做大腦會做的事。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%B8%89%E8%82%A1%E5%8A%9B%E9%87%8F%EF%BC%8C%E5%85%A8%E9%83%A8%E5%BE%80%E5%90%8C%E4%B8%80%E5%80%8B%E6%96%B9%E5%90%91%E6%8E%A8&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/#%E4%B8%89%E8%82%A1%E5%8A%9B%E9%87%8F%EF%BC%8C%E5%85%A8%E9%83%A8%E5%BE%80%E5%90%8C%E4%B8%80%E5%80%8B%E6%96%B9%E5%90%91%E6%8E%A8&quot;&gt;&lt;span&gt;三股力量，全部往同一個方向推&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Hedonic adaptation 不只是大事才有，每天都在發生，對你享受的所有東西都有效。神經化學的解釋很簡單：novelty 產生的多巴胺反應跟 surprise 成正比。昨天那個遊戲有 surprise，新的機制、新的劇情點、地圖上某個你還沒看過的角落。今天，prediction error 比較小。你大概知道接下來會發生什麼。&lt;/p&gt;
+&lt;p&gt;這不代表遊戲變差了。是你的大腦更新了它的模型。同樣的內容產生較小的反應。&lt;/p&gt;
+&lt;p&gt;再加上 variety-seeking 本能。行為經濟學家測量過一個穩定的效應：即使人們很愛昨天那個東西，今天給他們選擇，他們會選不一樣的。不是因為昨天那個錯了，是因為單調本身會讓人不舒服。&lt;/p&gt;
+&lt;p&gt;再加上 resumption friction。即使只隔一天，你還是要記得上次到哪、操作怎麼來、目標是什麼。重新載入要花力氣。回頭那一段的前十分鐘是笨拙的。你的 System 2 在評估今晚要不要玩的時候，會準確估算這個成本，跟「換個新的開始」做比較。&lt;/p&gt;
+&lt;p&gt;三股力量都把你往同一個方向推：離開昨天那個遊戲。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E6%88%91%E5%B0%B1%E4%B8%80%E7%9B%B4%E7%8E%A9%E5%88%B0%E7%8E%A9%E5%AE%8C%E3%80%8D%E7%B8%BD%E6%98%AF%E5%A4%B1%E6%95%97&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/#%E7%82%BA%E4%BB%80%E9%BA%BC%E3%80%8C%E6%88%91%E5%B0%B1%E4%B8%80%E7%9B%B4%E7%8E%A9%E5%88%B0%E7%8E%A9%E5%AE%8C%E3%80%8D%E7%B8%BD%E6%98%AF%E5%A4%B1%E6%95%97&quot;&gt;&lt;span&gt;為什麼「我就一直玩到玩完」總是失敗&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這個計畫是昨天的你做的，他在不一樣的心理狀態。今天的你不分享這個 commitment，因為今天的你不是同樣的神經化學。那個承諾要一直玩下去的未來自己，是不一樣的人。現在的自己有完整的權利不同意。&lt;/p&gt;
+&lt;p&gt;這不是意志力薄弱，是記憶和動機運作的方式。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E6%9C%89%E7%94%A8%E7%9A%84%E6%9D%B1%E8%A5%BF&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/#%E6%9C%89%E7%94%A8%E7%9A%84%E6%9D%B1%E8%A5%BF&quot;&gt;&lt;span&gt;有用的東西&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;降低啟動能量。如果你能兩分鐘而不是十分鐘就坐下來繼續，resumption friction 會縮小。快速讀檔、立刻知道下一個目標、不需要在選單裡翻找。&lt;/p&gt;
+&lt;p&gt;接受暫停。一個遊戲可以等三天再回來，可能因為 variety 重置了，反而更享受。每天進度不是一種美德。&lt;/p&gt;
+&lt;p&gt;對重要的事先承諾。如果完成某個特定遊戲對你有意義，昨天就先鎖定一些決定：「明天 9 點玩這個，不管我感覺怎樣」。今天的你會抗拒，但過去的承諾可以蓋過當下的聳肩。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-03-yesterdays-game-doesnt-work-today/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida 有一個叫 Anchor 的 feature，做的就是上面第三件事。長按三秒一個遊戲，Maida 會在接下來幾天優先 surface 它，替你對抗每日重置。但 Maida 不會提醒你去 anchor。如果昨天的你沒想到要做，今天的你重新洗牌。&lt;/p&gt;
+&lt;p&gt;理由很誠實：Maida 沒辦法判斷你是滿足地關掉那個遊戲，還是煩躁地關掉。把你推回去那個遊戲是猜，猜錯的成本比猜對的好處大。所以 Maida 對昨天保持安靜，相信你想回去的話會自己找路。&lt;/p&gt;
+&lt;p&gt;如果這個立場讓你有興趣，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 免費在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>02 · 為什麼你打開 Steam 五分鐘又關掉</title>
+  <link href="https://blog.brightraven.world/zh/A-02-why-you-open-steam-and-close-it/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/A-02-why-you-open-steam-and-close-it/</id>
+  <content type="html">&lt;h1&gt;02 · 為什麼你打開 Steam 五分鐘又關掉&lt;/h1&gt;
+&lt;p&gt;這個 pattern 永遠是同一個。&lt;/p&gt;
+&lt;p&gt;你下班，累但睡前還有一兩個小時。你打開 Steam，準備玩點什麼。你滑過你的庫存。某個東西看起來不錯，你 hover 過去。另一個也不錯，你比較。兩個都跳過。你看到一個忘記自己擁有的遊戲，你考慮它。五分鐘過去。你關掉 Steam。打開 YouTube。&lt;/p&gt;
+&lt;p&gt;剛剛發生了什麼。&lt;/p&gt;
+&lt;p&gt;這是 decision fatigue 在 real time 撞上 variety。經過一整天工作的決策，你的 System 2 已經沒電了。它還能處理資訊，但已經沒辦法 commit。你滑過的每一個遊戲都需要一個小評估。類型對嗎？長度對嗎？心情對嗎？乘以 80 個遊戲，就是 80 個微決策，一個都沒導向行動。&lt;/p&gt;
+&lt;p&gt;庫存變成「之後再說」的關卡賽。每個遊戲都被評估，沒有任何一個被選中。&lt;/p&gt;
+&lt;p&gt;最後跑去 YouTube 不是因為懶。YouTube 不需要做決定。演算法幫你選。你不是因為不想玩遊戲而放棄玩遊戲。你是因為「選擇」變成 bottleneck，不是「玩」。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%A4%B1%E6%95%97%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%9A%E6%9B%B4%E5%A4%9A%E6%8E%A8%E8%96%A6&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-02-why-you-open-steam-and-close-it/#%E5%A4%B1%E6%95%97%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%9A%E6%9B%B4%E5%A4%9A%E6%8E%A8%E8%96%A6&quot;&gt;&lt;span&gt;失敗的解法：更多推薦&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;直覺解法是讓 Steam surface 一些東西。「告訴我玩什麼」。但這是同一個問題換衣服。Steam 會 surface 5-10 個候選。你現在有 5-10 個微決策而不是 80 個。好一點，但沒解決。&lt;/p&gt;
+&lt;p&gt;更好的 surface 在你的 System 2 沒東西可給的時候，最後一樣會走到同個地方。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%9C%9F%E6%AD%A3%E6%9C%89%E6%95%88%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%9A%E6%8A%8A%E9%81%B8%E6%93%87%E5%BE%9E%E7%AD%89%E5%BC%8F%E8%A3%A1%E6%8B%BF%E8%B5%B0&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-02-why-you-open-steam-and-close-it/#%E7%9C%9F%E6%AD%A3%E6%9C%89%E6%95%88%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%9A%E6%8A%8A%E9%81%B8%E6%93%87%E5%BE%9E%E7%AD%89%E5%BC%8F%E8%A3%A1%E6%8B%BF%E8%B5%B0&quot;&gt;&lt;span&gt;真正有效的解法：把選擇從等式裡拿走&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你今晚會選的任何東西都是夠好的。完美的選擇不存在。「今晚最好的遊戲」和「今晚第五好的遊戲」的差距，比起「今晚有玩」和「今晚沒玩」的差距，小得多。&lt;/p&gt;
+&lt;p&gt;處理 decision fatigue 最被低估的方法，是把決定授權給某個無害的地方。擲骰子。讓隨機選擇器幫你選。設一個規則：打開 Steam 看到的第一個遊戲就是我玩的，不准滑。&lt;/p&gt;
+&lt;p&gt;只要你進入某個遊戲二十分鐘，你會知道你享不享受。兩種都是有用的資訊。兩種都不需要你在一小時前累到沒辦法思考的時候做出「正確」的選擇。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-02-why-you-open-steam-and-close-it/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;我做了 Maida 就是為了這個晚上的狀態。它一次只給你看一個遊戲。沒有 library view，所以沒有東西可以滑。你要嘛試它給你看的這個遊戲，要嘛說「不要」看下一個。三四張卡之後，你要嘛已經開始玩，要嘛真的確認自己今晚不想玩，那 YouTube 一直就是對的答案。&lt;/p&gt;
+&lt;p&gt;如果這個瀏覽迴圈是你晚上的麻煩，&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida 在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>01 · 你沒有忘記那個遊戲。你忘記的是當初為什麼想玩它</title>
+  <link href="https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/</id>
+  <content type="html">&lt;h1&gt;01 · 你沒有忘記那個遊戲。你忘記的是當初為什麼想玩它&lt;/h1&gt;
+&lt;p&gt;你沒有忘記那個遊戲。你忘記的是當初為什麼想玩它。&lt;/p&gt;
+&lt;p&gt;你的庫存裡某處有一款遊戲，是某次特賣加進去的，或某個朋友提到之後加的，或是預告片在某一個剛剛好的時間點打到你。那一刻有什麼東西點亮了。你知道你為什麼要它。&lt;/p&gt;
+&lt;p&gt;之後生活繼續走，那個情境消散，遊戲留下來。&lt;/p&gt;
+&lt;p&gt;現在你滑過它，它就只是一個標題。你大腦裡那個會慎重評估的部分接手，開始問：今晚適合這個類型嗎？要花多久？我真的會玩完嗎？然後在這個計算的某個地方，什麼也沒發生。&lt;/p&gt;
+&lt;p&gt;不是這個遊戲被你拒絕。是它從當初存在於庫存的理由那裡被孤立了。&lt;/p&gt;
+&lt;p&gt;這不是 backlog 問題。這是記憶問題。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E5%85%A9%E7%A8%AE%E5%A4%A7%E8%85%A6%EF%BC%8C%E4%B8%80%E5%80%8B%E5%BA%AB%E5%AD%98&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/#%E5%85%A9%E7%A8%AE%E5%A4%A7%E8%85%A6%EF%BC%8C%E4%B8%80%E5%80%8B%E5%BA%AB%E5%AD%98&quot;&gt;&lt;span&gt;兩種大腦，一個庫存&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Daniel Kahneman 描述過兩種思考模式。System 1 快、情緒、反射。System 2 慢、刻意、分析。&lt;/p&gt;
+&lt;p&gt;當你把那個遊戲加進願望清單的時候，掌權的是 System 1。某個東西讓你興奮起來，可能是預告片、推薦、一個瞬間的好奇。那個決定在幾秒內做完，當下的情境讓它完全 make sense。&lt;/p&gt;
+&lt;p&gt;當你今晚坐下來想玩點什麼，出現的是 System 2。它要評估選項、衡量時間投入、考慮你現在的心情適不適合這個類型。它看著你 300 個遊戲的庫存，看到的是 300 個要做的決定。&lt;/p&gt;
+&lt;p&gt;System 2 不記得 System 1 想要任何東西的理由。它只看到一份清單。&lt;/p&gt;
+&lt;p&gt;癱瘓就從這裡開始。不是因為遊戲太多。是因為太多遊戲沒有附帶記憶。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E7%82%BA%E4%BB%80%E9%BA%BC%E6%8E%A8%E8%96%A6%E8%AE%93%E4%BA%8B%E6%83%85%E8%AE%8A%E5%BE%97%E6%9B%B4%E7%B3%9F&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%8E%A8%E8%96%A6%E8%AE%93%E4%BA%8B%E6%83%85%E8%AE%8A%E5%BE%97%E6%9B%B4%E7%B3%9F&quot;&gt;&lt;span&gt;為什麼推薦讓事情變得更糟&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;直覺的解法是讓演算法幫你選。Steam 會推一些東西。推薦系統會把選項收窄。&lt;/p&gt;
+&lt;p&gt;但是推薦系統的目標是「你下一秒最有可能點什麼」。它看你的歷史，找出 pattern。如果你最近玩動作遊戲，它就推更多動作遊戲。&lt;/p&gt;
+&lt;p&gt;時間久了，演算法看到的你的品味變得越來越窄，不是越來越廣。在你興趣邊緣的東西，那些可能會驚喜你的東西，被它降權了。演算法不知道三個月前那一刻，你加了某個遊戲是因為它讓你想起當時你在思考的某件事。它也不知道你還沒玩它是因為你忘了那一刻，不是因為你改變了主意。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E4%BD%A0%E6%83%B3%E7%8E%A9%E7%9A%84%E9%81%8A%E6%88%B2%E5%B7%B2%E7%B6%93%E5%9C%A8%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E8%A3%A1&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/#%E4%BD%A0%E6%83%B3%E7%8E%A9%E7%9A%84%E9%81%8A%E6%88%B2%E5%B7%B2%E7%B6%93%E5%9C%A8%E4%BD%A0%E7%9A%84%E5%BA%AB%E5%AD%98%E8%A3%A1&quot;&gt;&lt;span&gt;你想玩的遊戲已經在你的庫存裡&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;大多數有 decision paralysis 的人，他們需要的遊戲已經有了。問題不在取得，在那個瞬間之間的差距：你想要它的瞬間，跟你準備好玩它的瞬間。&lt;/p&gt;
+&lt;p&gt;backlog 不會因為找到更好的推薦而變小。它變小是因為你重新接上當初做那些決定的理由。&lt;/p&gt;
+&lt;p&gt;幾件事在推薦失效時還能用。&lt;/p&gt;
+&lt;p&gt;把清單縮減到已安裝的部分。一旦它被安裝，你已經做了一個承諾，你想要它到願意花磁碟空間給它。那是一個真實的信號。從那裡開始。&lt;/p&gt;
+&lt;p&gt;接受你不會玩完所有的東西。庫存不是 checklist。讓一些東西放下，不需要罪惡感。&lt;/p&gt;
+&lt;p&gt;不要選。讓某個東西自己浮現。隨機抽一個會把那個「找最好」的壓力拿掉。你不用對自己解釋這個選擇，因為不是你做的。一小時之後，你要嘛想繼續，要嘛不想。兩種結果都是好結果。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/zh/A-01-you-didnt-forget-the-game/#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90&quot;&gt;&lt;span&gt;順帶一提&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;「我不是在玩遊戲，我是在玩瀏覽遊戲這件事。」&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;這是當我終於承認自己在做什麼的時候，描述自己的句子。我 Steam 上裝了大概 80 個遊戲。每次打開，我會滑十分鐘、被別的東西打斷、最後去做別的事。我不需要更好的推薦。我需要在任何時候眼前的選項更少。&lt;/p&gt;
+&lt;p&gt;所以我做了 Maida。它每次只給你看一個已安裝的遊戲。你在大概 30 秒內決定：今晚試試看，還是不要。沒有 library view，沒有排序，沒有瀏覽。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Maida 是你開始之前經過的空間。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;它免費、開源，可以在 Windows 和 Linux 上跑。如果你認得那個瀏覽迴圈，&lt;a href=&quot;https://brightraven.world/&quot;&gt;在這裡&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry>
+
+</feed>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>101 分鐘</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida 是一個免費、開源的工具，幫你決定今晚玩什麼。 <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/zh/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">沒有電子報。用 RSS 訂閱，或想到再回來。</p>
+</footer>
+</body>
+</html>

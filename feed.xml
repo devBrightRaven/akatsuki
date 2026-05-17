@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<title>Bright Raven</title>
+<subtitle>Notes on decision paralysis, agency, and gaming.</subtitle>
+<link href="https://blog.brightraven.world/feed.xml" rel="self"/>
+<link href="https://blog.brightraven.world/"/>
+<updated>2026-05-17T09:44:00Z</updated>
+<id>https://blog.brightraven.world/</id>
+<author>
+  <name>Bertram (Bright Raven)</name>
+  <email>bertram@brightraven.world</email>
+</author>
+
+<entry>
+  <title>25 · The Three Things Maida Doesn&#39;t Track (And Why)</title>
+  <link href="https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/</id>
+  <content type="html">&lt;h1&gt;25 · The Three Things Maida Doesn’t Track (And Why)&lt;/h1&gt;
+&lt;p&gt;Maida sends three pieces of telemetry, total, ever. They go out once per launch.&lt;/p&gt;
+&lt;p&gt;A random UUID (so I know unique installs vs the same person opening Maida ten times)
+Days since first install (so I know if people stick around)
+The app version (so I know which version is in the wild)&lt;/p&gt;
+&lt;p&gt;That’s it. There’s no session data. No game titles. No play duration. No device fingerprint. No locale. No IP-derived inference. No analytics SDK. No third-party trackers.&lt;/p&gt;
+&lt;p&gt;This is unusual for modern software. It’s worth explaining why.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-maida-doesn%E2%80%99t-track%2C-listed-explicitly&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#what-maida-doesn%E2%80%99t-track%2C-listed-explicitly&quot;&gt;&lt;span&gt;What Maida doesn’t track, listed explicitly&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I’ll go through the categories of data Maida doesn’t collect, in order of how surprised people are when I tell them.&lt;/p&gt;
+&lt;h3 id=&quot;what-games-you-have&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#what-games-you-have&quot;&gt;&lt;span&gt;What games you have&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Maida reads your game library locally. It does not transmit any of it. Steam knows what games you own, because you bought them through Steam. Maida is a local tool that operates on data Steam has given your computer. That data stays on your computer.&lt;/p&gt;
+&lt;p&gt;There is no Maida server that has a list of your games. There is no leaderboard. There is no aggregate report. The list of games on your machine is between you and Steam.&lt;/p&gt;
+&lt;h3 id=&quot;what-games-you-play&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#what-games-you-play&quot;&gt;&lt;span&gt;What games you play&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When Maida shows you a card and you press TRY, that information stays in your local games.json file. It’s used to calculate which game to surface next. It is never sent anywhere.&lt;/p&gt;
+&lt;p&gt;If you play a game for forty hours, Maida doesn’t know. If you abandon it after five minutes, Maida doesn’t know. The TRY signal is the only thing the system sees, and it sees it only locally.&lt;/p&gt;
+&lt;h3 id=&quot;how-long-you-use-maida&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#how-long-you-use-maida&quot;&gt;&lt;span&gt;How long you use Maida&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;There’s no session timer. There’s no usage report. The “days since first install” telemetry is computed from the install date, not from active sessions. Whether you opened Maida once a month or ten times a day, the telemetry is the same.&lt;/p&gt;
+&lt;p&gt;This is one of the easier things to track in modern software, and many tools do it as a default. Maida doesn’t.&lt;/p&gt;
+&lt;h3 id=&quot;anything-about-you-specifically&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#anything-about-you-specifically&quot;&gt;&lt;span&gt;Anything about you specifically&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;No location. No device specs. No operating system version. No locale. No language settings. No system fingerprint.&lt;/p&gt;
+&lt;p&gt;If two people are using Maida from the same household, the only thing the telemetry can tell me is that there are two random UUIDs. I don’t know they’re in the same household. I don’t know they’re in any country. I don’t know what hardware they have.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-so-little&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#why-so-little&quot;&gt;&lt;span&gt;Why so little&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Most software collects more telemetry than it needs. The reasoning is usually: maybe we’ll need it later. Maybe a new feature requires it. Maybe analytics will reveal something. Better to collect now than to have to instrument later.&lt;/p&gt;
+&lt;p&gt;I disagreed with this reasoning when I was building Maida. The reasoning treats the user’s data as something to be extracted just-in-case. The user pays the cost (their data is collected, stored, exposed to breach risk) so that I can have optionality on possible future features.&lt;/p&gt;
+&lt;p&gt;The math is wrong. The user’s privacy is a real cost. My future optionality is a hypothetical benefit. Asking the user to pay a real cost for a hypothetical benefit is not respectful.&lt;/p&gt;
+&lt;p&gt;The three fields I do collect are the minimum I needed to know whether the project was worth maintaining. Are people still using it? Is there a long tail of users? The three fields answer those questions and stop there.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-the-absence-enables&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#what-the-absence-enables&quot;&gt;&lt;span&gt;What the absence enables&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The absence of telemetry is not just a privacy posture. It’s a design constraint.&lt;/p&gt;
+&lt;p&gt;Because Maida doesn’t know what you played, it can’t make recommendations based on your play history. This is sometimes inconvenient. It also means the engine can’t drift toward optimizing for engagement, because there’s no engagement signal to optimize against.&lt;/p&gt;
+&lt;p&gt;Because Maida doesn’t know how long you played, it can’t gamify. There’s no “you played 5 days in a row, keep your streak” mechanic. The features that exploit user attention require data Maida doesn’t have, by design.&lt;/p&gt;
+&lt;p&gt;The three-field constraint is upstream of many decisions. If I’d chosen to collect more, I would have used more. The constraint protects the product from drifting toward extraction.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-this-asks-of-the-user&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#what-this-asks-of-the-user&quot;&gt;&lt;span&gt;What this asks of the user&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Trust, partially. You can read the code (Maida is open source) and verify the telemetry claim. The transmission is auditable. But for users who don’t read code, there’s a small leap of trust.&lt;/p&gt;
+&lt;p&gt;The privacy posture is also part of the user experience. You don’t get a “your year in gaming” wrap-up. You don’t get insights about your habits. You don’t get cross-device sync. These features depend on data Maida doesn’t have.&lt;/p&gt;
+&lt;p&gt;For users who want those features, Maida is the wrong tool. For users who’d rather have a tool that doesn’t watch them, this is the trade.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-25-three-things-maida-doesnt-track/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The three-field telemetry is documented in the privacy policy and visible in the code. It’s not a marketing claim. The constraint is enforced by the small surface area of the network calls Maida makes.&lt;/p&gt;
+&lt;p&gt;If you’ve been used to software that quietly collects everything, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is a different default&lt;/a&gt;. The minimum needed to maintain the project, nothing else.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>24 · What &quot;Bring Back Your Agency&quot; Actually Means</title>
+  <link href="https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/</id>
+  <content type="html">&lt;h1&gt;24 · What “Bring Back Your Agency” Actually Means&lt;/h1&gt;
+&lt;p&gt;Maida’s tagline is “Bring back your agency.”&lt;/p&gt;
+&lt;p&gt;Every word of this is doing work. People sometimes read it as marketing copy and bounce off. But it’s the most honest description of the product I could write, and the words are precise.&lt;/p&gt;
+&lt;p&gt;Here’s what each one means.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E2%80%9Cagency%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#%E2%80%9Cagency%E2%80%9D&quot;&gt;&lt;span&gt;“Agency”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Agency is the capacity to make choices that originate from you, rather than being shaped by external systems. It’s the difference between picking a game because you wanted to and picking a game because the algorithm steered you there.&lt;/p&gt;
+&lt;p&gt;In gaming specifically, agency includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Choosing what to play, deliberately&lt;/li&gt;
+&lt;li&gt;Knowing why you wanted a game when you bought it&lt;/li&gt;
+&lt;li&gt;Stopping when you want to stop, not when the game says you should&lt;/li&gt;
+&lt;li&gt;Having a relationship to your library that’s yours, not platform-mediated&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most modern gaming software erodes agency. Steam recommends. Discord pressures. Achievements gamify. Subscriptions monetize. Each of these can be useful, but together they shape the user’s relationship to gaming away from “what I want” and toward “what the system wants me to want.”&lt;/p&gt;
+&lt;p&gt;The agency erosion is gradual. You don’t notice it. You just notice you don’t enjoy gaming the way you used to.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E2%80%9Cyour%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#%E2%80%9Cyour%E2%80%9D&quot;&gt;&lt;span&gt;“Your”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The agency in question is yours, specifically. Not generic agency. Not the abstract idea of choice. Your agency, in the sense of: you, the person reading this, can make decisions that are yours.&lt;/p&gt;
+&lt;p&gt;This matters because the alternatives often address agency in the abstract while taking it away in practice. “We give you control” while burying the control under twelve menus. “You decide” while the algorithm has pre-selected three options. The systemic version of agency is hollow. The personal version, the one that’s yours, requires actual autonomy.&lt;/p&gt;
+&lt;p&gt;The “your” is a reminder that this is not philosophy. This is about you, tonight, sitting down to play, deciding for yourself what’s worth your time.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E2%80%9Cback%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#%E2%80%9Cback%E2%80%9D&quot;&gt;&lt;span&gt;“Back”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Agency was something you had. Then it was taken, gradually, by a series of systems that made things easier. The recommendation engine took it, in exchange for not having to choose. The notification took it, in exchange for not having to remember. The achievement took it, in exchange for the small reward.&lt;/p&gt;
+&lt;p&gt;“Back” implies that there was a before. There was. You had agency over your gaming once. Most adults remember a version of themselves that just played games, without the optimization layer, without the social pressure, without the guilt of unfinished things.&lt;/p&gt;
+&lt;p&gt;That version is recoverable. Not perfectly, but partially. The systems that took agency can be opted out of, one by one. The defaults can be changed.&lt;/p&gt;
+&lt;p&gt;“Bring back” is not utopian. It’s targeted. There’s a specific thing you used to have, and you can have it again, with effort.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;%E2%80%9Cbring%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#%E2%80%9Cbring%E2%80%9D&quot;&gt;&lt;span&gt;“Bring”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The verb is active. It’s not “find” or “discover” or “rediscover.” It’s “bring.” Something that was taken, you’re carrying back. The action is yours. The tool helps, but the bringing is what you do.&lt;/p&gt;
+&lt;p&gt;Maida doesn’t restore your agency for you. It makes restoring easier. The work of choosing, deciding, paying attention to your own preferences—this work is still yours. The tool removes some friction; the agency you bring back is your own.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-this-matters-as-a-tagline&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#why-this-matters-as-a-tagline&quot;&gt;&lt;span&gt;Why this matters as a tagline&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The tagline tells you what Maida is for. It’s not for picking games faster. It’s not for managing your backlog. It’s not for showing you what you already have. It’s for restoring a specific relationship between you and your gaming that has been worn down by other systems.&lt;/p&gt;
+&lt;p&gt;If that’s not the relationship you want, Maida is not the tool. There are excellent recommendation systems and library managers. Steam’s discover queue is well-built. Playnite is comprehensive. Use those if they fit you.&lt;/p&gt;
+&lt;p&gt;If “bring back your agency” describes something you’ve actually felt the loss of, then Maida is built for you. The whole product is downstream of those four words.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-24-what-bring-back-your-agency-means/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I write the tagline first because the product flows from it. Every feature decision in Maida is checked against this tagline. Does this feature support the user’s agency? Or does it absorb the agency into the system?&lt;/p&gt;
+&lt;p&gt;That check is what produces the strange decisions: no library view, no recommendation engine, no completion tracking, no telemetry beyond three anonymous fields. Each of these would have been easier to ship with. Each of them would have eroded the thing the tagline is trying to protect.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It’s a small tool. The tagline is the whole point.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>23 · Anti-Recommendation: A Manifesto</title>
+  <link href="https://blog.brightraven.world/F-23-anti-recommendation-manifesto/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/F-23-anti-recommendation-manifesto/</id>
+  <content type="html">&lt;h1&gt;23 · Anti-Recommendation: A Manifesto&lt;/h1&gt;
+&lt;p&gt;Most of the software you use is in the business of recommending things. Spotify recommends songs. Netflix recommends shows. YouTube recommends videos. Amazon recommends products. Steam recommends games.&lt;/p&gt;
+&lt;p&gt;The pattern is so universal that we’ve stopped questioning it. Recommendation is the default mode of how content reaches us.&lt;/p&gt;
+&lt;p&gt;But recommendation is not neutral. It does specific things to your taste, your attention, and your relationship to choosing. Some of those things are bad. Most users have stopped noticing because the alternative is invisible.&lt;/p&gt;
+&lt;p&gt;This is a case for noticing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-recommendation-optimizes-for&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#what-recommendation-optimizes-for&quot;&gt;&lt;span&gt;What recommendation optimizes for&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Every recommendation system has a target. The target is usually some version of “engagement” or “click-through” or “session length.” These are proxies for “the user found this useful,” but they are not the same thing.&lt;/p&gt;
+&lt;p&gt;A user who clicks every recommendation has high engagement. They might also be on a slow drift away from their own preferences, toward the platform’s preferences. The system can’t tell the difference between productive engagement and addictive engagement. Both look the same in the metrics.&lt;/p&gt;
+&lt;p&gt;Over years, recommendation systems shape users in their image. Not maliciously. The system is doing what it was built to do. The shaping is a side effect.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-you-lose&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#what-you-lose&quot;&gt;&lt;span&gt;What you lose&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You lose the experience of choosing. Choosing is a small act of self-definition. When the algorithm chooses, you don’t perform that act. You consume what’s offered. The thing you got might be excellent, but you didn’t pick it. Over time, this changes who you are.&lt;/p&gt;
+&lt;p&gt;You lose taste at the edges. The system narrows you toward your cluster. Things outside the cluster don’t get surfaced. Your sense of what you like contracts to what the system has decided you’ll click on.&lt;/p&gt;
+&lt;p&gt;You lose the muscle of evaluation. If something is always pre-selected, you stop developing the ability to evaluate things yourself. The work has been outsourced. The capacity atrophies.&lt;/p&gt;
+&lt;p&gt;You lose serendipity. The unrecommended thing, the random discovery, the friend’s strange suggestion: these don’t appear in algorithmic feeds. The algorithm prefers safe matches.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-conviction&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#the-conviction&quot;&gt;&lt;span&gt;The conviction&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The conviction behind Maida is that for some categories of activity, recommendation is the wrong default. Specifically: leisure activities where the act of choosing is part of the value, where taste is supposed to expand over time, where personal agency matters more than efficiency.&lt;/p&gt;
+&lt;p&gt;Gaming is one of these categories. So is reading. So is music, sometimes. So is, arguably, most of how we spend our discretionary time.&lt;/p&gt;
+&lt;p&gt;Recommendation is great for utility. Finding the cheapest flight, the best route home, the right product for a known need. For those, optimize freely.&lt;/p&gt;
+&lt;p&gt;For leisure, recommendation is corrosive. It replaces the part of the experience where you decide what you want with a system that decides for you. The decision is the thing. Removing it removes the experience.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-anti-recommendation-looks-like-in-practice&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#what-anti-recommendation-looks-like-in-practice&quot;&gt;&lt;span&gt;What anti-recommendation looks like in practice&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Anti-recommendation is not “no surfacing.” That would be too much friction. Some surfacing is necessary; users can’t navigate raw libraries.&lt;/p&gt;
+&lt;p&gt;Anti-recommendation is surfacing without preference. Maida shows you a game. The game is not picked because you’ll like it. It’s picked from the pool of installed games with mild behavioral weighting. The system is not trying to predict your preferences. It’s offering options without judgment.&lt;/p&gt;
+&lt;p&gt;The user does the work of deciding. Try this tonight, or not now. If not now, see another. The system never says “but this one is better, look at it again.” The user remains the source of preference.&lt;/p&gt;
+&lt;p&gt;This is slower than algorithmic recommendation. It’s also fundamentally different in what it produces. The user develops their own taste through the act of choosing. They don’t outsource the development to a system that has goals other than theirs.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-this-requires-of-the-user&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#what-this-requires-of-the-user&quot;&gt;&lt;span&gt;What this requires of the user&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Anti-recommendation requires more from the user than recommendation does. You have to decide. You have to know yourself enough to evaluate. You have to tolerate the friction of choosing.&lt;/p&gt;
+&lt;p&gt;This is a feature. The friction is what builds the taste. The decision is what reinforces the agency. The user who has done this work has something the user who hasn’t doesn’t have: a relationship to their own preferences that’s their own, not borrowed from a system.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-23-anti-recommendation-manifesto/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida is a small, partial implementation of this idea. It only addresses one slice: choosing what to play tonight from already-installed games. It doesn’t try to fix the whole problem.&lt;/p&gt;
+&lt;p&gt;But the principle scales. Wherever you find yourself reaching for a recommendation system, you can ask: would I rather be served, or would I rather choose? For some categories the answer is “served.” For others, “choose” is what you actually want, and you’ve been forgetting.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It’s a tool that respects you enough to let you choose.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>22 · Why I Built a Game Launcher with No Library View</title>
+  <link href="https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/</id>
+  <content type="html">&lt;h1&gt;22 · Why I Built a Game Launcher with No Library View&lt;/h1&gt;
+&lt;p&gt;The most common reaction to Maida is: where’s the library view.&lt;/p&gt;
+&lt;p&gt;Every other game launcher has one. Steam’s library is the central screen. Playnite, GOG Galaxy, EA App, Epic. They all show your collection as a grid or list. You scroll, you sort, you filter, you click.&lt;/p&gt;
+&lt;p&gt;Maida doesn’t have this. You can’t browse your library in Maida. There is no grid, no list, no sorting. The interface shows you one game at a time and asks if you want to try it tonight.&lt;/p&gt;
+&lt;p&gt;This is a deliberate constraint. Here’s why.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-the-library-view-actually-causes&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/#what-the-library-view-actually-causes&quot;&gt;&lt;span&gt;What the library view actually causes&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The library view is the place where decision paralysis happens. You open it with the intention to play. You see a hundred games. You start evaluating. You don’t commit. You leave.&lt;/p&gt;
+&lt;p&gt;The library view is sold as the convenient way to choose. In practice, it’s the friction that prevents choosing. The more you see, the harder it is to pick.&lt;/p&gt;
+&lt;p&gt;This is not a UI problem you can solve by adding better filters. The filters help marginally. The fundamental issue is that human beings are not good at choosing from large, unsorted sets. Adding sort options moves the problem one layer deeper. It doesn’t dissolve it.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-removing-the-library-view-does&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/#what-removing-the-library-view-does&quot;&gt;&lt;span&gt;What removing the library view does&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;If you can’t browse, you can’t compare. If you can’t compare, you can’t agonize. If you can’t agonize, you can either play or not play. The decision space collapses to binary.&lt;/p&gt;
+&lt;p&gt;The first time you use Maida, this feels wrong. You expect a list. The absence of a list feels like the tool is broken or insufficient. By the third or fourth session, the lack of a list starts feeling like relief.&lt;/p&gt;
+&lt;p&gt;The library view was the bottleneck. Removing it removes the bottleneck.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-objection%3A-%E2%80%9Cbut-i-want-to-choose%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/#the-objection%3A-%E2%80%9Cbut-i-want-to-choose%E2%80%9D&quot;&gt;&lt;span&gt;The objection: “but I want to choose”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This is the most common objection. People feel that not having a library view denies them agency. They want to pick from their library, deliberately.&lt;/p&gt;
+&lt;p&gt;Two responses.&lt;/p&gt;
+&lt;p&gt;First: in practice, what most people do in front of a library view is not choose deliberately. They scroll until something feels right, then second-guess, then look at something else. The “choosing” is mostly drift. Removing the library view doesn’t take away choosing; it takes away drifting.&lt;/p&gt;
+&lt;p&gt;Second: when you do want to choose deliberately, Kamae (a separate view) is there. Kamae is for curation, not for tonight’s pick. The two activities are different and benefit from being separated.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-you-give-up&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/#what-you-give-up&quot;&gt;&lt;span&gt;What you give up&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You give up the visual pleasure of looking at your collection. There’s something satisfying about seeing a wall of cover art. Maida doesn’t offer that.&lt;/p&gt;
+&lt;p&gt;You give up the easy reference: “what do I own again?” Maida assumes you can use Steam for that, which is fair.&lt;/p&gt;
+&lt;p&gt;You give up granular control over what comes up. The engine picks. You can constrain via Kamae, but you don’t pick from a menu each time.&lt;/p&gt;
+&lt;p&gt;For some people, these are deal-breakers. They want the wall of art and the control. For them, Maida isn’t a fit.&lt;/p&gt;
+&lt;p&gt;For others, removing these things is the entire point.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The decision to exclude the library view was the founding decision of Maida. Everything else is downstream of it. If you take that decision out, you have a different product, one that already exists many times over.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free&lt;/a&gt;. The library view absence is not a missing feature. It’s the feature.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>21 · Why You Feel Bad About Refunding</title>
+  <link href="https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/</id>
+  <content type="html">&lt;h1&gt;21 · Why You Feel Bad About Refunding&lt;/h1&gt;
+&lt;p&gt;You bought a game. You played it for an hour. You don’t like it. You’re inside the Steam refund window. You hesitate.&lt;/p&gt;
+&lt;p&gt;The hesitation isn’t economic. The refund is free. The hesitation is something else.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-the-hesitation-is-actually-about&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/#what-the-hesitation-is-actually-about&quot;&gt;&lt;span&gt;What the hesitation is actually about&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Asking for a refund means admitting you made a mistake. The purchase was a small wrong call. Reversing it is acknowledging the wrong.&lt;/p&gt;
+&lt;p&gt;For some people, this is fine. They refund without ceremony.&lt;/p&gt;
+&lt;p&gt;For others, the act of admitting carries weight. The purchase was a vote of confidence in the game and in your own judgment. Refunding feels like reversing both votes. You don’t trust the developer (small disloyalty) and you don’t trust your own choice (small self-correction).&lt;/p&gt;
+&lt;p&gt;The discomfort isn’t about money. It’s about being wrong, twice, in a small visible way.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-you%E2%80%99re-actually-paying-for-if-you-don%E2%80%99t-refund&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/#what-you%E2%80%99re-actually-paying-for-if-you-don%E2%80%99t-refund&quot;&gt;&lt;span&gt;What you’re actually paying for if you don’t refund&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Not refunding a game you don’t want is paying full price for storage. The game sits on your hard drive, occupying space that could go to something you’d actually play. It also occupies psychic space: every time you see it in your library, you remember you didn’t refund.&lt;/p&gt;
+&lt;p&gt;The cost of not refunding compounds. It teaches you to pay for things you won’t use. Over years, this shapes your library and your spending pattern.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-right-frame&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/#the-right-frame&quot;&gt;&lt;span&gt;The right frame&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Steam’s refund window exists for a reason. Two hours is enough to evaluate whether the game is going to land for you. The window is a feature, not a moral test.&lt;/p&gt;
+&lt;p&gt;Using the window is normal. Asking for refunds is what consumers do, in any healthy purchase relationship. The seller has a return policy, and your job as a buyer is to use it when appropriate.&lt;/p&gt;
+&lt;p&gt;The shame is borrowed from contexts where returns are difficult or stigmatized. Steam refunds are not those contexts. They are easy, automated, and untracked. The friction is entirely psychological.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Pre-decide your refund threshold. Before you buy, set a rule: if I’m not enjoying it after 90 minutes, I refund. Decide ahead of time, when the math is clear. Then execute the rule when you hit the threshold.&lt;/p&gt;
+&lt;p&gt;Refund within 48 hours of purchase, regardless of feeling. The longer you wait, the heavier the refund becomes psychologically. Rip the bandage early.&lt;/p&gt;
+&lt;p&gt;Don’t justify to yourself. The refund doesn’t require a story. You bought, you didn’t like, you returned. Steam doesn’t ask why. Don’t construct a narrative about “I should give it more time” if the first hour was clearly wrong.&lt;/p&gt;
+&lt;p&gt;Notice when refund-shame is keeping a game in your library. If you have games you bought, didn’t like, and didn’t refund because of the shame, those games are evidence of the cost of avoiding the discomfort.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-21-why-you-feel-bad-about-refunding/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida won’t help you refund. But it surfaces what’s in your library, which can be a quiet check: if a game keeps coming up in Maida and you keep saying not now, you might just not want it. That information is useful. It’s the missing data that would have justified a refund a year ago.&lt;/p&gt;
+&lt;p&gt;The refund window is past, but the lesson can shape future purchases. &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>20 · You&#39;re Not Behind. There&#39;s No Race.</title>
+  <link href="https://blog.brightraven.world/E-20-youre-not-behind-no-race/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/E-20-youre-not-behind-no-race/</id>
+  <content type="html">&lt;h1&gt;20 · You’re Not Behind. There’s No Race.&lt;/h1&gt;
+&lt;p&gt;A new game launches. The first weekend, social media is full of it. Discord servers are alive. Streamers are streaming. People are posting screenshots, theories, tier lists.&lt;/p&gt;
+&lt;p&gt;You’re not playing. You’re working, or busy, or just tired.&lt;/p&gt;
+&lt;p&gt;By Tuesday, you feel a small dread. Everyone else is ahead. The discourse has moved on. By the time you play, the spoilers will be everywhere and the hot takes will already exist.&lt;/p&gt;
+&lt;p&gt;This feeling is FOMO at a specific cultural pace. It’s also fictional.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-launch-week-illusion&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-20-youre-not-behind-no-race/#the-launch-week-illusion&quot;&gt;&lt;span&gt;The launch-week illusion&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The internet rewards being early. The first hot take, the first tier list, the first speedrun, the first reaction. Platforms surface the early stuff because it’s where the discussion is.&lt;/p&gt;
+&lt;p&gt;This creates the impression that everyone is playing the new game, right now, and you’re missing it. The impression is wrong. Most people who own the game aren’t playing it during launch week. Most players catch up in the weeks and months after. The launch hype is a small slice, amplified by visibility.&lt;/p&gt;
+&lt;p&gt;But because that small slice is what you see, you feel like the train is leaving without you.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-you%E2%80%99re-actually-missing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-20-youre-not-behind-no-race/#what-you%E2%80%99re-actually-missing&quot;&gt;&lt;span&gt;What you’re actually missing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Launch-week play has some advantages. You get to be part of the live discussion. You don’t dodge spoilers. The community is most active.&lt;/p&gt;
+&lt;p&gt;It also has disadvantages. Launch builds are buggier. Patches happen in the next month. The community discourse is at its most heated and least reflective. Spoilers are everywhere precisely because of the high engagement.&lt;/p&gt;
+&lt;p&gt;A patient player gets the patched version, the calmer community, and a richer set of secondary commentary. They give up the live thrill of being part of the moment.&lt;/p&gt;
+&lt;p&gt;These are not better and worse, just different. The frame of “missing out” suggests a one-sided loss. There isn’t one.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-patience-is-hard&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-20-youre-not-behind-no-race/#why-patience-is-hard&quot;&gt;&lt;span&gt;Why patience is hard&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The loss feels real because the missing-out is salient and the patient-version benefits are abstract. You can imagine the discord chats you’re not in. You can’t imagine the patches that haven’t shipped yet.&lt;/p&gt;
+&lt;p&gt;This is loss aversion working against you. The visible loss is overweighted; the invisible gain is underweighted. The combination creates the feeling of being left behind that has no actual referent.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-20-youre-not-behind-no-race/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Define your relationship to new releases ahead of time. “I don’t play games during launch month” is a coherent stance. So is “I play one new release per quarter.” Pre-deciding takes the urgency out of each launch.&lt;/p&gt;
+&lt;p&gt;Mute or unfollow during hype cycles. If you’re not playing the game, you don’t need to see its discourse. Mute keywords on Twitter, mute channels in Discord, skip the reviews. The FOMO depends on visibility.&lt;/p&gt;
+&lt;p&gt;Notice the moment of feeling behind. Ask: am I behind on what, exactly? The answer is usually “behind on a conversation I don’t actually want to have.” That’s not a problem. That’s a non-event you’ve imagined as a problem.&lt;/p&gt;
+&lt;p&gt;Trust the long tail. Games stay good. The 2018 game that was great then is still great now. You haven’t missed it. You’ve just delayed it, which is fine.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-20-youre-not-behind-no-race/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t know about launch dates. It doesn’t surface “trending” games. It doesn’t care if a game is brand new or eight years old. The only thing it sees is what’s installed and what your behavior signals are. A 2017 game and a 2026 game are equivalent.&lt;/p&gt;
+&lt;p&gt;If the launch-week pressure has been making your gaming feel like a race, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It treats every game as available, not urgent.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>19 · Save Scumming Is About Your Life, Not the Game</title>
+  <link href="https://blog.brightraven.world/E-19-save-scumming-is-about-life/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/E-19-save-scumming-is-about-life/</id>
+  <content type="html">&lt;h1&gt;19 · Save Scumming Is About Your Life, Not the Game&lt;/h1&gt;
+&lt;p&gt;You’re playing a game. A choice goes wrong. You reload the save and try again. You do this five times until the outcome feels right.&lt;/p&gt;
+&lt;p&gt;This is fine, occasionally. When it becomes a pattern across many games, it stops being about the games. It’s about something else.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-save-scumming-optimizes-for&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-19-save-scumming-is-about-life/#what-save-scumming-optimizes-for&quot;&gt;&lt;span&gt;What save scumming optimizes for&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The behavior is rational at the level of the game. You’re trying to maximize the outcome of the run. Better resources, better story branch, better stats. Reloading is free.&lt;/p&gt;
+&lt;p&gt;But the cost is real. You lose the experience of the game as designed. The designers built choice and consequence into the system. By undoing every consequence, you’re playing a different game from the one you started: a game where decisions don’t matter and the goal is the optimal save state.&lt;/p&gt;
+&lt;p&gt;Most people who save scum heavily report not enjoying the games as much. The reload pattern strips out the part where outcomes feel earned.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-it-persists-anyway&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-19-save-scumming-is-about-life/#why-it-persists-anyway&quot;&gt;&lt;span&gt;Why it persists anyway&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The reason isn’t that save scummers don’t notice this. They often do. They keep doing it because the impulse isn’t really about the game.&lt;/p&gt;
+&lt;p&gt;Save scumming is, for a lot of people, a small expression of a larger pattern: the desire to undo, retry, perfect. The same instinct that makes you replay a conversation in your head after it didn’t go well. The same instinct that makes you wish you could rewind a decision at work.&lt;/p&gt;
+&lt;p&gt;In life, you can’t reload. In games, you can. The game becomes a place to practice the undo that the rest of life refuses to grant.&lt;/p&gt;
+&lt;p&gt;This is comprehensible. It’s also not what games are for, and it doesn’t satisfy the deeper need.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what%E2%80%99s-underneath&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-19-save-scumming-is-about-life/#what%E2%80%99s-underneath&quot;&gt;&lt;span&gt;What’s underneath&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The drive to perfect every choice often correlates with anxiety about consequences in non-game contexts. If small mistakes in a game feel intolerable, it’s worth asking whether small mistakes elsewhere also feel intolerable.&lt;/p&gt;
+&lt;p&gt;The work isn’t really at the game level. It’s recognizing that imperfect outcomes are how things actually unfold, in games and out of them. Tolerating the imperfect run, the suboptimal save, is practice for tolerating the same in life.&lt;/p&gt;
+&lt;p&gt;This isn’t a quick fix. But it’s the actual lever.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-helps-at-the-game-level&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-19-save-scumming-is-about-life/#what-helps-at-the-game-level&quot;&gt;&lt;span&gt;What helps at the game level&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Play games on permadeath or single-save runs occasionally. Roguelikes are designed for this. The constraint forces you to accept outcomes, which is uncomfortable at first and then liberating.&lt;/p&gt;
+&lt;p&gt;Set a rule: one reload per session, max. After that, the choice stands. The discomfort of the bad outcome is the practice.&lt;/p&gt;
+&lt;p&gt;Notice the urge to reload. Don’t suppress it, just notice. “I want to reload because I made a small mistake.” Often, naming it is enough to choose differently.&lt;/p&gt;
+&lt;p&gt;Pay attention to which games trigger heavy save scumming. The pattern isn’t uniform across all games. The games that trigger it most are showing you something about your relationship to consequences.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-19-save-scumming-is-about-life/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t see save scumming. It only sees what game you launched. But Maida’s design philosophy quietly aligns with the cure: the TRY/NOT NOW decision is one-shot. There’s no reload. You decide, you commit, the next card comes. You can’t roll back the choice to play this game tonight; you can only choose differently next time.&lt;/p&gt;
+&lt;p&gt;If the desire to reload has been showing up in your life, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. The thirty-second commitment is small but real.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>18 · You Can&#39;t Be Playing Three Games at Once</title>
+  <link href="https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/</id>
+  <content type="html">&lt;h1&gt;18 · You Can’t Be Playing Three Games at Once&lt;/h1&gt;
+&lt;p&gt;You have three games in progress. You started a 50-hour RPG, you have a competitive multiplayer in rotation, and you’re working through a narrative game on the side.&lt;/p&gt;
+&lt;p&gt;You haven’t made progress on any of them in two weeks.&lt;/p&gt;
+&lt;p&gt;This is the multitasking trap, applied to leisure.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-parallel-games-stall-each-other&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/#why-parallel-games-stall-each-other&quot;&gt;&lt;span&gt;Why parallel games stall each other&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Each game requires a context: who you are in the game, what your skills are, what your goals are, where you left off. Holding context for one game is light. Holding context for three is exponentially heavier.&lt;/p&gt;
+&lt;p&gt;When you sit down to play, the first decision is which one. Then the second decision is whether you actually want that one tonight, or you should switch. Both decisions cost you. By the time you’ve decided, the energy you wanted to spend on playing has been spent on choosing.&lt;/p&gt;
+&lt;p&gt;So you don’t play any of them. The three games block each other by competing for the same evening.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-illusion-of-progress&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/#the-illusion-of-progress&quot;&gt;&lt;span&gt;The illusion of progress&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Three games in rotation feels like productivity. Three things being made progress on. Three different moods covered.&lt;/p&gt;
+&lt;p&gt;The reality is different. Two of the three are losing context faster than you’re adding to it. Each session you skip them, the resumption friction grows. Eventually one of them crosses a threshold where you’d have to start over to come back, and you abandon it instead.&lt;/p&gt;
+&lt;p&gt;The math: three games at 33% engagement is worse than one game at 100% engagement. The fragmented attention produces fewer completed sessions, less satisfying play, more partial games on the abandoned shelf.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Pick one. Commit to it for a stretch. Two weeks, four sessions, a finishable arc. The other games can wait. Your attention is finite, and concentrating it produces better outcomes than distributing it.&lt;/p&gt;
+&lt;p&gt;Have a comfort fallback. One game, well-known, low-context, that you can drop into when you don’t have energy for the main game. This isn’t a third game. It’s a release valve.&lt;/p&gt;
+&lt;p&gt;Resist starting new games while one is in progress. The new release will still exist in three weeks. Finish or formally abandon what you have first.&lt;/p&gt;
+&lt;p&gt;Define “in progress” deliberately. A game you played once and stopped is not in progress. It’s an artifact. Two games at most should ever count as in progress at the same time.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;when-parallel-makes-sense&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/#when-parallel-makes-sense&quot;&gt;&lt;span&gt;When parallel makes sense&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Some configurations work. A long-form solo game and a 30-minute multiplayer for social sessions. A rich single-player and a roguelike for short sessions. The rule is that the games should occupy different time and energy slots, not compete for the same one.&lt;/p&gt;
+&lt;p&gt;If three games all want your prime evening hour, you’re going to lose two of them. Pick which two you’re losing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/E-18-cant-be-playing-three-games-at-once/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida pushes lightly toward focus. The Anchor feature lets you commit to one game for a few days, and the engine respects that commitment. When you anchor, you’re saying: this is the one. The score system still tracks your other games, but Anchor takes priority.&lt;/p&gt;
+&lt;p&gt;If you’ve been juggling more games than your attention can carry, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. Anchor is the part of it that matches your situation.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>17 · Decision Fatigue at 9pm</title>
+  <link href="https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/</id>
+  <content type="html">&lt;h1&gt;17 · Decision Fatigue at 9pm&lt;/h1&gt;
+&lt;p&gt;You’re trying to pick a game at 9pm. You can’t. You scroll, you hover, you close the launcher.&lt;/p&gt;
+&lt;p&gt;This isn’t a personal flaw. This is your brain doing exactly what brains do.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-biology-of-evening-choosing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/#the-biology-of-evening-choosing&quot;&gt;&lt;span&gt;The biology of evening choosing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Your prefrontal cortex, which handles deliberate decisions, runs on glucose. Each non-trivial decision depletes the budget. By the end of a workday, the budget is mostly gone.&lt;/p&gt;
+&lt;p&gt;What’s left is enough for autopilot. Enough to follow a recipe, watch a familiar show, scroll a feed. Not enough to evaluate twenty new options against your evening’s mood.&lt;/p&gt;
+&lt;p&gt;The 9pm gaming session is asking your prefrontal cortex to do its hardest work at its lowest capacity. It can’t. So it doesn’t.&lt;/p&gt;
+&lt;p&gt;Morning gamers don’t have this problem. They’re choosing on a fresh budget. The same library that paralyzes you at 9pm is navigable at 9am.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-%E2%80%9Cmore-discipline%E2%80%9D-doesn%E2%80%99t-fix-it&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/#why-%E2%80%9Cmore-discipline%E2%80%9D-doesn%E2%80%99t-fix-it&quot;&gt;&lt;span&gt;Why “more discipline” doesn’t fix it&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The framing of “I should be more disciplined about my evening gaming” misunderstands the constraint. Discipline is also drawn from the prefrontal budget. Spending discipline to overcome decision fatigue is paying for the same resource twice.&lt;/p&gt;
+&lt;p&gt;What works isn’t discipline. What works is reducing the decision load to fit the depleted budget.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-actually-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/#what-actually-works&quot;&gt;&lt;span&gt;What actually works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Pre-decide. Earlier in the day, when you have budget, pick what you’ll play tonight. Write it down if you have to. By 9pm, the decision is already made and you only need to execute.&lt;/p&gt;
+&lt;p&gt;Limit the candidate pool. If your library has 80 games, you have 80 micro-decisions to make. If you’ve curated to 5 candidates ahead of time, you have 5. The math is much more forgiving.&lt;/p&gt;
+&lt;p&gt;Use a random picker. The single most effective hack for decision fatigue is to delegate the decision to randomness. Whatever comes up is what you play. You’re not picking. You’re accepting.&lt;/p&gt;
+&lt;p&gt;Lower the stakes. Tell yourself the choice is reversible. You can stop and switch in 20 minutes if it’s wrong. The reversibility takes pressure off the initial selection.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-doesn%E2%80%99t-work&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/#what-doesn%E2%80%99t-work&quot;&gt;&lt;span&gt;What doesn’t work&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Trying harder. The capacity isn’t there.&lt;/p&gt;
+&lt;p&gt;Adding more options. The instinct when you can’t pick is to think you need more candidates. The opposite is true.&lt;/p&gt;
+&lt;p&gt;Forcing yourself. Eventually you’ll pick something out of frustration, and the frustration will follow you into the session. The session won’t recover.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-17-decision-fatigue-at-9pm/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida is built for 9pm. The decision time per card is thirty seconds. There’s no scrolling. There’s no comparison. The pool has been pre-filtered by what’s installed. The choice has been delegated to the engine, not to you.&lt;/p&gt;
+&lt;p&gt;If 9pm has been the part of the day that defeats your gaming, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>16 · The 30-Minute Lie</title>
+  <link href="https://blog.brightraven.world/D-16-the-30-minute-lie/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/D-16-the-30-minute-lie/</id>
+  <content type="html">&lt;h1&gt;16 · The 30-Minute Lie&lt;/h1&gt;
+&lt;p&gt;You sit down with an hour. You tell yourself: I’ll just play 30 minutes.&lt;/p&gt;
+&lt;p&gt;What actually happens, almost always, is one of two things. You play for three hours and lose track of time. Or you don’t play at all because 30 minutes wasn’t quite enough motivation to start.&lt;/p&gt;
+&lt;p&gt;The 30-minute promise is a lie you tell yourself to make starting easier. It doesn’t describe what will actually happen.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-the-30-minute-frame-fails&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-16-the-30-minute-lie/#why-the-30-minute-frame-fails&quot;&gt;&lt;span&gt;Why the 30-minute frame fails&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Starting a game has a fixed cost. You launch the executable. You navigate the menu. You load a save. You re-orient yourself. By the time you’re actually playing, ten minutes have passed.&lt;/p&gt;
+&lt;p&gt;Once you’re playing, stopping has its own cost. You’re in the middle of a fight, an objective, a level. Stopping at the artificial 30-minute mark means abandoning a state you just spent ten minutes building. The path of least resistance is to keep going.&lt;/p&gt;
+&lt;p&gt;So 30 minutes is structurally hard to achieve. It’s longer than zero, but it’s bounded by an arbitrary clock that doesn’t match the rhythms of any actual game.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what%E2%80%99s-really-happening-when-you-say-%E2%80%9C30-minutes%E2%80%9D&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-16-the-30-minute-lie/#what%E2%80%99s-really-happening-when-you-say-%E2%80%9C30-minutes%E2%80%9D&quot;&gt;&lt;span&gt;What’s really happening when you say “30 minutes”&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The 30-minute frame is a permission slip from System 2 to System 1. System 2 is wary of opening Steam because of the time commitment. System 1 wants to play. The compromise is “small commitment, easy to escape.”&lt;/p&gt;
+&lt;p&gt;The compromise rarely holds. Once System 1 is engaged with the game, the original 30-minute boundary is a memory, not a constraint.&lt;/p&gt;
+&lt;p&gt;This isn’t bad. The 30-minute frame did its job: it got you started. The fact that you played for three hours is the actual outcome you wanted, you just couldn’t admit it upfront.&lt;/p&gt;
+&lt;p&gt;But there are evenings when the 30-minute frame fails the other way. You estimate the activation cost and conclude it’s not worth it for only 30 minutes of actual play. So you don’t start. The 30-minute frame talked you out of it.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;a-better-frame&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-16-the-30-minute-lie/#a-better-frame&quot;&gt;&lt;span&gt;A better frame&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Instead of bargaining with yourself about duration, name the actual question.&lt;/p&gt;
+&lt;p&gt;“Do I want to start playing tonight?” If yes, start. The duration will figure itself out.&lt;/p&gt;
+&lt;p&gt;“Do I have the energy for the activation cost?” If yes, start. The session will land where it lands.&lt;/p&gt;
+&lt;p&gt;“Am I trying to convince myself this is okay?” If yes, the answer is probably that you’re tired and want to be reading or watching something instead.&lt;/p&gt;
+&lt;p&gt;The 30-minute frame is a false specificity. The actual decision is binary: start or don’t.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-16-the-30-minute-lie/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Stop estimating session lengths upfront. Decide whether to start, then let the session run as long as it runs. If you have to stop at a particular time, set an alarm, but don’t predict the duration.&lt;/p&gt;
+&lt;p&gt;Notice the difference between “I have time” and “I want to play.” Sometimes you have time but don’t want to play. That’s a fine answer. The library will be there tomorrow.&lt;/p&gt;
+&lt;p&gt;Reduce the activation cost. If launching a game takes ten minutes of menu navigation, find ways to trim that. Quick save loads, controller already paired, headphones within reach. The lower the activation, the less you have to bargain with yourself.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-16-the-30-minute-lie/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida shortens activation by a lot. The decision is thirty seconds. The launch is one click. There’s no scrolling to do, no comparison shopping, no save file to find. You either try the game or you don’t. If you try, you’re in the game in under a minute.&lt;/p&gt;
+&lt;p&gt;If the 30-minute lie has been keeping you from starting, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It removes the bargaining.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>15 · Why Comfort Gaming Feels Lazy But Isn&#39;t</title>
+  <link href="https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/</id>
+  <content type="html">&lt;h1&gt;15 · Why Comfort Gaming Feels Lazy But Isn’t&lt;/h1&gt;
+&lt;p&gt;You finish work. You sit down to play. You have 80 unplayed games. You launch the same game you’ve been replaying for three years.&lt;/p&gt;
+&lt;p&gt;You feel a small embarrassment about this. There’s a voice that says you should be trying something new. The unplayed games are right there. Replaying feels like avoiding growth.&lt;/p&gt;
+&lt;p&gt;That voice is wrong. Comfort gaming has a function, and the function is real.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-comfort-gaming-actually-does&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/#what-comfort-gaming-actually-does&quot;&gt;&lt;span&gt;What comfort gaming actually does&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;When you replay a familiar game, you skip the highest-friction parts of gaming. You don’t have to learn new controls. You don’t have to evaluate whether you like it. You don’t have to make sense of an unfamiliar world. The cognitive load is near zero.&lt;/p&gt;
+&lt;p&gt;What you get in exchange is a known quantity. The game will land roughly the way it landed last time. There’s no risk of disappointment, no chance of the evening being wasted on something that turned out bad.&lt;/p&gt;
+&lt;p&gt;For an evening when your reserves are low, this is exactly the right trade. New experiences are valuable when you have the energy to absorb them. Familiar experiences are valuable when you don’t.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-cultural-voice-that-says-this-is-wrong&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/#the-cultural-voice-that-says-this-is-wrong&quot;&gt;&lt;span&gt;The cultural voice that says this is wrong&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Comfort gaming gets coded as lazy because it doesn’t fit the productivity frame. You’re not exploring, you’re not learning, you’re not expanding your tastes. You’re doing the same thing you did last week.&lt;/p&gt;
+&lt;p&gt;But entertainment is not productivity. The point of an evening’s gaming is not to grow as a person. The point is to feel okay before bed. Comfort gaming is highly effective at this. The 80 unplayed games are not.&lt;/p&gt;
+&lt;p&gt;The shame attached to comfort gaming is a category error. We’re applying productivity values to leisure activities and getting the math wrong.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-practical-case&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/#the-practical-case&quot;&gt;&lt;span&gt;The practical case&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;People who comfort-game guilt-free often play more games overall, not fewer. The comfort sessions provide stability. The exploration sessions are easier to undertake when you’re not relying on every session to deliver.&lt;/p&gt;
+&lt;p&gt;People who fight comfort-gaming tend to scroll their library, fail to commit, and end up not playing at all. They miss both the comfort and the exploration. The shame about comfort eats into the willingness to try anything.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;When you launch the comfort game, do it deliberately. “Tonight is a comfort night.” Name it. Don’t sneak into it like it’s a guilty pleasure.&lt;/p&gt;
+&lt;p&gt;Notice the energy state that triggers comfort gaming. Tired? Stressed? Decision-fatigued? Knowing the trigger lets you predict your needs better.&lt;/p&gt;
+&lt;p&gt;Keep the comfort game installed. Don’t try to “free up space” by uninstalling it. Its function is to be available when you need it.&lt;/p&gt;
+&lt;p&gt;Trust that exploration will happen on its own when you have the resources. Comfort gaming isn’t a habit you have to break. It’s a tool you have to keep available.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-15-why-comfort-gaming-isnt-lazy/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida won’t push you toward comfort gaming or away from it. The score system works in both directions: a game you keep launching gets a higher weight, but the variety in the engine means new games still surface regularly. If you want comfort, the engine will respect that pattern. If you want variety, the engine will provide it.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It treats comfort and exploration as equally valid uses of an evening.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>14 · You Don&#39;t Have a Time Problem. You Have a Mood Problem.</title>
+  <link href="https://blog.brightraven.world/D-14-mood-problem-not-time-problem/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/D-14-mood-problem-not-time-problem/</id>
+  <content type="html">&lt;h1&gt;14 · You Don’t Have a Time Problem. You Have a Mood Problem.&lt;/h1&gt;
+&lt;p&gt;The most common thing adult gamers say is “I don’t have time anymore.” This is sometimes true. Often it’s not. What’s actually true is that the available time and the available mood don’t line up.&lt;/p&gt;
+&lt;p&gt;You have an hour after dinner. The hour exists. But your nervous system is in the wrong configuration for the games in your library. You’re tired, but not the right kind of tired for the slow strategy game. You’re alert, but not focused enough for the puzzle game. You’re available, but not present.&lt;/p&gt;
+&lt;p&gt;The hour gets spent on YouTube or doomscrolling, and you call it a time problem.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-mood-actually-is&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-14-mood-problem-not-time-problem/#what-mood-actually-is&quot;&gt;&lt;span&gt;What mood actually is&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Mood is the configuration of your attention, energy, and emotional baseline. Different games require different configurations.&lt;/p&gt;
+&lt;p&gt;A roguelike needs sharp focus and tolerance for failure. A narrative game needs the ability to sit still and let things unfold. A multiplayer competitive game needs adrenaline and social bandwidth. A management sim needs patience for systems.&lt;/p&gt;
+&lt;p&gt;These are not interchangeable. If you have an hour but you’re in narrative-game mood, your strategy library is not a candidate, even though it’s installed.&lt;/p&gt;
+&lt;p&gt;The mismatch between what’s available and what’s installable is the real bottleneck for most adult gamers.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-%E2%80%9Cdiversify-your-library%E2%80%9D-doesn%E2%80%99t-solve-it&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-14-mood-problem-not-time-problem/#why-%E2%80%9Cdiversify-your-library%E2%80%9D-doesn%E2%80%99t-solve-it&quot;&gt;&lt;span&gt;Why “diversify your library” doesn’t solve it&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The intuitive fix is to install games for every possible mood. Have a roguelike for sharp evenings, a narrative for soft ones, a multiplayer for social, a management sim for slow.&lt;/p&gt;
+&lt;p&gt;This works partially. But it adds a new problem: now you have four times the inventory to choose from, and you’re choosing while in a depleted state. The diversification helps the matching but hurts the deciding.&lt;/p&gt;
+&lt;p&gt;The deeper fix is to know your moods well enough to filter quickly. If you can recognize “I’m in soft narrative mood” without thinking, you can filter to two candidates instead of forty. The skill is not having more options. It’s reading yourself.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-14-mood-problem-not-time-problem/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Name the mood out loud. If you can articulate what you actually want from a game tonight, you can filter against your library cleanly. “I want something I can fail at without consequence.” “I want a story that doesn’t ask anything of me.” “I want to be smart for an hour.”&lt;/p&gt;
+&lt;p&gt;Build a small library deliberately. Three to five installed games covering the main moods you experience. More than that adds noise. Less than that fails to match.&lt;/p&gt;
+&lt;p&gt;Accept that some evenings, no game in your library matches. That’s fine. Those evenings are for other things. You don’t need to force a game into a mood-mismatched slot.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/D-14-mood-problem-not-time-problem/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t help you read your mood. That’s still on you. But it helps the second part: once you know what you want, Maida shows one game at a time, and you decide. Without the library scrolling, the matching is faster.&lt;/p&gt;
+&lt;p&gt;If the gap between available time and available mood has been frustrating you, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It can’t fix the mood, but it removes the searching.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>13 · Demos Are a Trap You Set for Yourself</title>
+  <link href="https://blog.brightraven.world/C-13-demos-are-a-trap/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/C-13-demos-are-a-trap/</id>
+  <content type="html">&lt;h1&gt;13 · Demos Are a Trap You Set for Yourself&lt;/h1&gt;
+&lt;p&gt;Steam Next Fest happens. You queue up six demos to try. You spend an evening playing 30 minutes of each. You wishlist three of them. You go to bed feeling like you accomplished something.&lt;/p&gt;
+&lt;p&gt;Three months later, you’ve bought one of those games. You haven’t played it.&lt;/p&gt;
+&lt;p&gt;The demo wasn’t a sample. It was a substitute.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-dopamine-of-trying&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-13-demos-are-a-trap/#the-dopamine-of-trying&quot;&gt;&lt;span&gt;The dopamine of trying&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Trying something new gives you a small reward. It’s the same circuit that makes wishlisting feel productive. You’re moving through novelty without commitment, and your brain treats this as pleasant.&lt;/p&gt;
+&lt;p&gt;A demo session is six new starts in one evening. Six dopamine hits, none of which require you to commit to anything. By the end, you’ve satisfied the part of you that wanted to play games tonight, without ever playing a game in any meaningful sense.&lt;/p&gt;
+&lt;p&gt;The full game would have asked more from you. It would have asked you to push through the slow first hour. It would have asked you to tolerate not understanding everything. The demo did none of that. It gave you the appetizer and packaged it as a meal.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-the-demo-actually-tested&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-13-demos-are-a-trap/#what-the-demo-actually-tested&quot;&gt;&lt;span&gt;What the demo actually tested&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;A 30-minute demo can tell you whether you find the controls satisfying and whether the art style appeals to you. It tells you almost nothing about whether you’ll enjoy 20 hours of the game.&lt;/p&gt;
+&lt;p&gt;The slow burn of a good game often happens after the demo would have ended. The mechanics that feel fine in the first 30 minutes can feel hollow at hour 5, or they can deepen. The demo can’t reveal which.&lt;/p&gt;
+&lt;p&gt;Demo evaluation is the most superficial form of game evaluation possible. Treating it as a basis for purchase decisions is a category error. The demo is a marketing artifact, not a fair sample.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-13-demos-are-a-trap/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Don’t queue demos. Pick one game from a festival, play it deeper than the demo allows. If there’s no demo, watch a 20-minute review and decide.&lt;/p&gt;
+&lt;p&gt;Set a different default for trying. Instead of “I’ll try this demo for 20 minutes,” try “I’ll play this demo until it stops being interesting, even if that’s 5 minutes.” Truncate the polite politeness of completing the demo runtime. Your time is more valuable than the demo’s pacing.&lt;/p&gt;
+&lt;p&gt;Notice the substitution. If you’ve spent an evening on demos and realize you didn’t actually play a game, ask whether you wanted to play a game or wanted to feel like you did.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-13-demos-are-a-trap/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida only knows about games you’ve actually installed. Demos count if they’re installed. So do full games. The decision is the same: launch this thirty-second decision into a thirty-minute or three-hour session, or pass.&lt;/p&gt;
+&lt;p&gt;If the demo loop has been replacing actual gaming, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;. It doesn’t reward queueing.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>12 · The Friend Who Says &quot;You Have to Play This&quot;</title>
+  <link href="https://blog.brightraven.world/C-12-friend-says-you-have-to-play/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/C-12-friend-says-you-have-to-play/</id>
+  <content type="html">&lt;h1&gt;12 · The Friend Who Says “You Have to Play This”&lt;/h1&gt;
+&lt;p&gt;Your friend just finished a game. They loved it. They tell you about it for an hour. Then they say it: “you have to play this.”&lt;/p&gt;
+&lt;p&gt;You add it to your wishlist. You feel a small spike of obligation. The game is now on a list of things you’ve implicitly agreed to engage with. If you don’t play it, eventually your friend will ask, and you’ll feel a small shame.&lt;/p&gt;
+&lt;p&gt;This is one of the most reliable ways to add games to your library that don’t fit you.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-%E2%80%9Cmust-play%E2%80%9D-recommendations-fail&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-12-friend-says-you-have-to-play/#why-%E2%80%9Cmust-play%E2%80%9D-recommendations-fail&quot;&gt;&lt;span&gt;Why “must-play” recommendations fail&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The friend’s experience was specific to them, in a moment, in a context. They were in a particular mood, had a particular history of recent games, had a particular life situation that made the game land.&lt;/p&gt;
+&lt;p&gt;When they say “you have to play this,” they’re projecting their own experience onto your future self. They’re saying: I had a great experience, you will also have a great experience.&lt;/p&gt;
+&lt;p&gt;That’s almost never true.&lt;/p&gt;
+&lt;p&gt;A good game for one person is a fine game for most others, sometimes a great game, sometimes a frustrating one, sometimes a “why did my friend like this.” The variance is large. The “must play” framing erases the variance.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-accumulation-effect&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-12-friend-says-you-have-to-play/#the-accumulation-effect&quot;&gt;&lt;span&gt;The accumulation effect&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Every must-play adds to your wishlist or your owned-but-unplayed collection. Over years, friends compound. You end up with a library of games other people loved, which is not the same as a library of games you love.&lt;/p&gt;
+&lt;p&gt;Some of these will be hits. Most won’t. The ratio doesn’t matter much. What matters is that the social pressure has nudged your library away from your own taste.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-honest-version-of-recommending&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-12-friend-says-you-have-to-play/#the-honest-version-of-recommending&quot;&gt;&lt;span&gt;The honest version of recommending&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;A better version of friend-recommendation sounds like this: I really enjoyed X. I think you might too because Y. If it doesn’t grab you in two hours, drop it.&lt;/p&gt;
+&lt;p&gt;This version respects your time, includes a reason, and gives you permission to not finish. It treats the game as a tip, not an obligation.&lt;/p&gt;
+&lt;p&gt;When you’re the one recommending, try this version. When you’re on the receiving end, mentally retrofit the lazy “must play” into this form before you decide whether to engage.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-12-friend-says-you-have-to-play/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Don’t add must-plays to your wishlist immediately. Wait a week. If you still want it, add it. If you’ve forgotten about it, the recommendation didn’t have enough force on you specifically.&lt;/p&gt;
+&lt;p&gt;Tell your friends you don’t take must-play recommendations. Tell them why. Most people will respect it. The ones who can’t respect it are giving you data about how their recommendations are actually delivered.&lt;/p&gt;
+&lt;p&gt;Disclose your own bias to yourself. You like the friend, so you trust the recommendation more than you would from a stranger. That trust is interpersonal, not informational. The friend’s taste is partial information, not authority.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-12-friend-says-you-have-to-play/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida ignores all of this. It doesn’t see what your friends recommended. It doesn’t know which games are critically acclaimed. It only knows what’s installed and what your behavior signals are.&lt;/p&gt;
+&lt;p&gt;If the social pressure has been quietly shaping your library against your taste, using a tool that doesn’t care about social context is a quiet way to recover. &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>11 · Why Game Pass Stresses You Out</title>
+  <link href="https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/</id>
+  <content type="html">&lt;h1&gt;11 · Why Game Pass Stresses You Out&lt;/h1&gt;
+&lt;p&gt;Game Pass was supposed to be paradise. Hundreds of games for one monthly price. No more agonizing over which one to buy. Just install and play.&lt;/p&gt;
+&lt;p&gt;For some people it worked. For most, it added a new texture of stress they didn’t have before.&lt;/p&gt;
+&lt;p&gt;If you’ve felt it, you know what I mean. Opening Game Pass and feeling not freedom but pressure. A library you don’t own, but somehow owe. The clock ticking on titles that will rotate out. The vague guilt of paying for something you’re not using fully.&lt;/p&gt;
+&lt;p&gt;Here’s why it happens.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-psychology-of-the-all-you-can-eat-buffet&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/#the-psychology-of-the-all-you-can-eat-buffet&quot;&gt;&lt;span&gt;The psychology of the all-you-can-eat buffet&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Subscriptions change the math you do about value. When you buy a game, the question is “is this worth $X to me.” Once it’s owned, the question is “do I want to play this tonight.” These are different questions and the second one isn’t contaminated by the first.&lt;/p&gt;
+&lt;p&gt;When you have a subscription, the question becomes “am I getting my money’s worth.” This question never goes away. It runs in the background of every gaming session. You’re playing one game and aware that 200 others are paid for and waiting. You’re not just choosing among games anymore. You’re choosing among games while justifying the subscription.&lt;/p&gt;
+&lt;p&gt;That justification framing is exhausting. It turns leisure into accounting.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-rotation-pressure&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/#the-rotation-pressure&quot;&gt;&lt;span&gt;The rotation pressure&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Game Pass adds and removes games. This creates artificial scarcity. You’ve been meaning to try X. X leaves the service in two weeks. Now there’s urgency that didn’t exist when you weren’t paying for it.&lt;/p&gt;
+&lt;p&gt;The rotation is designed to drive engagement. It works. It also makes you feel like you’re being chased by deadlines for activities that should be relaxing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-owned-vs-rented-confusion&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/#the-owned-vs-rented-confusion&quot;&gt;&lt;span&gt;The owned-vs-rented confusion&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Owning a game makes it part of your life. You can come back to it in three years. The slow burn is part of the relationship.&lt;/p&gt;
+&lt;p&gt;Subscription games never become part of your life in the same way. You play them while you’re paying. You stop paying, they’re gone. This creates a different relationship to the games themselves, more like watching a TV show than building a library.&lt;/p&gt;
+&lt;p&gt;For some games this is fine. For others, the lack of ownership creates a permanent surface-level engagement. You played it once, you don’t have access, you don’t think about it again. The game existed in your life as content consumed, not a thing you have.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Stop tracking what you should play on Game Pass. The list of available games is not a list of games you owe attention. It’s a menu of options on any given evening, no different from your Steam library.&lt;/p&gt;
+&lt;p&gt;Cancel and re-subscribe based on what’s actually available. If a season has nothing new for you, don’t pay for the access. Resume when something compelling shows up.&lt;/p&gt;
+&lt;p&gt;Treat the subscription as a discovery tool, not a backlog generator. Game Pass is great for trying things you wouldn’t have bought. It becomes stressful when you treat the trial library as obligations.&lt;/p&gt;
+&lt;p&gt;Notice when the math is hurting you. If “am I getting my money’s worth” is making you play games you don’t enjoy, you’re not getting your money’s worth. The whole point of leisure is that you stop optimizing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-11-why-game-pass-stresses-you-out/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida works with whatever’s installed, regardless of where it came from. A Game Pass game and a purchased game look the same to it. There’s no Game Pass timer in the interface, no “expires soon” pressure. If you’ve installed it, it’s a candidate.&lt;/p&gt;
+&lt;p&gt;If the subscription anxiety has been bleeding into your gaming, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free here&lt;/a&gt;. It treats your library, however assembled, as just a library.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>10 · The Algorithm Is Making Your Taste Smaller</title>
+  <link href="https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/</id>
+  <content type="html">&lt;h1&gt;10 · The Algorithm Is Making Your Taste Smaller&lt;/h1&gt;
+&lt;p&gt;Recommendation systems are good at finding things you’ll click on. That sounds like the same thing as finding things you’ll like. It’s not.&lt;/p&gt;
+&lt;p&gt;The optimization target of every modern recommendation engine, including Steam’s, is probability of engagement in the next session. The engine looks at what you played recently and finds adjacent things. If you played a roguelike, you’ll see more roguelikes. If you played at 11pm, you’ll see more games people played at 11pm.&lt;/p&gt;
+&lt;p&gt;Each of these recommendations is plausible. None of them are surprising.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-surprise-does-for-taste&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/#what-surprise-does-for-taste&quot;&gt;&lt;span&gt;What surprise does for taste&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Taste is built by exposure to things at the edges of what you currently like. The fifth roguelike teaches you less than a strategy game you’d never have picked. The second turn-based JRPG narrows you. A documentary, a movie, a conversation that nudges you toward something unexpected expands you.&lt;/p&gt;
+&lt;p&gt;Recommendation engines don’t optimize for expansion. They optimize for not losing you. The two are related but not the same. A user who never sees anything outside their cluster has high engagement and zero growth.&lt;/p&gt;
+&lt;p&gt;After two years of letting an algorithm choose, your taste has been quietly funneled. You don’t notice because each individual recommendation felt right. The shape of the funnel is invisible from inside.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;how-this-shows-up&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/#how-this-shows-up&quot;&gt;&lt;span&gt;How this shows up&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You start to feel like new games are all the same. They’re not. You’re being shown a narrow slice.&lt;/p&gt;
+&lt;p&gt;You feel like you’ve outgrown a genre, when actually you’ve just exhausted the slice the algorithm thinks you want.&lt;/p&gt;
+&lt;p&gt;You buy something on a friend’s recommendation and find you love it, in a way nothing the algorithm showed you has hit in months. That’s the algorithm hiding things from you.&lt;/p&gt;
+&lt;p&gt;You scroll your library and realize you don’t remember why you have the games at the bottom of the list, the ones you bought before the algorithm started filtering. Those were the ones you were curious about. The newer ones were optimized for click probability.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Curate against the algorithm intentionally. Once a month, pick a game from a genre you don’t usually play. Let yourself dislike it. That’s a real data point. Sometimes you’ll find a category you didn’t know you wanted.&lt;/p&gt;
+&lt;p&gt;Use recommendation sources that aren’t trying to keep you on a platform. A friend, a podcast, a forum, a magazine. Their interests bleed into yours, which is a different kind of recommendation than “users like you also bought.”&lt;/p&gt;
+&lt;p&gt;Remember that “I don’t like JRPGs” was probably formed five years ago based on three games. Your taste then is not your taste now. Test it occasionally.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/C-10-algorithm-making-taste-smaller/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t try to recommend. It picks from your installed library based on your past behavior, but it doesn’t know which games are similar to which. There’s no “users like you also played” hiding in the engine. If you installed it, it’s eligible. The randomness is the feature.&lt;/p&gt;
+&lt;p&gt;This isn’t accidentally true. The whole product was built on the conviction that algorithm-recommended is the wrong default for entertainment. &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free, here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>09 · You&#39;re Not Playing Worse, You&#39;re Just Older</title>
+  <link href="https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/</id>
+  <content type="html">&lt;h1&gt;09 · You’re Not Playing Worse, You’re Just Older&lt;/h1&gt;
+&lt;p&gt;You used to play four hours a night without thinking about it. Now you play forty-five minutes and feel done. You used to push through the difficult parts of a game. Now you switch to easy mode without ceremony, or stop playing.&lt;/p&gt;
+&lt;p&gt;Something changed. Most people interpret it as decline. They worry their reflexes are slipping, their attention span is shrinking, their love for games is fading.&lt;/p&gt;
+&lt;p&gt;That’s not what’s happening.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what%E2%80%99s-actually-changed&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/#what%E2%80%99s-actually-changed&quot;&gt;&lt;span&gt;What’s actually changed&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The number of decisions you make per day in adult life is roughly an order of magnitude higher than what it was in your teens. By the time you sit down to play, you’re not at full capacity. Your nervous system has been running a tab.&lt;/p&gt;
+&lt;p&gt;Older brains aren’t worse. They’re more efficient at routing energy. The energy gets routed away from optional activities, toward whatever the body decides is necessary. Games are optional. They lose the budget battle to fatigue, dinner, the conversation you didn’t finish, the email you didn’t reply to.&lt;/p&gt;
+&lt;p&gt;The “I used to play more” feeling isn’t about gaming. It’s about everything else expanding around gaming.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-myth-of-declining-reflexes&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/#the-myth-of-declining-reflexes&quot;&gt;&lt;span&gt;The myth of declining reflexes&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Your reflexes haven’t changed much. The “I can’t play hard games anymore” feeling is mostly about the cost of failure. When you were 18, dying in a hard fight cost you 20 minutes of redo. That was acceptable. When you’re 35, those 20 minutes are stolen from your one available hour of the evening. The cost-per-mistake has gone up, even if your raw skill hasn’t.&lt;/p&gt;
+&lt;p&gt;Easy mode isn’t surrender. Easy mode is a recalibration of cost. You’re paying in opportunity cost for every minute of the evening. Hard mode triples that cost. Easy mode keeps it stable. The math is correct.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-this-means-for-your-library&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/#what-this-means-for-your-library&quot;&gt;&lt;span&gt;What this means for your library&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The games you bought when you had four-hour evenings don’t fit forty-five-minute evenings. This isn’t your fault. It’s a mismatch between your past purchasing self and your current playing self.&lt;/p&gt;
+&lt;p&gt;Some of those games will never get played. That’s accurate, not regrettable. The version of you that bought them isn’t the version of you that has time to play them. They were purchased in good faith and failed to clear the schedule constraint.&lt;/p&gt;
+&lt;p&gt;Treat them as a fossil record of a past life, not as obligations.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Pick games that fit your actual evenings, not your aspirational evenings. A 20-hour story-driven indie is a better fit than a 200-hour open-world RPG, for most adult schedules.&lt;/p&gt;
+&lt;p&gt;Use easy modes without guilt. The accomplishment is launching the game and engaging with it, not the difficulty curve.&lt;/p&gt;
+&lt;p&gt;Quit games early when they’re not landing. Your time is more valuable than the cost sunk into the first hour.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-09-youre-not-playing-worse-just-older/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida is built for adult evenings. It assumes your time is short and your decision capacity is low. It shows you one game, asks for thirty seconds of decision, and gets out of your way.&lt;/p&gt;
+&lt;p&gt;If the gap between “I used to play games” and “I want to play games but it’s hard now” has been bothering you, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>08 · Why You Buy Games During Sales You&#39;ll Never Play</title>
+  <link href="https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/</id>
+  <content type="html">&lt;h1&gt;08 · Why You Buy Games During Sales You’ll Never Play&lt;/h1&gt;
+&lt;p&gt;The Steam Summer Sale starts. You feel a familiar pull. You scroll through the discounts. A game catches your eye. 75% off. You’re not sure if you’ll play it. You buy it anyway.&lt;/p&gt;
+&lt;p&gt;Six months later, the game is still uninstalled. You feel mildly guilty when you see it. You might buy another one in the next sale.&lt;/p&gt;
+&lt;p&gt;This pattern is not a failure of self-control. It’s a feature of how sales are designed.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-question-the-sale-makes-you-answer&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/#the-question-the-sale-makes-you-answer&quot;&gt;&lt;span&gt;The question the sale makes you answer&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;When you’re not in a sale, the question your brain asks about a potential game is: do I want to play this.&lt;/p&gt;
+&lt;p&gt;When you’re in a sale, the question shifts to: am I willing to miss this discount.&lt;/p&gt;
+&lt;p&gt;These are completely different questions. The first one is hard to answer in the affirmative because most games you don’t urgently want to play. The second one is easy to answer in the affirmative because the discount has a deadline and the price feels low.&lt;/p&gt;
+&lt;p&gt;The sale framing changes the comparison set. You’re no longer comparing the game to not having it. You’re comparing the discounted price to the regular price. The latter comparison almost always favors buying.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;loss-aversion-meets-perceived-scarcity&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/#loss-aversion-meets-perceived-scarcity&quot;&gt;&lt;span&gt;Loss aversion meets perceived scarcity&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Two well-documented biases compound here. Loss aversion makes the “missing the sale” option feel worse than it actually is. Perceived scarcity (the sale ends in 24 hours) elevates urgency above evaluation. Together they push the decision toward buying without ever engaging the question of whether you’ll actually play.&lt;/p&gt;
+&lt;p&gt;The Steam interface reinforces both. Countdown timers. Limited-time deals. Wishlist alerts. Each design element optimizes for buying, not for matching games to your actual needs.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what%E2%80%99s-actually-being-optimized&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/#what%E2%80%99s-actually-being-optimized&quot;&gt;&lt;span&gt;What’s actually being optimized&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Steam’s revenue, obviously. But also your sense of being a savvy buyer. You bought a $40 game for $10. You won. The game now exists in your library, evidence of the win. Whether you play it is a separate, less salient question.&lt;/p&gt;
+&lt;p&gt;The buying delivers the satisfaction. The playing is supposed to deliver more satisfaction, but it requires effort, and the satisfaction has already been collected.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Don’t browse sales without a list. Decide in advance what you want, and only check those items. Don’t let the discovery happen at the same time as the discount.&lt;/p&gt;
+&lt;p&gt;Use the wishlist as a cooling-off period. Add anything that catches your eye to the wishlist. Don’t buy on first sight. A week later, decide. The urgency that made the purchase feel necessary will have evaporated.&lt;/p&gt;
+&lt;p&gt;Reframe the math. The question is not “is this $10 a good price for a $40 game.” The question is “would I pay $10 to play this in the next month.” If the answer is no, you’re not saving money. You’re spending $10 on storage.&lt;/p&gt;
+&lt;p&gt;Calculate cost-per-played-hour. If you spent $200 on Steam sales last year and played 20 hours of those games, you spent $10 per hour for entertainment you mostly didn’t enjoy. Sales feel cheap individually and add up to expensive in aggregate.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-08-why-you-buy-games-during-sales/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida only sees what’s installed. It can’t be gamed by Steam sales. The games you bought during a sale and never installed don’t appear in Maida’s selection at all. This is a feature: the friction of installing forces a small commitment that the buying didn’t.&lt;/p&gt;
+&lt;p&gt;If the sale-buying loop has been bothering you, separating “owned” from “installed” is a quiet way to take the sale out of the equation.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>07 · The Pile of Shame Is a Lie You Tell Yourself</title>
+  <link href="https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/</id>
+  <content type="html">&lt;h1&gt;07 · The Pile of Shame Is a Lie You Tell Yourself&lt;/h1&gt;
+&lt;p&gt;“Pile of shame” entered gaming vocabulary somewhere around the rise of digital storefronts. Before Steam sales and Humble Bundles, you had to physically buy each game. Your library was self-limiting. After, the friction collapsed and libraries grew faster than playtime.&lt;/p&gt;
+&lt;p&gt;The pile was a way to acknowledge the gap. The shame was a way to perform sheepishness about it.&lt;/p&gt;
+&lt;p&gt;The first part is fine. Libraries grew. The second part is a problem.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-the-framing-is-wrong&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/#why-the-framing-is-wrong&quot;&gt;&lt;span&gt;Why the framing is wrong&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The phrase implies that the unplayed games are a moral failing. Money was spent, time was committed, and you didn’t follow through. You’re a gamer who can’t game.&lt;/p&gt;
+&lt;p&gt;But this framing imports values from other domains. A pile of unread books on your nightstand is supposedly bad because reading is good for you and you said you’d improve yourself. A pile of unfinished projects in your basement is supposedly bad because you should be productive.&lt;/p&gt;
+&lt;p&gt;Games occupy a different category. They’re entertainment. The math of a $2 Steam sale game you never play is: you spent $2 and got no entertainment from it. That’s not a moral failure. That’s a refund-tier purchase you didn’t bother to refund.&lt;/p&gt;
+&lt;p&gt;There is no version of this where you owe the unplayed games anything.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-the-pile-actually-is&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/#what-the-pile-actually-is&quot;&gt;&lt;span&gt;What the pile actually is&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;If you reframe the pile honestly, here’s what’s there.&lt;/p&gt;
+&lt;p&gt;A library of options, larger than any one person needs. Insurance against any given evening, where one of the games will fit your mood. Receipts for past versions of yourself that wanted different things. Some genuinely bad purchases mixed in with good ones, which is true of every purchase category.&lt;/p&gt;
+&lt;p&gt;None of these descriptions involve shame.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-shame-is-the-problem%2C-not-the-pile&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/#the-shame-is-the-problem%2C-not-the-pile&quot;&gt;&lt;span&gt;The shame is the problem, not the pile&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The pile itself is harmless. The shame attached to the pile is what creates the avoidance loop. You don’t open Steam because you’ll see the unplayed games. You don’t try new games because you’ll add to the count. You buy games anyway because the buying is satisfying and the playing is now contaminated.&lt;/p&gt;
+&lt;p&gt;If you removed the shame, the pile would be a feature. You’d open Steam, see your library, pick something that fits the mood, play it, close Steam. Some games would never get played. That would be fine.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;practical-reframes&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/#practical-reframes&quot;&gt;&lt;span&gt;Practical reframes&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Stop calling it the pile of shame. The phrase carries weight you didn’t choose. Call it a library, a collection, a backlog if you must, but not a pile and not a shame.&lt;/p&gt;
+&lt;p&gt;Stop counting unplayed games. The number doesn’t tell you anything useful. It only tells you the size of your collection, which is not a moral metric.&lt;/p&gt;
+&lt;p&gt;Stop apologizing for it in conversations. You don’t owe other gamers an explanation for your unplayed library. They have one too.&lt;/p&gt;
+&lt;p&gt;Treat each game like a possibility, not an obligation. The next time you scroll past a game you haven’t played, the question isn’t “why haven’t I played this.” The question is “do I want to play this tonight.” If yes, play. If no, scroll past without comment.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-07-pile-of-shame-is-a-lie/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida is built around this reframe. There is no count of unplayed games. There is no progress tracker. There is no completion percentage. The only thing Maida knows is what’s installed and what your behavior signals are. The pile, with all its imagined weight, doesn’t appear anywhere in the interface.&lt;/p&gt;
+&lt;p&gt;If the pile has been bothering you, it might help to use a tool that doesn’t acknowledge its existence.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>06 · You Don&#39;t Owe That Game an Ending</title>
+  <link href="https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/</id>
+  <content type="html">&lt;h1&gt;06 · You Don’t Owe That Game an Ending&lt;/h1&gt;
+&lt;p&gt;You started a game three weeks ago. You played for ten hours. Then life happened. You haven’t gone back, but you haven’t deleted it either. Every time you see it in your library, you feel a small pang.&lt;/p&gt;
+&lt;p&gt;The game is fine. The game doesn’t need anything from you. The game is software, sitting on a hard drive. It is incapable of being disappointed.&lt;/p&gt;
+&lt;p&gt;But somewhere along the way, you internalized that not finishing a game is failure. Where did that come from.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-lineage-of-completion-guilt&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/#the-lineage-of-completion-guilt&quot;&gt;&lt;span&gt;The lineage of completion guilt&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The idea that you should finish what you start is borrowed from other contexts. Books, especially the literary ones you read in school, came with a moral framing: finishing was virtue, abandoning was weakness. Long-form media, by virtue of demanding sustained attention, accrued cultural weight as something serious people see through.&lt;/p&gt;
+&lt;p&gt;Games inherited this framing without earning it. A game is not a novel. It is not a course you signed up for. It is not a marathon you committed to running. It is a piece of entertainment you bought because at one point it appealed to you. The terms of that purchase did not include an obligation.&lt;/p&gt;
+&lt;p&gt;The industry’s marketing reinforces the mistake. Achievements, completion percentages, true endings, post-game content. Each mechanic is designed to extract more time from you, framed as if you owe it.&lt;/p&gt;
+&lt;p&gt;You don’t.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-cost-of-the-lie&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/#the-cost-of-the-lie&quot;&gt;&lt;span&gt;The cost of the lie&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The completion compulsion has a price. It makes starting new games harder, because each new start carries the weight of an implicit promise to finish. The pile of shame grows precisely because of the shame attached to it.&lt;/p&gt;
+&lt;p&gt;People who have made peace with not finishing things end up playing more games, not fewer. They start things lightly. They stop when they stop enjoying. They move on without ceremony.&lt;/p&gt;
+&lt;p&gt;People who can’t shake the obligation end up paralyzed. They don’t start because they can’t bear the prospect of another half-finished entry on the list.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what%E2%80%99s-actually-true&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/#what%E2%80%99s-actually-true&quot;&gt;&lt;span&gt;What’s actually true&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;A game is finished for you when you’ve gotten what you wanted out of it. Sometimes that aligns with the credits. Often it doesn’t. You can finish a game in the third hour, having seen what you needed to see. You can finish a game in the fortieth hour, after the official ending, in a moment of “I’m done” that the game has no opinion about.&lt;/p&gt;
+&lt;p&gt;The credits are a cultural marker, not a moral one.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/B-06-you-dont-owe-the-game-an-ending/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t track completion. It doesn’t show you progress bars. It doesn’t ask if you finished. The score it keeps is binary: did you launch it tonight or not. The rest is between you and the game.&lt;/p&gt;
+&lt;p&gt;This is deliberate. Tracking completion would invite the guilt back in through the side door. Maida can’t help you finish things, and it doesn’t try to. What it does is make starting things easier, which is where the actual problem is.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here, free&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>05 · Stop Waiting for the Perfect Time to Start That RPG</title>
+  <link href="https://blog.brightraven.world/A-05-stop-waiting-perfect-time/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/A-05-stop-waiting-perfect-time/</id>
+  <content type="html">&lt;h1&gt;05 · Stop Waiting for the Perfect Time to Start That RPG&lt;/h1&gt;
+&lt;p&gt;The 80-hour RPG sits in your library. You bought it on sale six months ago. It’s a great game, you know it’s a great game, you’ve heard nothing but praise. But you haven’t started it.&lt;/p&gt;
+&lt;p&gt;The reason you give yourself: you’re waiting for the right time. A long weekend, a vacation, a quiet stretch of evenings. Once you have that, you’ll really commit. You’ll do it justice.&lt;/p&gt;
+&lt;p&gt;That stretch never arrives.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-fantasy-of-the-right-time&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-05-stop-waiting-perfect-time/#the-fantasy-of-the-right-time&quot;&gt;&lt;span&gt;The fantasy of the right time&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The right time is a fictional period your imagination has constructed. It has these properties:&lt;/p&gt;
+&lt;p&gt;You have unlimited evenings. You’re not tired. Nothing else competes for attention. You’re in the right mood for a 60-hour epic. You’re committed to seeing it through.&lt;/p&gt;
+&lt;p&gt;This person doesn’t exist. You don’t have unlimited evenings, you’ll be tired some of them, things will compete, your mood will vary, and your commitment will waver. These are all true and they will all remain true forever.&lt;/p&gt;
+&lt;p&gt;The plan to wait for the right time is a plan to never start.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-long-games-trigger-this-specifically&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-05-stop-waiting-perfect-time/#why-long-games-trigger-this-specifically&quot;&gt;&lt;span&gt;Why long games trigger this specifically&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Short games don’t have this problem. You can dabble. A four-hour indie game can be tried tonight without ceremony.&lt;/p&gt;
+&lt;p&gt;An 80-hour RPG carries the weight of a contract. Starting it feels like signing up for something. If you’re not sure you can finish, the safer move (your brain reasons) is to not start. Once you’ve started and abandoned, the game is wasted. Better to keep it on the shelf of pristine future.&lt;/p&gt;
+&lt;p&gt;This is loss aversion applied to time investment. The fear of starting and not finishing outweighs the certainty of never playing. The latter is what’s actually happening, but it’s invisible because it’s the default state.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-05-stop-waiting-perfect-time/#what-works&quot;&gt;&lt;span&gt;What works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Start with a session you’re willing to lose.&lt;/p&gt;
+&lt;p&gt;Tell yourself: I’ll play this for 45 minutes tonight. If I don’t like it, I’m done. If I do like it, I might play more. Either way, the 45 minutes is fine.&lt;/p&gt;
+&lt;p&gt;You’re not signing up for 80 hours. You’re signing up for 45 minutes. The contract is small.&lt;/p&gt;
+&lt;p&gt;Most people who try this find that one of two things happens. Either they discover the game isn’t actually for them, in which case they’ve saved themselves 79 hours of guilt. Or they discover they’re enjoying it, in which case the next session is no longer a contract because they already started.&lt;/p&gt;
+&lt;p&gt;The 80-hour fantasy is the obstacle. The 45-minute test session is the antidote.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-05-stop-waiting-perfect-time/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida doesn’t care how long a game is. It shows you one installed game. You decide whether to try it tonight. If you do, you don’t have to commit to finishing. You’re committing to launching it.&lt;/p&gt;
+&lt;p&gt;That smaller commitment is what most decisions actually are, when stripped of the future-you anxiety.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free, here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>04 · Why You Want New Games When You Have 80 Unplayed Ones</title>
+  <link href="https://blog.brightraven.world/A-04-why-you-want-new-games/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/A-04-why-you-want-new-games/</id>
+  <content type="html">&lt;h1&gt;04 · Why You Want New Games When You Have 80 Unplayed Ones&lt;/h1&gt;
+&lt;p&gt;You scroll through your library. Nothing grabs you. So you open the Steam store. You browse. You wishlist a couple of things. You feel productive.&lt;/p&gt;
+&lt;p&gt;Twenty minutes later, you’ve added two games to your wishlist and zero hours to your playtime. The library you were avoiding is exactly the same size, plus you now have two new candidates for the same library you couldn’t navigate.&lt;/p&gt;
+&lt;p&gt;This is not a research problem. This is escape.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-the-store-feels-better-than-the-library&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-04-why-you-want-new-games/#why-the-store-feels-better-than-the-library&quot;&gt;&lt;span&gt;Why the store feels better than the library&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The reason the store feels better than the library is the same reason planning feels better than doing.&lt;/p&gt;
+&lt;p&gt;Library: full of obligations. Each game represents a past decision, money spent, hard drive space allocated. There is implicit pressure to play them. Each title you scroll past is a small accusation.&lt;/p&gt;
+&lt;p&gt;Store: pure potential. The games haven’t entered your responsibility yet. Browsing them is consequence-free. Even buying one is a kind of consequence-free, because the act of purchase is the satisfying part. The game itself doesn’t have to be played for the dopamine to fire.&lt;/p&gt;
+&lt;p&gt;You’re not actually looking for a new game. You’re looking for relief from the library you can’t bring yourself to engage with.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-the-loop-continues&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-04-why-you-want-new-games/#why-the-loop-continues&quot;&gt;&lt;span&gt;Why the loop continues&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This loop is what builds the backlog. Each store visit adds a couple of games to the pile. The pile gets bigger. The avoidance gets stronger. The store becomes a more reliable source of dopamine than the actual games.&lt;/p&gt;
+&lt;p&gt;Steam sales accelerate this. The framing changes the question you’re answering. You’re no longer evaluating whether you’ll play the game. You’re evaluating whether you’d be foolish to miss the deal. These are very different questions. The first one might end in not buying. The second one usually ends in buying.&lt;/p&gt;
+&lt;p&gt;This is why people with 500-game libraries keep buying. Not because they’re irrational. Because the system is rational at the level it’s evaluating, just not the level that matters.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-actually-works&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-04-why-you-want-new-games/#what-actually-works&quot;&gt;&lt;span&gt;What actually works&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Time-box the store. Decide in advance: Saturday mornings I browse, weekday evenings I play. Don’t let browsing happen at the same time as the play decision. They’re different activities, treat them like different rooms.&lt;/p&gt;
+&lt;p&gt;Wishlist instead of buy. The wishlist is the cheapest commitment device available. It captures the System 1 interest without engaging your wallet. A week later, when you look at the wishlist, the urgency has decayed. You can evaluate calmly whether you actually want the game, and most of the time the answer is no.&lt;/p&gt;
+&lt;p&gt;Notice the urge for what it is. The next time you find yourself headed to the store with no specific game in mind, ask: am I researching, or am I avoiding? The honest answer, almost always, is the second.&lt;/p&gt;
+&lt;p&gt;Accept the pile. You’re not going to play 80% of your library. That’s true for most gamers. The 80% isn’t waste, it’s a backstop. A guarantee that on any given evening, you have something installed that fits your mood. The pile has a purpose, even if it never shrinks.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-04-why-you-want-new-games/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida won’t stop you from going to the store. But it gives you something to do in the moment when you’d otherwise drift there. Open Maida, see one installed game, decide in thirty seconds whether to launch it. If yes, you’re playing. If no, see another. Three or four cards in, you’ve either started a session or honestly confirmed you’re not in the mood. Either outcome saves you from the store-as-procrastination loop.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free, here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>03 · The Reason Yesterday&#39;s Game Doesn&#39;t Work Today</title>
+  <link href="https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/</id>
+  <content type="html">&lt;h1&gt;03 · The Reason Yesterday’s Game Doesn’t Work Today&lt;/h1&gt;
+&lt;p&gt;You played a game yesterday. You enjoyed it. You went to bed thinking about it.&lt;/p&gt;
+&lt;p&gt;Tonight you sit down to play, and the thought of returning to that same game feels heavy. You don’t dislike it. You just don’t want it. You scroll past it in your library. You look at other things instead.&lt;/p&gt;
+&lt;p&gt;You’re not being inconsistent. Your brain is doing what brains do.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;three-forces%2C-all-pushing-the-same-way&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/#three-forces%2C-all-pushing-the-same-way&quot;&gt;&lt;span&gt;Three forces, all pushing the same way&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Hedonic adaptation isn’t just for big things. It happens daily, with everything you enjoy. The neurochemistry is straightforward: novelty produces a dopamine response that scales with surprise. Yesterday, the game had surprises. A new mechanic, a story beat, a corner of the map you hadn’t seen. Today, the prediction error is smaller. You roughly know what’s coming next.&lt;/p&gt;
+&lt;p&gt;This doesn’t mean the game is worse. It means your brain has updated its model. The same content produces a smaller response.&lt;/p&gt;
+&lt;p&gt;Add to this the variety-seeking instinct. Behavioral economists have measured a robust effect: even when people love what they had yesterday, they will choose something different today, given the option. Not because yesterday’s choice was wrong. Because monotony itself feels aversive.&lt;/p&gt;
+&lt;p&gt;Then add resumption friction. Even after one day, you have to remember where you were, what controls you’d internalized, what your immediate goal was. Reloading takes effort. The first ten minutes of a returning session are clumsy. Your System 2, evaluating whether to play tonight, accurately estimates this cost and weighs it against the alternative of starting fresh.&lt;/p&gt;
+&lt;p&gt;All three forces push the same direction: away from yesterday’s game.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-%E2%80%9Ci%E2%80%99ll-just-keep-playing-until-i-finish%E2%80%9D-fails&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/#why-%E2%80%9Ci%E2%80%99ll-just-keep-playing-until-i-finish%E2%80%9D-fails&quot;&gt;&lt;span&gt;Why “I’ll just keep playing until I finish” fails&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The plan was made by yesterday’s-you, who was in a different mental state. Today’s-you doesn’t share the commitment because today’s-you isn’t the same neurochemistry. The future self that promised to keep playing was a different person. The current self has every right to disagree.&lt;/p&gt;
+&lt;p&gt;This isn’t weakness. It’s how memory and motivation actually work.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;what-helps&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/#what-helps&quot;&gt;&lt;span&gt;What helps&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Lower the activation energy. If you can sit down and resume in two minutes instead of ten, the resumption friction shrinks. Quick save loaded, immediate next objective in mind, no menu hunting.&lt;/p&gt;
+&lt;p&gt;Accept the pause. A game can wait three days and be more enjoyable when you come back, because variety has reset. Daily progress is not a virtue.&lt;/p&gt;
+&lt;p&gt;Pre-commit for things that matter. If finishing a particular game is important to you, lock in some decisions yesterday: tomorrow at 9pm I’ll play this one, regardless of what I feel. Today’s-you will resist, but the past commitment can override the in-the-moment shrug.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-03-yesterdays-game-doesnt-work-today/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maida has a feature called Anchor that does the third thing above. Hold three seconds on a game and Maida will surface it for the next several days, fighting the daily reset on your behalf. But Maida won’t remind you to anchor. If yesterday’s-you didn’t think to do it, today’s-you starts fresh.&lt;/p&gt;
+&lt;p&gt;The reason is honest: Maida can’t tell whether you went to bed satisfied with that game or frustrated by it. Pushing you back to it would be a guess, and a wrong guess costs more than the right guess gains. So Maida stays quiet about yesterday and trusts you to find your own way back if you want to.&lt;/p&gt;
+&lt;p&gt;If that posture interests you, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is free here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>02 · Why You Open Steam and Close It Five Minutes Later</title>
+  <link href="https://blog.brightraven.world/A-02-why-you-open-steam-and-close-it/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/A-02-why-you-open-steam-and-close-it/</id>
+  <content type="html">&lt;h1&gt;02 · Why You Open Steam and Close It Five Minutes Later&lt;/h1&gt;
+&lt;p&gt;The pattern is always the same.&lt;/p&gt;
+&lt;p&gt;You finish work. You’re tired but you have an hour or two before bed. You open Steam, ready to play something. You scroll through your library. Something looks interesting. You hover over it. Something else also looks interesting. You compare. You scroll past both. You notice a game you forgot you owned. You consider it. Five minutes pass. You close Steam. You open YouTube.&lt;/p&gt;
+&lt;p&gt;What just happened.&lt;/p&gt;
+&lt;p&gt;This is decision fatigue meeting variety in real time. After a full day of decisions at work, your System 2 is depleted. It can still process information, but it can no longer commit. Each game you scroll past requires a small evaluation. Right genre? Right length? Right mood? Multiplied by 80 games, that’s 80 micro-decisions, none of which result in action.&lt;/p&gt;
+&lt;p&gt;The library becomes a gauntlet of “maybe later.” Each game gets evaluated, none get chosen.&lt;/p&gt;
+&lt;p&gt;The reason it ends with YouTube isn’t laziness. YouTube requires zero decisions. The algorithm picks for you. You’re not abandoning gaming because you don’t want to play. You’re abandoning gaming because choosing has become the bottleneck, not playing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-fix-that-doesn%E2%80%99t-work%3A-more-recommendations&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-02-why-you-open-steam-and-close-it/#the-fix-that-doesn%E2%80%99t-work%3A-more-recommendations&quot;&gt;&lt;span&gt;The fix that doesn’t work: more recommendations&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The intuitive solution is to ask Steam to surface something. “Show me what to play.” But this is the same problem in different clothing. Steam will surface 5-10 candidates. You now have 5-10 micro-decisions instead of 80. Better, but not solved.&lt;/p&gt;
+&lt;p&gt;A better surface still ends in the same place if your System 2 has nothing left to give.&lt;/p&gt;
+&lt;h2 id=&quot;the-fix-that-works%3A-remove-the-choice-from-the-equation&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-02-why-you-open-steam-and-close-it/#the-fix-that-works%3A-remove-the-choice-from-the-equation&quot;&gt;&lt;span&gt;The fix that works: remove the choice from the equation&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Whatever you would have chosen tonight is fine. The perfect choice doesn’t exist. The variance between “best game tonight” and “fifth-best game tonight” is small compared to the variance between “any game tonight” and “no game at all.”&lt;/p&gt;
+&lt;p&gt;The most underrated way to handle decision fatigue is to delegate the decision somewhere harmless. Roll a die. Let a random picker choose. Set a rule: the first game I see when I open Steam is what I play, no scrolling allowed.&lt;/p&gt;
+&lt;p&gt;Once you’re twenty minutes into something, you’ll either be enjoying it or you won’t. Both are useful information. Neither requires you to have made the correct choice an hour ago when you were too tired to think.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-02-why-you-open-steam-and-close-it/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I built Maida specifically for this state of evening. It shows one game at a time. There is no library view, so there’s nothing to scroll. You either try the game it shows you, or you say “not now” and see another one. After three or four cards, you’ve either started playing or you’ve genuinely confirmed you’re not in the mood, in which case YouTube was the right answer all along.&lt;/p&gt;
+&lt;p&gt;If the browsing-loop is the part of your evening that’s been frustrating you, &lt;a href=&quot;https://brightraven.world/&quot;&gt;Maida is here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+  <title>01 · You Didn&#39;t Forget the Game. You Forgot Why You Wanted It.</title>
+  <link href="https://blog.brightraven.world/A-01-you-didnt-forget-the-game/"/>
+  <updated>2026-05-17T09:44:00Z</updated>
+  <id>https://blog.brightraven.world/A-01-you-didnt-forget-the-game/</id>
+  <content type="html">&lt;h1&gt;01 · You Didn’t Forget the Game. You Forgot Why You Wanted It.&lt;/h1&gt;
+&lt;p&gt;You didn’t forget the game. You forgot why you wanted it.&lt;/p&gt;
+&lt;p&gt;Somewhere in your library there’s a game you added during a sale, or after a friend mentioned it, or because a trailer caught you at exactly the right moment. At that moment, something clicked. You knew why you wanted it.&lt;/p&gt;
+&lt;p&gt;Then life continued. The context dissolved. The game stayed.&lt;/p&gt;
+&lt;p&gt;Now when you scroll past it, it’s just a title. The deliberate, calculating part of your brain looks at it and starts asking: Is this the right genre for tonight? How long is it? Will I actually finish it? And somewhere in that calculation, nothing happens.&lt;/p&gt;
+&lt;p&gt;The game wasn’t rejected. It was orphaned from its own reason for existing in your library.&lt;/p&gt;
+&lt;p&gt;This is not a backlog problem. It’s a memory problem.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;two-different-brains%2C-one-library&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-01-you-didnt-forget-the-game/#two-different-brains%2C-one-library&quot;&gt;&lt;span&gt;Two different brains, one library&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Daniel Kahneman described two modes of thinking. System 1 is fast, emotional, reactive. System 2 is slow, deliberate, analytical.&lt;/p&gt;
+&lt;p&gt;When you added that game to your wishlist, System 1 was in charge. Something excited you — a trailer, a recommendation, a moment of curiosity. That decision was made in seconds, with a context that made complete sense at the time.&lt;/p&gt;
+&lt;p&gt;When you sit down to play something tonight, System 2 shows up. It wants to evaluate options, weigh time investment, consider whether you’re in the right mood for this genre. It looks at your library of 300 games and sees 300 decisions to be made.&lt;/p&gt;
+&lt;p&gt;System 2 doesn’t remember why System 1 wanted anything. It just sees the list.&lt;/p&gt;
+&lt;p&gt;This is where the paralysis comes from. Not from having too many games. From having too many games with no memory attached to them.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;why-recommendations-make-it-worse&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-01-you-didnt-forget-the-game/#why-recommendations-make-it-worse&quot;&gt;&lt;span&gt;Why recommendations make it worse&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The obvious solution is to ask an algorithm. Steam will surface something. A recommendation system will narrow the options.&lt;/p&gt;
+&lt;p&gt;But recommendation systems optimize for what you’re most likely to click on right now. They look at your history and find the pattern. If you’ve been playing action games, they’ll show you more action games.&lt;/p&gt;
+&lt;p&gt;Over time, your taste as seen by the algorithm becomes narrower, not wider. The games at the edges of your interest — the ones that might surprise you — get deprioritized. The algorithm doesn’t know about that moment three months ago when you added something because it reminded you of something you were thinking about then. It also doesn’t know that you haven’t played it yet because you forgot that moment, not because you changed your mind.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;the-games-you-want-to-play-are-already-in-your-library&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-01-you-didnt-forget-the-game/#the-games-you-want-to-play-are-already-in-your-library&quot;&gt;&lt;span&gt;The games you want to play are already in your library&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Most people experiencing decision paralysis already own the games they need. The problem isn’t access. It’s the gap between the moment you wanted something and the moment you’re ready to play it.&lt;/p&gt;
+&lt;p&gt;The backlog doesn’t shrink by finding better recommendations. It shrinks by reconnecting with the reasons you made those decisions in the first place.&lt;/p&gt;
+&lt;p&gt;A few things work when recommendations don’t.&lt;/p&gt;
+&lt;p&gt;Reduce the list to what’s already installed. Once it’s installed, you’ve already made one commitment — you wanted it enough to use disk space on it. That’s a real signal. Work from there.&lt;/p&gt;
+&lt;p&gt;Accept that you won’t play everything. A library isn’t a checklist. Let some of them go without guilt.&lt;/p&gt;
+&lt;p&gt;Don’t choose. Let something surface. A random pick removes the optimization pressure. You don’t have to justify the choice to yourself because you didn’t make it. Once you’re an hour in, you’ll either want to keep going or you won’t. Either outcome is fine.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;one-more-thing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;https://blog.brightraven.world/A-01-you-didnt-forget-the-game/#one-more-thing&quot;&gt;&lt;span&gt;One more thing&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;“I wasn’t playing games. I was playing the game of browsing games.”&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;That’s how I described it when I finally admitted what was happening. I had around 80 installed games on Steam. Every time I opened it, I’d spend ten minutes scrolling, get distracted, and end up doing something else. I didn’t need better recommendations. I needed fewer choices in front of me at any one time.&lt;/p&gt;
+&lt;p&gt;So I built Maida. It shows you one installed game. You decide in about thirty seconds: try it tonight, or not now. That’s it. No library view. No sorting. No browsing.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Maida is the space you pass through before you begin.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It’s free, open source, and runs on Windows and Linux. If you recognize the browsing loop, &lt;a href=&quot;https://brightraven.world/&quot;&gt;it’s here&lt;/a&gt;.&lt;/p&gt;
+</content>
+</entry>
+
+</feed>

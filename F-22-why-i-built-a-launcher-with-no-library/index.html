@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>22 · Why I Built a Game Launcher with No Library View | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22 · Why I Built a Game Launcher with No Library View">
+
+<meta property="og:url" content="https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/">Bright Raven</a>
+  <nav aria-label="中文">
+    <a href="/akatsuki/zh/F-22-why-i-built-a-launcher-with-no-library/" lang="zh-TW" hreflang="zh-TW">中文</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>22 · Why I Built a Game Launcher with No Library View</h1>
+<p>The most common reaction to Maida is: where’s the library view.</p>
+<p>Every other game launcher has one. Steam’s library is the central screen. Playnite, GOG Galaxy, EA App, Epic. They all show your collection as a grid or list. You scroll, you sort, you filter, you click.</p>
+<p>Maida doesn’t have this. You can’t browse your library in Maida. There is no grid, no list, no sorting. The interface shows you one game at a time and asks if you want to try it tonight.</p>
+<p>This is a deliberate constraint. Here’s why.</p>
+<hr>
+<h2 id="what-the-library-view-actually-causes" tabindex="-1"><a class="header-anchor" href="#what-the-library-view-actually-causes"><span>What the library view actually causes</span></a></h2>
+<p>The library view is the place where decision paralysis happens. You open it with the intention to play. You see a hundred games. You start evaluating. You don’t commit. You leave.</p>
+<p>The library view is sold as the convenient way to choose. In practice, it’s the friction that prevents choosing. The more you see, the harder it is to pick.</p>
+<p>This is not a UI problem you can solve by adding better filters. The filters help marginally. The fundamental issue is that human beings are not good at choosing from large, unsorted sets. Adding sort options moves the problem one layer deeper. It doesn’t dissolve it.</p>
+<hr>
+<h2 id="what-removing-the-library-view-does" tabindex="-1"><a class="header-anchor" href="#what-removing-the-library-view-does"><span>What removing the library view does</span></a></h2>
+<p>If you can’t browse, you can’t compare. If you can’t compare, you can’t agonize. If you can’t agonize, you can either play or not play. The decision space collapses to binary.</p>
+<p>The first time you use Maida, this feels wrong. You expect a list. The absence of a list feels like the tool is broken or insufficient. By the third or fourth session, the lack of a list starts feeling like relief.</p>
+<p>The library view was the bottleneck. Removing it removes the bottleneck.</p>
+<hr>
+<h2 id="the-objection%3A-%E2%80%9Cbut-i-want-to-choose%E2%80%9D" tabindex="-1"><a class="header-anchor" href="#the-objection%3A-%E2%80%9Cbut-i-want-to-choose%E2%80%9D"><span>The objection: “but I want to choose”</span></a></h2>
+<p>This is the most common objection. People feel that not having a library view denies them agency. They want to pick from their library, deliberately.</p>
+<p>Two responses.</p>
+<p>First: in practice, what most people do in front of a library view is not choose deliberately. They scroll until something feels right, then second-guess, then look at something else. The “choosing” is mostly drift. Removing the library view doesn’t take away choosing; it takes away drifting.</p>
+<p>Second: when you do want to choose deliberately, Kamae (a separate view) is there. Kamae is for curation, not for tonight’s pick. The two activities are different and benefit from being separated.</p>
+<hr>
+<h2 id="what-you-give-up" tabindex="-1"><a class="header-anchor" href="#what-you-give-up"><span>What you give up</span></a></h2>
+<p>You give up the visual pleasure of looking at your collection. There’s something satisfying about seeing a wall of cover art. Maida doesn’t offer that.</p>
+<p>You give up the easy reference: “what do I own again?” Maida assumes you can use Steam for that, which is fair.</p>
+<p>You give up granular control over what comes up. The engine picks. You can constrain via Kamae, but you don’t pick from a menu each time.</p>
+<p>For some people, these are deal-breakers. They want the wall of art and the control. For them, Maida isn’t a fit.</p>
+<p>For others, removing these things is the entire point.</p>
+<hr>
+<h2 id="one-more-thing" tabindex="-1"><a class="header-anchor" href="#one-more-thing"><span>One more thing</span></a></h2>
+<p>The decision to exclude the library view was the founding decision of Maida. Everything else is downstream of it. If you take that decision out, you have a different product, one that already exists many times over.</p>
+<p><a href="https://brightraven.world">Maida is free</a>. The library view absence is not a missing feature. It’s the feature.</p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>4 min read</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida is a free, open-source tool for choosing what to play tonight. <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">No newsletter. RSS or come back when you remember.</p>
+</footer>
+</body>
+</html>

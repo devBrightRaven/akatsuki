@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>個人化是依賴建立器，不是焦慮減輕劑 | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/zh/C-29-personalization-as-dependency/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/C-29-personalization-as-dependency/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/C-29-personalization-as-dependency/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/zh/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="個人化是依賴建立器，不是焦慮減輕劑">
+
+<meta property="og:url" content="https://blog.brightraven.world/zh/C-29-personalization-as-dependency/">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/zh/">Bright Raven</a>
+  <nav aria-label="English">
+    <a href="/akatsuki/C-29-personalization-as-dependency/" lang="en" hreflang="en">English</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>個人化是依賴建立器，不是焦慮減輕劑</h1>
+<p>一個多月前我做選擇焦慮的研究，掉進一個我以為的關鍵發現：</p>
+<blockquote>
+<p>多項實證研究顯示：<strong>關閉個人化推薦會引發焦慮、倦怠，並導致使用者離開平台</strong>。</p>
+</blockquote>
+<p>第一次讀到這條我心裡的劇本是：「啊，所以個人化是好的。它在減輕焦慮，不是放大焦慮。我之前以為的『AI 推薦越準焦慮越大』是錯的。」</p>
+<p>接著我把這個解讀寫進研究文件、改寫產品策略、廢掉一條原本的核心假設。</p>
+<p>然後過了一天，我重讀那段引文的時候才意識到我誤讀了。</p>
+<p>那不是「個人化減輕焦慮」的證據。那是<strong>依賴的證據</strong>。剝奪後引發的焦慮叫<strong>戒斷反應</strong>，不叫「失去原本的好處」。</p>
+<p>這篇是關於那個誤讀，以及它怎麼改變我看演算法推薦的方式。</p>
+<h2 id="%E6%88%92%E6%96%B7%E4%B8%8D%E8%AD%89%E6%98%8E%E5%AE%83%E5%81%A5%E5%BA%B7" tabindex="-1"><a class="header-anchor" href="#%E6%88%92%E6%96%B7%E4%B8%8D%E8%AD%89%E6%98%8E%E5%AE%83%E5%81%A5%E5%BA%B7"><span>戒斷不證明它健康</span></a></h2>
+<p>抽菸的人不抽會焦慮。這不是「抽菸對人好」的證據。是「抽菸建立了依賴」的證據。</p>
+<p>咖啡因、糖、社群媒體 scroll、video game loot box 都是這個 pattern。一個東西讓你停了之後不舒服，<strong>不代表它在你用的時候在做好的事</strong>。</p>
+<p>個人化推薦完全是這個 pattern。Netflix、Spotify、Instagram、YouTube 用一段時間之後，把推薦關掉，使用者會：</p>
+<ul>
+<li>不知道接下來該看什麼</li>
+<li>焦慮自己錯過好東西</li>
+<li>跳到別的平台或重新打開推薦</li>
+<li>對「自己挑」失去信心</li>
+</ul>
+<p>實證研究記錄了這些反應，因為它們是真實的、可量測的。但<strong>這些反應是依賴的症狀，不是個人化在做價值貢獻的證據</strong>。</p>
+<h2 id="%E5%80%8B%E4%BA%BA%E5%8C%96%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%B8%89%E4%BB%B6%E4%BA%8B" tabindex="-1"><a class="header-anchor" href="#%E5%80%8B%E4%BA%BA%E5%8C%96%E7%9C%9F%E6%AD%A3%E5%9C%A8%E5%81%9A%E7%9A%84%E4%B8%89%E4%BB%B6%E4%BA%8B"><span>個人化真正在做的三件事</span></a></h2>
+<p>2024 年 Nature 系列的 Humanities and Social Sciences Communications 有一篇談個人化演算法決策對自主性的影響，論證很清楚。三條侵蝕路徑：</p>
+<h3 id="%E8%B7%AF%E5%BE%91-1%EF%BC%9A%E5%81%8F%E9%9B%A2%E4%BD%A0%E7%9C%9F%E5%AF%A6%E7%9A%84%E8%87%AA%E6%88%91" tabindex="-1"><a class="header-anchor" href="#%E8%B7%AF%E5%BE%91-1%EF%BC%9A%E5%81%8F%E9%9B%A2%E4%BD%A0%E7%9C%9F%E5%AF%A6%E7%9A%84%E8%87%AA%E6%88%91"><span>路徑 1：偏離你真實的自我</span></a></h3>
+<p>演算法從你的行為痕跡推斷你想要什麼。但行為痕跡跟真實意圖<strong>不是同一件事</strong>。</p>
+<p>你累的時候滑了一支貓影片，演算法以為你愛貓。下次再推一支。再下次。三個月後你的 feed 一半是貓。</p>
+<p>你其實只是累了那兩天。</p>
+<p>這個落差不只是 noise 跟訊號的問題。是<strong>演算法的「你」跟你真實的「你」之間漸行漸遠</strong>。演算法的「你」是它從你疲倦、無聊、走神時的行為推測出來的，而那些時刻的你<strong>最不像你自己</strong>。</p>
+<p>長期下來，你打開 app 看到的是「演算法版本的你」想看的東西，不是「你想看的東西」。差別微妙但累積起來顯著。</p>
+<h3 id="%E8%B7%AF%E5%BE%91-2%EF%BC%9A%E8%87%AA%E6%88%91%E5%BC%B7%E5%8C%96%E7%9A%84%E5%BE%AA%E7%92%B0%E6%9C%83%E7%AA%84%E5%8C%96%E4%BD%A0%E7%9A%84%E8%87%AA%E6%88%91" tabindex="-1"><a class="header-anchor" href="#%E8%B7%AF%E5%BE%91-2%EF%BC%9A%E8%87%AA%E6%88%91%E5%BC%B7%E5%8C%96%E7%9A%84%E5%BE%AA%E7%92%B0%E6%9C%83%E7%AA%84%E5%8C%96%E4%BD%A0%E7%9A%84%E8%87%AA%E6%88%91"><span>路徑 2：自我強化的循環會窄化你的自我</span></a></h3>
+<p>演算法準了 → 你點了 → 訊號回去 → 推薦更窄 → 你更不容易看到原本不會點的東西 → 演算法的「你」更窄。</p>
+<p>半年後你發現自己只看某幾個 YouTuber、只聽某幾首歌、只買某幾個牌子的東西。<strong>這不是「你變專注」，是這個循環把你裁出來</strong>。</p>
+<p>你以前可能會點兩個範疇的東西。但兩個範疇互相沒有 transition signal，所以演算法選一個出來推。那個沒被選的範疇變稀少。久了你忘記自己原本喜歡那個。</p>
+<p>「自我」變窄了。但<strong>因為這個變窄是漸進的、無痛的</strong>，你不會意識到。直到某天遇到一個朋友推薦了 feed 之外的東西，你聽完想「我以前其實也喜歡這種啊」。</p>
+<p>那一刻就是路徑 2 的 receipt。</p>
+<h3 id="%E8%B7%AF%E5%BE%91-3%EF%BC%9A%E4%BD%A0%E8%87%AA%E5%B7%B1%E9%81%B8%E7%9A%84%E8%83%BD%E5%8A%9B%E6%9C%83%E8%90%8E%E7%B8%AE" tabindex="-1"><a class="header-anchor" href="#%E8%B7%AF%E5%BE%91-3%EF%BC%9A%E4%BD%A0%E8%87%AA%E5%B7%B1%E9%81%B8%E7%9A%84%E8%83%BD%E5%8A%9B%E6%9C%83%E8%90%8E%E7%B8%AE"><span>路徑 3：你自己選的能力會萎縮</span></a></h3>
+<p>技能跟肌肉一樣。不用就退。</p>
+<p>當演算法替你選夠久（夠久 = 6 個月到 2 年），你不用練「我今晚想看什麼」「我今天適合什麼音樂」這些判斷力。它退化。</p>
+<p>等你某天想自己選——關掉演算法、看一個沒推薦的目錄——你會發現選不出來。</p>
+<p>這個選不出來的感覺很糟，所以你會立刻打開推薦。<strong>這就是戒斷反應</strong>。但這個戒斷不是因為「沒推薦就活不下去」，是因為<strong>你的判斷力被外包出去太久了</strong>。</p>
+<p>外包出去的判斷力可以收回來，但要時間。三個月的離線使用後，多數人的判斷力會慢慢恢復。但很少人撐得了三個月。</p>
+<h2 id="hedonic-vs-eudaimonic" tabindex="-1"><a class="header-anchor" href="#hedonic-vs-eudaimonic"><span>Hedonic vs eudaimonic</span></a></h2>
+<p>ScienceDirect 2024 一篇關於問題性網路使用的研究有個關鍵發現，我第一次看的時候沒看懂：</p>
+<blockquote>
+<p>高風險使用組在 hedonic（享樂） AND eudaimonic（活得有意義、有成長）兩種 well-being 都最低。</p>
+</blockquote>
+<p>Hedonic well-being 是「當下開心嗎」。Eudaimonic 是「活得有意義嗎、有在成長嗎」。</p>
+<p>「個人化讓你開心，但讓你活得沒意義」是一種版本的批評（hedonic 高、eudaimonic 低）。但<strong>這篇研究找到的是更糟的版本</strong>：高度依賴推薦的人<strong>連短期開心都拿不到</strong>。</p>
+<p>意思是依賴個人化推薦的使用者：</p>
+<ul>
+<li>不像他們以為的那麼開心（hedonic 低）</li>
+<li>也沒有長期意義感（eudaimonic 低）</li>
+<li><strong>兩邊都輸</strong></li>
+</ul>
+<p>為什麼？因為依賴本身耗心力。每次打開 app 都有一點「不知道該看什麼」的焦慮（即使一秒）。每次被推薦演算法選中你不真想看的東西都有一點失望。每次滑了 30 分鐘起來覺得「啊我又浪費時間了」都有一點羞愧。</p>
+<p>這些微小的負面情感累積起來，比演算法給你的短期愉悅更多。<strong>淨值是負的</strong>，但因為單次體驗看起來是「方便、節省判斷力」，使用者自己常常意識不到淨值。</p>
+<h2 id="%E9%82%A3%E3%80%8C%E5%B0%8D%E6%8A%97%E6%BC%94%E7%AE%97%E6%B3%95%E3%80%8D%E6%98%AF%E7%AD%94%E6%A1%88%E5%97%8E" tabindex="-1"><a class="header-anchor" href="#%E9%82%A3%E3%80%8C%E5%B0%8D%E6%8A%97%E6%BC%94%E7%AE%97%E6%B3%95%E3%80%8D%E6%98%AF%E7%AD%94%E6%A1%88%E5%97%8E"><span>那「對抗演算法」是答案嗎</span></a></h2>
+<p>讀到這裡你可能會想：「所以解法是關掉所有個人化推薦？」</p>
+<p>我曾經這樣想。後來發現這個答案太簡單了。</p>
+<p>第一，<strong>對抗演算法的成本高到多數人受不了</strong>。你要從零學會「自己挑」。從零建立 mental model。三個月戒斷期。多數人撐不了一週。</p>
+<p>第二，<strong>演算法本身不是邪惡的</strong>。Spotify 的 Discover Weekly 在我週末整理歌單時很有用——它告訴我「跟你最近聽的類似的，可能會喜歡」。亞馬遜建議我這顆鏡頭也許要買個對應的清潔組合很合理。<strong>演算法作為「工具」是好的</strong>。</p>
+<p>第三，<strong>真正的問題不是演算法本身，是演算法的位置</strong>。當演算法被定位成「我幫你決定」，它跨過了那條線。當它被定位成「這幾個選項提供參考」，它在線的另一邊。</p>
+<p>兩者的差別不在技術，在<strong>敘事跟介面</strong>。同一個推薦演算法，配「為你推薦」標籤就傷人，配「你可能想看看」標籤就沒事。前者把使用者放在被動接收的位置。後者把選擇權留給使用者。</p>
+<h2 id="%E4%B8%80%E5%80%8B%E5%8F%AF%E6%93%8D%E4%BD%9C%E7%9A%84%E6%B8%AC%E8%A9%A6" tabindex="-1"><a class="header-anchor" href="#%E4%B8%80%E5%80%8B%E5%8F%AF%E6%93%8D%E4%BD%9C%E7%9A%84%E6%B8%AC%E8%A9%A6"><span>一個可操作的測試</span></a></h2>
+<p>我給自己訂了個測試，每次用一個個人化推薦產品時問：</p>
+<blockquote>
+<p><strong>「如果我把這個推薦關掉用一個月，我的生活會變好還是變差？」</strong></p>
+</blockquote>
+<p>如果答案是「變好（會看到更多範圍的東西）」→ 這個推薦是淨負，該關
+如果答案是「變差（會錯過真正有用的）」→ 這個推薦是淨正，留著用
+如果答案是「我不知道，我從來沒試過」→ <strong>這就是依賴的訊號</strong>，至少試一個月看看</p>
+<p>實際試之後我關掉了 YouTube 首頁推薦（淨負）、Netflix 自動播下一集（淨負）、Spotify Discover Weekly（淨正，留著）、亞馬遜 frequently bought together（淨正，留著）。</p>
+<p>不是所有推薦都關，也不是都留。是看<strong>那個推薦對「我選什麼」這件事是補強還是替代</strong>。</p>
+<h2 id="%E5%B0%8D%E7%94%A2%E5%93%81%E8%A8%AD%E8%A8%88%E7%9A%84%E5%90%AB%E6%84%8F" tabindex="-1"><a class="header-anchor" href="#%E5%B0%8D%E7%94%A2%E5%93%81%E8%A8%AD%E8%A8%88%E7%9A%84%E5%90%AB%E6%84%8F"><span>對產品設計的含意</span></a></h2>
+<p>如果你做產品，這條規則延伸出幾個設計選擇：</p>
+<p><strong>1. 個人化要明確標示是「建議」不是「答案」</strong>：</p>
+<p>「為你推薦」改成「你可能想看看」是小調整大差別。前者把使用者放在 passive recipient，後者把選擇權留下。</p>
+<p><strong>2. 提供「stop personalizing」的明確路徑</strong>：</p>
+<p>很多產品的個人化是默認開、深埋設定才能關。改成第一次使用就讓使用者選「要不要個人化」是禮貌（但會掉一些 metric，所以多數產品不做）。</p>
+<p><strong>3. 不要懲罰使用者切換</strong>：</p>
+<p>當使用者關掉個人化，戒斷期很難。如果你的產品在那段時間什麼都不顯示（「沒有推薦了，自己挑吧」），使用者會立刻打開回去。</p>
+<p>替代設計：戒斷期顯示一個 randomized 或 curated（人類編輯）內容池。給使用者「重新練習選擇」的腳手架，而不是直接丟進無重力空間。</p>
+<p><strong>4. 量測 eudaimonic 不只 hedonic</strong>：</p>
+<p>純看 NPS、retention、session length 抓不到我們在意的 well-being。要量測：</p>
+<ul>
+<li>使用者一個月後比一個月前<strong>更會自己選</strong>嗎？</li>
+<li>使用者離開產品時有沒有覺得<strong>更有能力</strong>？</li>
+<li>使用者推薦這個產品給朋友的時候是說「它替我選好了」還是「它幫我選更好」？</li>
+</ul>
+<p>這些 metric 難量但重要。如果你做的是長期跟使用者真實關係的產品，這些 metric 比 DAU 重要。</p>
+<h2 id="%E7%B5%90%E8%AA%9E%EF%BC%9A%E4%BD%A0%E6%83%B3%E8%A6%81%E4%BB%80%E9%BA%BC%E6%A8%A3%E7%9A%84%E4%BE%9D%E8%B3%B4" tabindex="-1"><a class="header-anchor" href="#%E7%B5%90%E8%AA%9E%EF%BC%9A%E4%BD%A0%E6%83%B3%E8%A6%81%E4%BB%80%E9%BA%BC%E6%A8%A3%E7%9A%84%E4%BE%9D%E8%B3%B4"><span>結語：你想要什麼樣的依賴</span></a></h2>
+<p>人對工具產生依賴是正常的。我依賴 Google Maps，依賴 iPhone，依賴我的眼鏡。這些依賴讓我能力<strong>外延</strong>。</p>
+<p>不健康的依賴讓我能力<strong>萎縮</strong>。社群媒體 scroll 讓我注意力萎縮。短影片讓我耐心萎縮。某些個人化推薦讓我審美萎縮。</p>
+<p>兩種依賴從外面看一樣（都是「離不開」），裡面完全不同。差別在：<strong>你停下的時候，你的能力跟著保留還是消失</strong>。</p>
+<p>下次當你在判斷一個工具值不值得用時，這個問題比「它好用嗎」更重要：</p>
+<blockquote>
+<p><strong>如果我用了它一年後停下，我的能力會比一年前更強還是更弱？</strong></p>
+</blockquote>
+<p>如果答案是更強，那它是好工具。如果是更弱，那它是依賴建立器。</p>
+<p>個人化推薦的真實價值，要用這個尺去量。</p>
+<hr>
+<p><em>Bright Raven 寫的是關於決策疲勞、能動性、跟遊戲。沒有電子報，用 RSS 訂閱，或想到再回來。</em></p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>8 分鐘</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida 是一個免費、開源的工具，幫你決定今晚玩什麼。 <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/zh/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">沒有電子報。用 RSS 訂閱，或想到再回來。</p>
+</footer>
+</body>
+</html>

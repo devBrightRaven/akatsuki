@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>22 · 為什麼我做了一個沒有 library view 的遊戲啟動器 | Bright Raven</title>
+
+<link rel="canonical" href="https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" hreflang="en" href="https://blog.brightraven.world/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" hreflang="zh-TW" href="https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/">
+<link rel="alternate" type="application/rss+xml" href="/akatsuki/zh/feed.xml" title="Bright Raven">
+<link rel="stylesheet" href="/akatsuki/assets/style.css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22 · 為什麼我做了一個沒有 library view 的遊戲啟動器">
+
+<meta property="og:url" content="https://blog.brightraven.world/zh/F-22-why-i-built-a-launcher-with-no-library/">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header" role="banner">
+  <a class="site-title" href="/akatsuki/zh/">Bright Raven</a>
+  <nav aria-label="English">
+    <a href="/akatsuki/F-22-why-i-built-a-launcher-with-no-library/" lang="en" hreflang="en">English</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<article>
+  <h1>22 · 為什麼我做了一個沒有 library view 的遊戲啟動器</h1>
+<p>對 Maida 最常見的反應是：library view 在哪？</p>
+<p>每個其他的遊戲啟動器都有一個。Steam 的庫存是中心畫面。Playnite、GOG Galaxy、EA App、Epic。它們都把你的收藏顯示成 grid 或 list。你滑、你排序、你過濾、你點。</p>
+<p>Maida 沒有這個。你不能在 Maida 裡面瀏覽你的庫存。沒有 grid，沒有 list，沒有排序。介面一次給你看一個遊戲，問你今晚要不要試。</p>
+<p>這是一個刻意的限制。原因如下。</p>
+<hr>
+<h2 id="library-view-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E9%80%A0%E6%88%90%E4%BB%80%E9%BA%BC" tabindex="-1"><a class="header-anchor" href="#library-view-%E5%AF%A6%E9%9A%9B%E4%B8%8A%E9%80%A0%E6%88%90%E4%BB%80%E9%BA%BC"><span>Library View 實際上造成什麼</span></a></h2>
+<p>Library view 是 decision paralysis 發生的地方。你帶著要玩的意圖打開它。你看到一百個遊戲。你開始評估。你不 commit。你離開。</p>
+<p>Library view 被當作方便選擇的方法賣。實際上，它是阻止選擇的摩擦。你看到越多，越難挑。</p>
+<p>這不是一個你可以靠加更好的 filter 解決的 UI 問題。Filter 邊際幫助。根本問題是人類不擅長從大的、未排序的集合裡選。加排序選項把問題推到下一層，沒有溶解它。</p>
+<hr>
+<h2 id="%E7%A7%BB%E9%99%A4-library-view-%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC" tabindex="-1"><a class="header-anchor" href="#%E7%A7%BB%E9%99%A4-library-view-%E5%81%9A%E4%BA%86%E4%BB%80%E9%BA%BC"><span>移除 library view 做了什麼</span></a></h2>
+<p>如果你不能瀏覽，你不能比較。如果你不能比較，你不能糾結。如果你不能糾結，你只能玩或不玩。決策空間 collapse 成二元。</p>
+<p>第一次用 Maida，這感覺錯。你期待一個清單。沒有清單感覺像工具壞了或不夠。第三或第四個 session 之後，沒有清單開始感覺像鬆了一口氣。</p>
+<p>Library view 是 bottleneck。移除它移除 bottleneck。</p>
+<hr>
+<h2 id="%E5%8F%8D%E5%B0%8D%EF%BC%9A%E3%80%8C%E4%BD%86%E6%98%AF%E6%88%91%E6%83%B3%E9%81%B8%E3%80%8D" tabindex="-1"><a class="header-anchor" href="#%E5%8F%8D%E5%B0%8D%EF%BC%9A%E3%80%8C%E4%BD%86%E6%98%AF%E6%88%91%E6%83%B3%E9%81%B8%E3%80%8D"><span>反對：「但是我想選」</span></a></h2>
+<p>這是最常見的反對。人們覺得沒有 library view 是剝奪了他們的能動性。他們想從庫存挑，刻意地。</p>
+<p>兩個回答。</p>
+<p>第一：實際上，多數人在 library view 前做的事不是刻意選擇。他們滑到某個東西感覺對，然後再次猜疑、看別的東西。「選擇」大部分是漂流。移除 library view 不是拿走選擇，是拿走漂流。</p>
+<p>第二：當你真的想刻意選的時候，Kamae（一個分開的 view）在那裡。Kamae 是給 curate 的，不是給今晚的選擇。兩個活動是不同的，分開有好處。</p>
+<hr>
+<h2 id="%E4%BD%A0%E6%94%BE%E6%A3%84%E4%BB%80%E9%BA%BC" tabindex="-1"><a class="header-anchor" href="#%E4%BD%A0%E6%94%BE%E6%A3%84%E4%BB%80%E9%BA%BC"><span>你放棄什麼</span></a></h2>
+<p>你放棄看到你收藏的視覺愉悅。看到一面牆的封面有某種滿足。Maida 不提供。</p>
+<p>你放棄方便的參考：「我又有什麼了？」Maida 假設你可以用 Steam 查那個，這是公平的。</p>
+<p>你放棄對什麼會出現的細粒控制。引擎挑。你可以透過 Kamae 限制，但你不是每次從選單挑。</p>
+<p>對某些人這些是 deal-breaker。他們想要那面牆和控制。對他們來說 Maida 不適合。</p>
+<p>對其他人，移除這些就是整個重點。</p>
+<hr>
+<h2 id="%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90" tabindex="-1"><a class="header-anchor" href="#%E9%A0%86%E5%B8%B6%E4%B8%80%E6%8F%90"><span>順帶一提</span></a></h2>
+<p>排除 library view 的決定是 Maida 的奠基決定。其他一切都從它下游。如果你把那個決定拿掉，你有一個不同的產品，那種產品已經存在很多次了。</p>
+<p><a href="https://brightraven.world">Maida 免費</a>。Library view 的不存在不是失蹤的 feature，是 feature。</p>
+
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>3 分鐘</span>
+    </p>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <p>Maida 是一個免費、開源的工具，幫你決定今晚玩什麼。 <a href="https://brightraven.world">Maida →</a></p>
+  <p class="meta">
+    <a href="/akatsuki/zh/feed.xml">RSS</a>
+    · <a href="https://github.com/devBrightRaven">GitHub</a>
+  </p>
+  <p class="quiet">沒有電子報。用 RSS 訂閱，或想到再回來。</p>
+</footer>
+</body>
+</html>
