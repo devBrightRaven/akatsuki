@@ -1,0 +1,12 @@
+---
+layout: layouts/base.njk
+---
+<article>
+  {{ content | safe }}
+
+  <footer class="post-footer">
+    <p class="post-meta">
+      <span>{{ content | readingTime }} {{ site.i18n[lang].readingTime }}</span>
+    </p>
+  </footer>
+</article>

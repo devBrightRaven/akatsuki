@@ -1,0 +1,27 @@
+---
+permalink: /zh/feed.xml
+eleventyExcludeFromCollections: true
+lang: zh-TW
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-TW">
+<title>{{ site.i18n['zh-TW'].siteTitle }}</title>
+<subtitle>{{ site.i18n['zh-TW'].tagline }}</subtitle>
+<link href="{{ site.url }}/zh/feed.xml" rel="self"/>
+<link href="{{ site.url }}/zh/"/>
+<updated>{% if collections.postsZh[0].date %}{{ collections.postsZh[0].date | dateToRfc3339 }}{% endif %}</updated>
+<id>{{ site.url }}/zh/</id>
+<author>
+  <name>{{ site.author.name }}</name>
+  <email>{{ site.author.email }}</email>
+</author>
+{% for post in collections.postsZh | reverse %}
+<entry>
+  <title>{{ post.data.title }}</title>
+  <link href="{{ site.url }}{{ post.url }}"/>
+  <updated>{{ post.date | dateToRfc3339 }}</updated>
+  <id>{{ site.url }}{{ post.url }}</id>
+  <content type="html">{{ post.templateContent | htmlToAbsoluteUrls(site.url + post.url) | escape }}</content>
+</entry>
+{% endfor %}
+</feed>

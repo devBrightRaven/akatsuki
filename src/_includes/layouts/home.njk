@@ -1,0 +1,22 @@
+---
+layout: layouts/base.njk
+---
+<header class="home-header">
+  <h1>{{ site.i18n[lang].siteTitle }}</h1>
+  <p class="tagline">{{ site.i18n[lang].tagline }}</p>
+</header>
+
+<section aria-labelledby="all-posts">
+  <h2 id="all-posts">{{ site.i18n[lang].allPosts }}</h2>
+  <ol class="post-list" reversed>
+    {% set posts = collections.postsEn if lang == 'en' else collections.postsZh %}
+    {% for post in posts %}
+    <li>
+      <a href="{{ post.url }}">
+        <span class="post-num">{{ post.data.order }}</span>
+        <span class="post-title">{{ post.data.title }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>

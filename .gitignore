@@ -1,0 +1,6 @@
+node_modules
+public
+.cache
+.eleventy.cache
+.DS_Store
+*.log

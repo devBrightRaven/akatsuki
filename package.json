@@ -1,0 +1,22 @@
+{
+  "name": "brightraven-blog",
+  "version": "0.1.0",
+  "description": "Bilingual essay blog about gaming decision paralysis. Source for blog.brightraven.world.",
+  "type": "module",
+  "scripts": {
+    "sync": "powershell -ExecutionPolicy Bypass -File scripts/sync-from-vault.ps1",
+    "dev": "npm run sync && eleventy --serve",
+    "build": "npm run sync && eleventy",
+    "clean": "rimraf public"
+  },
+  "keywords": ["blog", "maida", "decision-paralysis"],
+  "author": "Bertram (Bright Raven) <bertram@brightraven.world>",
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy-plugin-rss": "^3.0.0",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-attrs": "^4.3.1"
+  }
+}
