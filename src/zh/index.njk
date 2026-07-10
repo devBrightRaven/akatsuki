@@ -1,6 +1,10 @@
 ---
 layout: layouts/home.njk
-permalink: /zh/
 lang: zh-TW
 eleventyExcludeFromCollections: true
+pagination:
+  data: collections.postsZh
+  size: 9
+  alias: pagePosts
+permalink: "{% if pagination.pageNumber == 0 %}/zh/{% else %}/zh/page/{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---

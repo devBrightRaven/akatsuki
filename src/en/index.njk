@@ -1,6 +1,10 @@
 ---
 layout: layouts/home.njk
-permalink: /
 lang: en
 eleventyExcludeFromCollections: true
+pagination:
+  data: collections.postsEn
+  size: 9
+  alias: pagePosts
+permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/page/{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---

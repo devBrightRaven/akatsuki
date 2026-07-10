@@ -18,6 +18,10 @@ export default function (eleventyConfig) {
     })
     .use(markdownItAttrs)
 
+  const renderFence = md.renderer.rules.fence
+  md.renderer.rules.fence = (...args) =>
+    renderFence(...args).replace("<pre>", '<pre tabindex="0">')
+
   eleventyConfig.setLibrary("md", md)
 
   // RSS feed
@@ -44,17 +48,30 @@ export default function (eleventyConfig) {
   })
 
   // Language switcher: find translation of current page
-  eleventyConfig.addFilter("translation", function (currentUrl, otherLang) {
+  eleventyConfig.addFilter("translation", function (currentUrl, otherLang, postsEn = [], postsZh = [], fallbackToHome = true) {
     if (!currentUrl) return null
     const isZhTarget = otherLang === "zh" || otherLang === "zh-TW"
-    if (isZhTarget) {
-      return currentUrl.startsWith("/zh/")
+    const targetUrl = isZhTarget
+      ? currentUrl.startsWith("/zh/")
         ? currentUrl
         : "/zh" + currentUrl
+      : currentUrl.startsWith("/zh/")
+        ? currentUrl.replace(/^\/zh/, "") || "/"
+        : currentUrl
+
+    if (targetUrl === "/" || targetUrl === "/zh/") return targetUrl
+
+    const targetPosts = isZhTarget ? postsZh : postsEn
+    const paginationMatch = targetUrl.match(/^\/(?:zh\/)?page\/(\d+)\/$/)
+    if (paginationMatch) {
+      const targetPageExists = Number(paginationMatch[1]) <= Math.ceil(targetPosts.length / 9)
+      if (targetPageExists) return targetUrl
+      return fallbackToHome ? (isZhTarget ? "/zh/" : "/") : null
     }
-    return currentUrl.startsWith("/zh/")
-      ? currentUrl.replace(/^\/zh/, "") || "/"
-      : currentUrl
+
+    if (targetPosts.some((post) => post.url === targetUrl)) return targetUrl
+
+    return fallbackToHome ? (isZhTarget ? "/zh/" : "/") : null
   })
 
   // Filter draft posts in production

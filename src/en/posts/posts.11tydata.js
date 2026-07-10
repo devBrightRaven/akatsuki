@@ -12,8 +12,27 @@ function extractTitleFromInput(inputPath) {
   }
 }
 
+function extractDescriptionFromInput(inputPath) {
+  try {
+    const content = fs.readFileSync(inputPath, "utf-8")
+    const match = content.match(/^#\s+.+\r?\n(?:\r?\n)+([\s\S]*?)(?:\r?\n\r?\n|$)/m)
+    return match ? match[1].replace(/\s+/g, " ").trim() : ""
+  } catch {
+    return ""
+  }
+}
+
+function displayTitleFromInput(inputPath) {
+  return extractTitleFromInput(inputPath).replace(/^\d+\s*·\s*/, "")
+}
+
 export default {
   eleventyComputed: {
     title: (data) => extractTitleFromInput(data.page.inputPath),
+    displayTitle: (data) => displayTitleFromInput(data.page.inputPath),
+    description: (data) => extractDescriptionFromInput(data.page.inputPath),
+    storyNumber: (data) => data.order
+      ? String(data.order).padStart(2, "0")
+      : data.page.fileSlug.match(/^[A-Z]-\d+/)?.[0].replace("-", "") || "—",
   },
 }

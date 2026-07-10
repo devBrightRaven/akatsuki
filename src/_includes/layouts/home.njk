@@ -1,22 +1,49 @@
 ---
 layout: layouts/base.njk
+bodyClass: home-page
 ---
-<header class="home-header">
-  <h1>{{ site.i18n[lang].siteTitle }}</h1>
-  <p class="tagline">{{ site.i18n[lang].tagline }}</p>
-</header>
+{% set posts = collections.postsEn if lang == 'en' else collections.postsZh %}
+{% if pagePosts.length <= 3 %}{% set rowCount = 1 %}{% elif pagePosts.length <= 6 %}{% set rowCount = 2 %}{% else %}{% set rowCount = 3 %}{% endif %}
 
-<section aria-labelledby="all-posts">
-  <h2 id="all-posts">{{ site.i18n[lang].allPosts }}</h2>
-  <ol class="post-list" reversed>
-    {% set posts = collections.postsEn if lang == 'en' else collections.postsZh %}
-    {% for post in posts %}
-    <li>
-      <a href="{{ post.url }}">
-        <span class="post-num">{{ post.data.order }}</span>
-        <span class="post-title">{{ post.data.title }}</span>
-      </a>
-    </li>
+<section class="story-stage" aria-labelledby="story-series-title">
+  <header class="home-header">
+    <div>
+      <p class="home-kicker">{% if pagination.pageNumber == 0 %}{{ site.i18n[lang].seriesKicker }}{% else %}{{ site.i18n[lang].moreStories }}{% endif %}</p>
+      <h1 id="story-series-title"><span lang="ja">曉</span> Akatsuki</h1>
+      <p class="tagline">{{ site.i18n[lang].tagline }}</p>
+    </div>
+    <p class="page-summary">{{ posts.length }} {{ site.i18n[lang].stories }} · {{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>
+  </header>
+
+  <div class="story-grid story-grid-rows-{{ rowCount }}">
+    {% for post in pagePosts %}
+    {% if loop.index == 1 %}<div class="story-row story-row-1">{% elif loop.index == 4 %}<div class="story-row story-row-2">{% elif loop.index == 7 %}<div class="story-row story-row-3">{% endif %}
+    <a class="story-card" href="{{ post.url }}">
+      <div class="story-card-topline">
+        <span class="story-number">{{ post.data.storyNumber }}</span>
+        {% if pagination.pageNumber == 0 and loop.first %}<span class="start-label">{{ site.i18n[lang].startHere }}</span>{% endif %}
+      </div>
+      <h2>{{ post.data.displayTitle }}</h2>
+      <p class="story-summary">{{ post.data.description }}</p>
+      <p class="story-meta">{{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</p>
+    </a>
+    {% if loop.index == 3 or loop.index == 6 or loop.index == 9 or loop.last %}</div>{% endif %}
     {% endfor %}
-  </ol>
+  </div>
 </section>
+
+<nav class="pagination-nav" aria-label="{{ site.i18n[lang].pagination }}">
+  <p class="pagination-status" aria-current="page">{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>
+  <div class="pagination-actions">
+    {% if pagination.href.previous %}
+    <a class="pagination-link pagination-previous" href="{{ pagination.href.previous }}" rel="prev">
+      <strong>{{ site.i18n[lang].previousPage }}</strong>
+    </a>
+    {% endif %}
+    {% if pagination.href.next %}
+    <a class="pagination-link pagination-next" href="{{ pagination.href.next }}" rel="next">
+      <strong>{{ site.i18n[lang].nextPage }}</strong>
+    </a>
+    {% endif %}
+  </div>
+</nav>

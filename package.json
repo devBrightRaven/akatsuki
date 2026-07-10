@@ -7,6 +7,7 @@
     "sync": "powershell -ExecutionPolicy Bypass -File scripts/sync-from-vault.ps1",
     "dev": "npm run sync && eleventy --serve",
     "build": "npm run sync && eleventy",
+    "check": "eleventy && node scripts/verify-build.mjs",
     "clean": "rimraf public"
   },
   "keywords": ["blog", "maida", "decision-paralysis"],

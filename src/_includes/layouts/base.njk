@@ -3,25 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% if title %}{{ title }} | {% endif %}{{ site.i18n[lang].siteTitle }}</title>
-{% if description %}<meta name="description" content="{{ description }}">{% endif %}
+<title>{% if title %}{{ title }} | {% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {% endif %}{{ site.i18n[lang].siteTitle }}</title>
+{% set metaDescription = description or site.i18n[lang].tagline %}
+<meta name="description" content="{{ metaDescription }}">
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-<link rel="alternate" hreflang="en" href="{{ site.url }}{{ page.url | translation('en') }}">
-<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ page.url | translation('zh') }}">
+{% set alternateEn = page.url | translation('en', collections.postsEn, collections.postsZh, false) %}
+{% set alternateZh = page.url | translation('zh', collections.postsEn, collections.postsZh, false) %}
+{% if alternateEn %}<link rel="alternate" hreflang="en" href="{{ site.url }}{{ alternateEn }}">{% endif %}
+{% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
 <link rel="alternate" type="application/rss+xml" href="{{ site.feedUrl[lang] }}" title="{{ site.i18n[lang].siteTitle }}">
 <link rel="stylesheet" href="/assets/style.css">
-<meta property="og:type" content="article">
-<meta property="og:title" content="{{ title or site.i18n[lang].siteTitle }}">
-{% if description %}<meta property="og:description" content="{{ description }}">{% endif %}
+<meta property="og:type" content="{% if bodyClass == 'home-page' %}website{% else %}article{% endif %}">
+<meta property="og:title" content="{% if title %}{{ title }}{% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {{ site.i18n[lang].siteTitle }}{% else %}{{ site.i18n[lang].siteTitle }}{% endif %}">
+<meta property="og:description" content="{{ metaDescription }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 </head>
-<body>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a class="skip-link" href="#main">{{ site.i18n[lang].skipToContent }}</a>
 
 <header class="site-header" role="banner">
-  <a class="site-title" href="{% if lang == 'zh-TW' %}/zh/{% else %}/{% endif %}">{{ site.i18n[lang].siteTitle }}</a>
+  <div class="site-brand">
+    <a class="site-title" href="{% if lang == 'zh-TW' %}/zh/{% else %}/{% endif %}"><span lang="ja">曉</span> Akatsuki</a>
+    <span class="site-parent">by Bright Raven</span>
+  </div>
   <nav aria-label="{{ site.i18n[lang].switchLang }}">
-    <a href="{{ page.url | translation(site.i18n[lang].switchLangCode) }}" lang="{{ site.i18n[lang].switchLangCode }}" hreflang="{{ site.i18n[lang].switchLangCode }}">{{ site.i18n[lang].switchLang }}</a>
+    <a href="{{ page.url | translation(site.i18n[lang].switchLangCode, collections.postsEn, collections.postsZh) }}" lang="{{ site.i18n[lang].switchLangCode }}" hreflang="{{ site.i18n[lang].switchLangCode }}">{{ site.i18n[lang].switchLang }}</a>
   </nav>
 </header>
 

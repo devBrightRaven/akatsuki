@@ -1,6 +1,9 @@
 ---
 layout: layouts/base.njk
 ---
+{% set posts = collections.postsEn if lang == 'en' else collections.postsZh %}
+{% set previousPost = posts | getPreviousCollectionItem %}
+{% set nextPost = posts | getNextCollectionItem %}
 <article>
   {{ content | safe }}
 
@@ -8,5 +11,20 @@ layout: layouts/base.njk
     <p class="post-meta">
       <span>{{ content | readingTime }} {{ site.i18n[lang].readingTime }}</span>
     </p>
+    <nav class="post-navigation" aria-label="{{ site.i18n[lang].storyNavigation }}">
+      {% if previousPost %}
+      <a class="post-navigation-link post-navigation-previous" href="{{ previousPost.url }}" rel="prev">
+        <span>{{ site.i18n[lang].previousStory }}</span>
+        <strong>{{ previousPost.data.displayTitle }}</strong>
+      </a>
+      {% endif %}
+      {% if nextPost %}
+      <a class="post-navigation-link post-navigation-next" href="{{ nextPost.url }}" rel="next">
+        <span>{{ site.i18n[lang].nextStory }}</span>
+        <strong>{{ nextPost.data.displayTitle }}</strong>
+      </a>
+      {% endif %}
+    </nav>
+    <a class="all-stories-link" href="{% if lang == 'zh-TW' %}/zh/{% else %}/{% endif %}">{{ site.i18n[lang].allStories }}</a>
   </footer>
 </article>
