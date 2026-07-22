@@ -3,13 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>{% if title %}{{ title }} | {% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {% endif %}{{ site.i18n[lang].siteTitle }}</title>
 {% set metaDescription = description or site.i18n[lang].tagline %}
 <meta name="description" content="{{ metaDescription }}">
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-{% set alternateEn = page.url | translation('en', collections.postsEn, collections.postsZh, false) %}
-{% set alternateZh = page.url | translation('zh', collections.postsEn, collections.postsZh, false) %}
+{% set alternateEn = page.url | translation('en', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
+{% set alternateJa = page.url | translation('ja', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
+{% set alternateZh = page.url | translation('zh-TW', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
 {% if alternateEn %}<link rel="alternate" hreflang="en" href="{{ site.url }}{{ alternateEn }}">{% endif %}
+{% if alternateJa %}<link rel="alternate" hreflang="ja" href="{{ site.url }}{{ alternateJa }}">{% endif %}
 {% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
 <link rel="alternate" type="application/rss+xml" href="{{ site.feedUrl[lang] }}" title="{{ site.i18n[lang].siteTitle }}">
 <link rel="stylesheet" href="/assets/style.css">
@@ -23,11 +26,13 @@
 
 <header class="site-header" role="banner">
   <div class="site-brand">
-    <a class="site-title" href="{% if lang == 'zh-TW' %}/zh/{% else %}/{% endif %}"><span lang="ja">曉</span> Akatsuki</a>
+    <a class="site-title" href="{% if lang == 'zh-TW' %}/zh/{% elif lang == 'ja' %}/ja/{% else %}/{% endif %}"><span lang="ja">曉</span> Akatsuki</a>
     <span class="site-parent">by Bright Raven</span>
   </div>
-  <nav aria-label="{{ site.i18n[lang].switchLang }}">
-    <a href="{{ page.url | translation(site.i18n[lang].switchLangCode, collections.postsEn, collections.postsZh) }}" lang="{{ site.i18n[lang].switchLangCode }}" hreflang="{{ site.i18n[lang].switchLangCode }}">{{ site.i18n[lang].switchLang }}</a>
+  <nav aria-label="{{ site.i18n[lang].languageNavigation }}">
+    <a href="{{ page.url | translation('en', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="en" hreflang="en"{% if lang == 'en' %} aria-current="page"{% endif %}>EN</a>
+    <a href="{{ page.url | translation('ja', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="ja" hreflang="ja"{% if lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
+    <a href="{{ page.url | translation('zh-TW', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="zh-TW" hreflang="zh-TW"{% if lang == 'zh-TW' %} aria-current="page"{% endif %}>繁</a>
   </nav>
 </header>
 
@@ -36,12 +41,13 @@
 </main>
 
 <footer class="site-footer" role="contentinfo">
-  <p>{{ site.i18n[lang].productCTA }} <a href="{{ site.product.url }}">{{ site.product.name }} →</a></p>
+  <p><a href="{{ site.studio.url }}">{{ site.studio.name }}</a> · {{ site.i18n[lang].footerDescription }}</p>
   <p class="meta">
     <a href="{{ site.feedUrl[lang] }}">RSS</a>
     · <a href="{{ site.social.github }}">GitHub</a>
   </p>
   <p class="quiet">{{ site.i18n[lang].noNewsletter }}</p>
 </footer>
+{% if bodyClass == 'home-page' %}<script type="module" src="/assets/presentation.js"></script>{% endif %}
 </body>
 </html>

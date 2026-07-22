@@ -1,7 +1,13 @@
 ---
 layout: layouts/base.njk
 ---
-{% set posts = collections.postsEn if lang == 'en' else collections.postsZh %}
+{% if lang == 'en' %}
+  {% set posts = collections.postsEn %}
+{% elif lang == 'ja' %}
+  {% set posts = collections.postsJa %}
+{% else %}
+  {% set posts = collections.postsZh %}
+{% endif %}
 {% set previousPost = posts | getPreviousCollectionItem %}
 {% set nextPost = posts | getNextCollectionItem %}
 <article>
@@ -25,6 +31,6 @@ layout: layouts/base.njk
       </a>
       {% endif %}
     </nav>
-    <a class="all-stories-link" href="{% if lang == 'zh-TW' %}/zh/{% else %}/{% endif %}">{{ site.i18n[lang].allStories }}</a>
+    <a class="all-stories-link" href="{% if lang == 'zh-TW' %}/zh/{% elif lang == 'ja' %}/ja/{% else %}/{% endif %}">{{ site.i18n[lang].allStories }}</a>
   </footer>
 </article>

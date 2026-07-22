@@ -1,0 +1,11 @@
+---
+layout: layouts/home.njk
+lang: ja
+eleventyExcludeFromCollections: true
+pagination:
+  data: collections.postsJa
+  size: 9
+  alias: pagePosts
+  generatePageOnEmptyData: true
+permalink: "{% if pagination.pageNumber == 0 %}/ja/{% else %}/ja/page/{{ pagination.pageNumber + 1 }}/{% endif %}"
+---

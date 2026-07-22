@@ -48,30 +48,29 @@ export default function (eleventyConfig) {
   })
 
   // Language switcher: find translation of current page
-  eleventyConfig.addFilter("translation", function (currentUrl, otherLang, postsEn = [], postsZh = [], fallbackToHome = true) {
+  eleventyConfig.addFilter("translation", function (currentUrl, otherLang, postsEn = [], postsJa = [], postsZh = [], fallbackToHome = true) {
     if (!currentUrl) return null
-    const isZhTarget = otherLang === "zh" || otherLang === "zh-TW"
-    const targetUrl = isZhTarget
-      ? currentUrl.startsWith("/zh/")
-        ? currentUrl
-        : "/zh" + currentUrl
-      : currentUrl.startsWith("/zh/")
-        ? currentUrl.replace(/^\/zh/, "") || "/"
-        : currentUrl
+    const targetLang = otherLang === "zh" ? "zh-TW" : otherLang
+    const localePrefix = { en: "", ja: "/ja", "zh-TW": "/zh" }
+    const homeUrl = { en: "/", ja: "/ja/", "zh-TW": "/zh/" }
+    const targetPosts = { en: postsEn, ja: postsJa, "zh-TW": postsZh }[targetLang]
+    if (!targetPosts || !(targetLang in localePrefix)) return null
 
-    if (targetUrl === "/" || targetUrl === "/zh/") return targetUrl
+    const unprefixedUrl = currentUrl.replace(/^\/(?:ja|zh)(?=\/)/, "") || "/"
+    const targetUrl = localePrefix[targetLang] + unprefixedUrl
 
-    const targetPosts = isZhTarget ? postsZh : postsEn
-    const paginationMatch = targetUrl.match(/^\/(?:zh\/)?page\/(\d+)\/$/)
+    if (targetUrl === homeUrl[targetLang]) return targetUrl
+
+    const paginationMatch = targetUrl.match(/^\/(?:(?:ja|zh)\/)?page\/(\d+)\/$/)
     if (paginationMatch) {
       const targetPageExists = Number(paginationMatch[1]) <= Math.ceil(targetPosts.length / 9)
       if (targetPageExists) return targetUrl
-      return fallbackToHome ? (isZhTarget ? "/zh/" : "/") : null
+      return fallbackToHome ? homeUrl[targetLang] : null
     }
 
     if (targetPosts.some((post) => post.url === targetUrl)) return targetUrl
 
-    return fallbackToHome ? (isZhTarget ? "/zh/" : "/") : null
+    return fallbackToHome ? homeUrl[targetLang] : null
   })
 
   // Filter draft posts in production
@@ -85,6 +84,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addCollection("postsZh", function (collectionApi) {
     return collectionApi
       .getFilteredByGlob("src/zh/posts/*.md")
+      .filter((p) => p.data.draft !== true)
+      .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
+  })
+
+  eleventyConfig.addCollection("postsJa", function (collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("src/ja/posts/*.md")
       .filter((p) => p.data.draft !== true)
       .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
   })

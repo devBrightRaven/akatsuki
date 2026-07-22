@@ -2,7 +2,7 @@
 
 > 暁 / Dawn — 霧（Asagiri）散開後想通的時刻寫下來。
 
-Bilingual essay blog about decision paralysis, agency, friction philosophy, and product constitution. Source for `blog.brightraven.world`.
+Trilingual essay publication about AI, accessibility, games, and human agency. Source for `blog.brightraven.world`.
 
 ## Family
 
@@ -19,7 +19,7 @@ Akatsuki 在 Bright Raven 認知工作流家族裡的位置：
 ## Stack
 
 - Eleventy 3.x
-- Bilingual: English (`src/en/posts/`) + Chinese (`src/zh/posts/`)
+- Trilingual: English (`src/en/posts/`) + Japanese (`src/ja/posts/`) + Traditional Chinese (`src/zh/posts/`)
 - Content lives in vault, synced via `scripts/sync-from-vault.ps1`
 - Markdown with `markdown-it-anchor` + `markdown-it-attrs`
 - RSS via `@11ty/eleventy-plugin-rss`
@@ -27,9 +27,9 @@ Akatsuki 在 Bright Raven 認知工作流家族裡的位置：
 ## Workflow
 
 ```bash
-npm install
-npm run dev              # local preview (http://localhost:8080)
-npm run build            # production build to public/
+pnpm install
+pnpm run dev              # local preview (http://localhost:8080)
+pnpm run build            # production build to public/
 ```
 
 ## Content source
@@ -40,7 +40,7 @@ npm run build            # production build to public/
 D:\Obsidian\br-os-vault\4 BuildInPublic\bright-raven-world\blog\brightraven.world\
 ```
 
-每次 build 前自動 sync。English 檔 `*.md` → `src/en/posts/`，Chinese 檔 `*.zh.md` → `src/zh/posts/`（`.zh.md` suffix 自動剝離）。
+每次 build 前自動 sync。English 檔 `*.md` → `src/en/posts/`，Japanese 檔 `*.ja.md` → `src/ja/posts/`，Traditional Chinese 檔 `*.zh.md` → `src/zh/posts/`（語言 suffix 會自動剝離）。
 
 ## Article series
 

@@ -1,22 +1,23 @@
 ---
-permalink: /feed.xml
+permalink: /ja/feed.xml
 eleventyExcludeFromCollections: true
 layout: false
-lang: en
+lang: ja
+date: 2026-07-23
 ---
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
-<title>{{ site.i18n.en.siteTitle }}</title>
-<subtitle>{{ site.i18n.en.tagline }}</subtitle>
-<link href="{{ site.url }}/feed.xml" rel="self"/>
-<link href="{{ site.url }}/"/>
-<updated>{% if collections.postsEn[0].date %}{{ collections.postsEn[0].date | dateToRfc3339 }}{% endif %}</updated>
-<id>{{ site.url }}/</id>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ja">
+<title>{{ site.i18n.ja.siteTitle }}</title>
+<subtitle>{{ site.i18n.ja.tagline }}</subtitle>
+<link href="{{ site.url }}/ja/feed.xml" rel="self"/>
+<link href="{{ site.url }}/ja/"/>
+<updated>{% if collections.postsJa.length %}{{ collections.postsJa[0].date | dateToRfc3339 }}{% else %}{{ page.date | dateToRfc3339 }}{% endif %}</updated>
+<id>{{ site.url }}/ja/</id>
 <author>
   <name>{{ site.author.name }}</name>
   <email>{{ site.author.email }}</email>
 </author>
-{% for post in collections.postsEn | reverse %}
+{% for post in collections.postsJa | reverse %}
 <entry>
   <title>{{ post.data.title }}</title>
   <link href="{{ site.url }}{{ post.url }}"/>
