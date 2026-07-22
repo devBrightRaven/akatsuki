@@ -30,7 +30,6 @@ Akatsuki 在 Bright Raven 認知工作流家族裡的位置：
 npm install
 npm run dev              # local preview (http://localhost:8080)
 npm run build            # production build to public/
-PATH_PREFIX=akatsuki npm run build   # build for GitHub Pages subpath
 ```
 
 ## Content source
@@ -59,8 +58,7 @@ A 到 F-25 是 closed 25-article series。F-26+ 跟 G 系列是後續延伸。
 
 ## Deploy
 
-- **GitHub Pages**: 自動 deploy on push to `main`（見 `.github/workflows/deploy.yml`）。Preview at `https://devbrightraven.github.io/akatsuki/`
-- **Cloudflare Pages** (future): 之後 DNS 切到 `blog.brightraven.world`，pathPrefix 自動為空。
+- **GitHub Pages**: 自動 deploy on push to `main`（見 `.github/workflows/pages.yml`）。Custom domain: `https://blog.brightraven.world/`
 
 ## License
 
