@@ -326,8 +326,13 @@ article blockquote {
   border-left: 3px solid var(--border);
   padding-left: 1rem;
   color: var(--text-muted);
-  font-style: italic;
+  font-style: normal;
   margin: 1.5rem 0;
+}
+
+em,
+i {
+  font-style: normal;
 }
 
 article code {

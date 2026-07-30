@@ -1,6 +1,6 @@
 ---
 title: Players Are Not Infinite
-description: As games, content, and reasons to return keep multiplying, we still have only one life to give them.
+description: Games can keep multiplying, but the time, attention, and physical capacity players can give them cannot.
 summary: Games can keep multiplying. A player's time, attention, and body cannot.
 date: 2026-07-30
 status: published
@@ -22,7 +22,7 @@ topics:
 ---
 # Players Are Not Infinite
 
-> As games, content, and reasons to return keep multiplying, we still have only one life to give them.
+> Games can keep multiplying, but the time, attention, and physical capacity players can give them cannot.
 
 There can always be more games: the next sale, the next achievement, the next event. But the time and attention a player can give to games each day do not increase with them.
 
