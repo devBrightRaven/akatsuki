@@ -11,9 +11,11 @@ published languages.
 - Add `id="top"` to the page body.
 - Add one fixed `<a href="#top">` after the site footer.
 - Give the link a localized accessible name and title.
-- Render an upward arrow inside a decorative `.back-to-top-icon` slot.
-- Keep the accessible name on the link so the arrow can later be replaced by a
-  Bright Raven icon or mascot image without changing the control's semantics.
+- Render a small, single-color geometric crow placeholder inside a decorative
+  `.back-to-top-icon` slot.
+- Keep the accessible name on the link so the placeholder can later be replaced
+  by a finished Bright Raven icon or mascot image without changing the
+  control's semantics.
 - Use a stable 44 by 44 pixel target with a restrained border and a maximum
   8 pixel corner radius.
 - Keep the control clear of safe-area insets and prevent it from causing
