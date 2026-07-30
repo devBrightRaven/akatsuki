@@ -1,99 +1,173 @@
-# Back-to-top Control Implementation Plan
+# Back-to-top Raven Refinement Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a localized fixed back-to-top control with a replaceable geometric crow placeholder and soften the no-newsletter footer copy.
+**Goal:** Replace the always-visible 44px placeholder with an accessible 64px upward-flying raven control that appears only after one viewport of scrolling.
 
-**Architecture:** Extend the existing shared site data, base layout, stylesheet, and build verifier. Use an HTML anchor targeting the page body, so the feature requires no client-side JavaScript.
+**Architecture:** Keep the link after the footer so its Tab position remains last, but target a focusable site header. A small dependency-free module toggles the link's `hidden` state from `scrollY > innerHeight`; CSS owns the fixed presentation and inline SVG owns the simplified raven silhouette.
 
-**Tech Stack:** Eleventy 3, Nunjucks, CSS, Node.js assertions
+**Tech Stack:** Eleventy 3, Nunjucks, CSS, browser JavaScript, Node.js assertions
 
 ## Global Constraints
 
-- Do not add a dependency or client-side JavaScript.
-- Keep the control at 44 by 44 pixels with no more than an 8 pixel corner radius.
-- Keep the icon decorative and the localized accessible name on the link.
-- Do not introduce italic styling.
+- Use a stable 64 by 64 pixel target with no more than an 8 pixel corner radius.
+- Use a simplified front-facing upward-flying raven with raised wings and a broad unforked fan tail.
+- Do not add a separate arrow, dependency, italic styling, or raster production asset.
+- Keep the control out of the Tab order while hidden and after footer links when visible.
 - Preserve all unrelated working-tree changes.
 
 ---
 
-### Task 1: Shared back-to-top control
+### Task 1: Markup, behavior, and build contract
 
 **Files:**
 - Modify: `scripts/verify-build.mjs`
-- Modify: `src/_data/site.js`
 - Modify: `src/_includes/layouts/base.njk`
-- Modify: `src/assets/style.css`
+- Create: `src/assets/back-to-top.js`
 
 **Interfaces:**
-- Consumes: `site.i18n[lang]` from `src/_data/site.js`
-- Produces: `site.i18n[lang].backToTop`, `.back-to-top`, and `.back-to-top-icon`
+- Consumes: `.site-header`, `.back-to-top`, `window.scrollY`, and `window.innerHeight`
+- Produces: a focusable `#top` target and a control whose `hidden` state reflects whether `scrollY > innerHeight`
 
 - [ ] **Step 1: Add failing build assertions**
 
-Add assertions that English, Japanese, and Traditional Chinese pages contain
-localized back-to-top labels, that the shared page has an `id="top"` target,
-and that CSS defines a fixed 44 by 44 pixel control without italic styling.
+Assert that generated pages contain:
+
+```js
+assert.match(home, /<header[^>]*id="top"[^>]*tabindex="-1"/)
+assert.match(home, /class="back-to-top"[^>]*hidden/)
+assert.match(home, /src="\/assets\/back-to-top\.js"/)
+assert.match(home, /class="back-to-top-icon" viewBox="0 0 64 64"/)
+```
+
+Assert that CSS defines a fixed 64 by 64 pixel control and a 52 by 52 pixel icon.
 
 - [ ] **Step 2: Run the verifier and confirm failure**
 
 Run: `pnpm check`
 
-Expected: failure because `.back-to-top` and localized labels do not exist.
+Expected: failure because the generated page still targets `<body>` and uses the 44px placeholder.
 
-- [ ] **Step 3: Add localized copy and labels**
+- [ ] **Step 3: Replace the markup**
 
-Use these exact values in `src/_data/site.js`:
+Move `id="top"` from `<body>` to:
 
-```js
-noNewsletter: "No newsletter. Follow by RSS, or come back whenever you like.",
-backToTop: "Back to top",
+```html
+<header id="top" class="site-header" role="banner" tabindex="-1">
 ```
 
-```js
-noNewsletter: "ニュースレターは配信していません。RSSで購読するか、また読みたくなったときにお越しください。",
-backToTop: "ページ上部へ",
-```
+Add `hidden` to the existing link. Replace its SVG with a `64 64` viewBox and
+three overlapping `currentColor` paths: raised wings with four large primary
+tips per side, a substantial centered body with broad fan tail, and a short
+centered beak. Keep the SVG decorative.
+
+- [ ] **Step 4: Add the visibility module**
+
+Create `src/assets/back-to-top.js`:
 
 ```js
-noNewsletter: "不寄電子報。你可以透過 RSS 追蹤，或想起來時再回來看看。",
-backToTop: "回到頁首",
+const control = document.querySelector(".back-to-top")
+
+if (control) {
+  const update = () => {
+    control.hidden = window.scrollY <= window.innerHeight
+  }
+
+  window.addEventListener("scroll", update, { passive: true })
+  window.addEventListener("resize", update)
+  update()
+}
 ```
 
-- [ ] **Step 4: Add the native anchor and icon slot**
+Load it once near the end of the shared layout with:
 
-Add `id="top"` to `<body>`. After the footer, add an anchor targeting `#top`
-with localized `aria-label` and `title`. Put a 24 pixel inline SVG geometric
-crow inside it with `aria-hidden="true"` and class `.back-to-top-icon`.
+```html
+<script type="module" src="/assets/back-to-top.js"></script>
+```
 
-- [ ] **Step 5: Add restrained fixed positioning**
+- [ ] **Step 5: Run the build verification**
 
-Define a 44 by 44 pixel fixed control at the bottom-right safe area. Use
-existing color variables, a visible focus indicator, `currentColor` for the
-crow, and no italic styling. Ensure the icon slot can later contain an image.
+Run: `pnpm check`
 
-- [ ] **Step 6: Run automated verification**
+Expected: failure only until the stylesheet is updated in Task 2.
+
+---
+
+### Task 2: Visible 64px treatment
+
+**Files:**
+- Modify: `src/assets/style.css`
+- Modify: `src/_includes/layouts/base.njk`
+
+**Interfaces:**
+- Consumes: `.back-to-top`, `.back-to-top-icon`, existing color variables, and the native `hidden` attribute
+- Produces: a high-contrast 64px fixed control with a visible focus ring
+
+- [ ] **Step 1: Replace the old 44px styles**
+
+Set the target to `64px`, icon to `52px`, right and bottom offsets to safe-area-aware `0.75rem`, `border-radius: 8px`, `background: var(--text)`, and `color: var(--bg)`. Keep the control fixed and add a restrained shadow.
+
+- [ ] **Step 2: Add interaction states**
+
+Keep hover high contrast and add:
+
+```css
+.back-to-top:focus-visible {
+  outline: 3px solid var(--dawn);
+  outline-offset: 4px;
+}
+
+.site-header:focus:not(:focus-visible) {
+  outline: none;
+}
+```
+
+- [ ] **Step 3: Bust the stylesheet cache**
+
+Increment the shared stylesheet query string from `20260730-2` to `20260730-3`.
+
+- [ ] **Step 4: Run automated verification**
 
 Run: `pnpm check`
 
 Expected: `Akatsuki build verification passed`.
 
-- [ ] **Step 7: Run browser verification**
+---
 
-At 320, 768, 1024, 1280, 1440, 1742, and 1920 pixel widths, assert:
+### Task 3: Interaction and responsive verification
+
+**Files:**
+- Test: generated pages served by Eleventy
+
+**Interfaces:**
+- Consumes: the built site in a browser
+- Produces: evidence that visibility, focus order, navigation, and layout match the specification
+
+- [ ] **Step 1: Verify the visibility threshold**
+
+At page load assert the control is hidden. Scroll to `innerHeight + 1`, dispatch
+or await a scroll event, and assert it is visible.
+
+- [ ] **Step 2: Verify keyboard order and activation**
+
+Confirm footer links precede the visible control in document order. Focus the
+control, press Enter, and confirm the URL ends in `#top`, the site header owns
+focus, and the viewport returns to the top.
+
+- [ ] **Step 3: Verify all required widths**
+
+At 320, 768, 1024, 1280, 1440, 1742, and 1920 pixels, assert:
 
 ```js
 document.documentElement.scrollWidth <= document.documentElement.clientWidth
 ```
 
-Activate the control by keyboard and confirm the URL targets `#top`, the page
-returns to its header, and the localized accessible name is present. Inspect
-mobile and desktop screenshots for content obstruction.
+Inspect screenshots for text obstruction and verify the control remains 64 by
+64 pixels in English, Japanese, and Traditional Chinese.
 
-- [ ] **Step 8: Commit only owned files**
+- [ ] **Step 4: Commit only owned files**
 
 ```powershell
-git add -- scripts/verify-build.mjs src/_data/site.js src/_includes/layouts/base.njk src/assets/style.css docs/superpowers/plans/2026-07-30-back-to-top.md
-git commit -m "add localized back-to-top control"
+git add -- scripts/verify-build.mjs src/_includes/layouts/base.njk src/assets/back-to-top.js src/assets/style.css docs/superpowers/plans/2026-07-30-back-to-top.md
+git commit -m "refine back-to-top raven control"
 ```

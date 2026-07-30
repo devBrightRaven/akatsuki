@@ -15,16 +15,16 @@
 {% if alternateJa %}<link rel="alternate" hreflang="ja" href="{{ site.url }}{{ alternateJa }}">{% endif %}
 {% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
 <link rel="alternate" type="application/rss+xml" href="{{ site.feedUrl[lang] }}" title="{{ site.i18n[lang].siteTitle }}">
-<link rel="stylesheet" href="/assets/style.css?v=20260730-2">
+<link rel="stylesheet" href="/assets/style.css?v=20260730-3">
 <meta property="og:type" content="{% if bodyClass == 'home-page' %}website{% else %}article{% endif %}">
 <meta property="og:title" content="{% if title %}{{ title }}{% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {{ site.i18n[lang].siteTitle }}{% else %}{{ site.i18n[lang].siteTitle }}{% endif %}">
 <meta property="og:description" content="{{ metaDescription }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 </head>
-<body id="top"{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a class="skip-link" href="#main">{{ site.i18n[lang].skipToContent }}</a>
 
-<header class="site-header" role="banner">
+<header id="top" class="site-header" role="banner" tabindex="-1">
   <div class="site-brand">
     <a class="site-title" href="{% if lang == 'zh-TW' %}/zh/{% elif lang == 'ja' %}/ja/{% else %}/{% endif %}"><span lang="ja">曉</span> Akatsuki</a>
     <span class="site-parent">by Bright Raven</span>
@@ -48,12 +48,12 @@
   </p>
   <p class="quiet">{{ site.i18n[lang].noNewsletter }}</p>
 </footer>
-<a class="back-to-top" href="#top" aria-label="{{ site.i18n[lang].backToTop }}" title="{{ site.i18n[lang].backToTop }}">
-  <svg class="back-to-top-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path fill="currentColor" d="M2 17 8 11 6 4 13 10 16 6 19 9 23 10 19 12 17 20 12 15 8 20 9 14Z"/>
-    <circle cx="17.25" cy="9.35" r="0.8" fill="var(--bg)"/>
+<a class="back-to-top" href="#top" aria-label="{{ site.i18n[lang].backToTop }}" title="{{ site.i18n[lang].backToTop }}" hidden>
+  <svg class="back-to-top-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M8.1 5.7L8.4 10.7L12.2 17.2L4.6 11.3L4.3 12.7L7 17.6L11.7 21.7L4 19.9L6.7 23.4L11.9 26.4L7.3 27.4L16.5 35.6L26.4 41.1L22.7 54L25.3 53.5L25.9 56.1L30.6 58.1L36.9 56.8L38.6 53.4L41.5 53.4L37.6 41.1L47 36L56.7 26.8L52.1 26.4L57.3 23.4L59.9 19.5L52.3 21.9L57.9 16.5L59.7 11.4L51.9 17.3L55.9 10.2L55.9 5.9L37.2 28.6L31.9 15.3L27 28.6Z"/>
   </svg>
 </a>
+<script type="module" src="/assets/back-to-top.js"></script>
 {% if bodyClass == 'home-page' %}<script type="module" src="/assets/presentation.js"></script>{% endif %}
 </body>
 </html>
