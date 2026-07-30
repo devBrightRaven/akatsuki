@@ -15,7 +15,7 @@
 {% if alternateJa %}<link rel="alternate" hreflang="ja" href="{{ site.url }}{{ alternateJa }}">{% endif %}
 {% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
 <link rel="alternate" type="application/rss+xml" href="{{ site.feedUrl[lang] }}" title="{{ site.i18n[lang].siteTitle }}">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20260730">
 <meta property="og:type" content="{% if bodyClass == 'home-page' %}website{% else %}article{% endif %}">
 <meta property="og:title" content="{% if title %}{{ title }}{% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {{ site.i18n[lang].siteTitle }}{% else %}{{ site.i18n[lang].siteTitle }}{% endif %}">
 <meta property="og:description" content="{{ metaDescription }}">
