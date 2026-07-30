@@ -46,7 +46,10 @@ bodyClass: home-page
       <span class="story-card-calligraphy" aria-hidden="true" lang="ja">曉</span>
       <div class="story-card-topline">
         <span class="story-number">{{ post.data.storyNumber }}</span>
-        {% if pagination.pageNumber == 0 and loop.first %}<span class="start-label">{{ site.i18n[lang].startHere }}</span>{% endif %}
+        <span class="story-labels">
+          {% if post.data.topicLabel %}<span class="topic-label">{{ post.data.topicLabel }}</span>{% endif %}
+          {% if pagination.pageNumber == 0 and loop.first %}<span class="start-label">{{ site.i18n[lang].startHere }}</span>{% endif %}
+        </span>
       </div>
       <h2>{{ post.data.displayTitle }}</h2>
       <p class="story-summary">{{ post.data.description }}</p>
@@ -57,6 +60,7 @@ bodyClass: home-page
   </div>
 </section>
 
+{% if pagination.pages.length > 1 %}
 <nav class="pagination-nav" aria-label="{{ site.i18n[lang].pagination }}">
   <p class="pagination-status" aria-current="page">{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>
   <div class="pagination-actions">
@@ -72,3 +76,4 @@ bodyClass: home-page
     {% endif %}
   </div>
 </nav>
+{% endif %}

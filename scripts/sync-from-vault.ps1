@@ -1,71 +1,64 @@
 # Sync articles from Obsidian vault to Eleventy src/
 # - English articles → src/en/posts/
+# - Japanese articles (*.ja.md) → src/ja/posts/ (suffix stripped)
 # - Chinese articles (*.zh.md) → src/zh/posts/ (suffix stripped)
-# - Excludes: dashboards, drafts, group overviews (for now), index
+# - Only files explicitly moved into a topic's shipped/ folder are published
+# - Existing src posts are preserved so retired shelf entries keep their URLs
 
 $ErrorActionPreference = "Stop"
 
-$vault = "D:\Obsidian\br-os-vault\4 BuildInPublic\bright-raven-world\blog\brightraven.world"
+$vaultRoot = if ($env:BR_OS_VAULT) {
+  $env:BR_OS_VAULT
+} else {
+  "D:\Obsidian\br-os-vault"
+}
+$vaultSources = @(
+  "$vaultRoot\4 BuildInPublic\bright-raven-world\blog\philosophy-gaming\shipped",
+  "$vaultRoot\4 BuildInPublic\bright-raven-world\blog\philosophy-agents\shipped"
+)
 $enDest = "$PSScriptRoot\..\src\en\posts"
 $jaDest = "$PSScriptRoot\..\src\ja\posts"
 $zhDest = "$PSScriptRoot\..\src\zh\posts"
 
-if (-not (Test-Path $vault)) {
-  Write-Error "Vault not found at: $vault"
-  exit 1
+foreach ($source in $vaultSources) {
+  if (-not (Test-Path -LiteralPath $source -PathType Container)) {
+    throw "Published-post folder not found: $source"
+  }
 }
 
-# Ensure destinations exist and are clean
+# Deleting a published route is a separate action. Sync only adds or updates
+# approved posts.
 foreach ($dest in @($enDest, $jaDest, $zhDest)) {
   if (-not (Test-Path $dest)) {
     New-Item -ItemType Directory -Force -Path $dest | Out-Null
   }
-  Get-ChildItem -Path $dest -Filter "*.md" | Remove-Item -Force
 }
-
-# Patterns to exclude entirely
-$excludePatterns = @(
-  "_*",                        # _progress.md, _superlinear-test-post.md
-  "Untitled.md",
-  "00-index.md",
-  "*-research.md",
-  "A-00-*", "B-00-*", "C-00-*",
-  "D-00-*", "E-00-*", "F-00-*"  # group overviews (English only, defer)
-)
 
 $enCount = 0
 $jaCount = 0
 $zhCount = 0
-$skipped = 0
+$publishedNames = @{}
 
-Get-ChildItem -Path $vault -Filter "*.md" -File | ForEach-Object {
+Get-ChildItem -LiteralPath $vaultSources -Filter "*.md" -File | ForEach-Object {
   $name = $_.Name
-  $skip = $false
-
-  foreach ($pattern in $excludePatterns) {
-    if ($name -like $pattern) {
-      $skip = $true
-      break
-    }
-  }
-
-  if ($skip) {
-    $skipped++
-    return
-  }
-
   if ($name -like "*.ja.md") {
     $newName = $name -replace "\.ja\.md$", ".md"
-    Copy-Item -Path $_.FullName -Destination "$jaDest\$newName" -Force
+    $destination = "$jaDest\$newName"
     $jaCount++
   } elseif ($name -like "*.zh.md") {
     $newName = $name -replace "\.zh\.md$", ".md"
-    Copy-Item -Path $_.FullName -Destination "$zhDest\$newName" -Force
+    $destination = "$zhDest\$newName"
     $zhCount++
   } else {
-    Copy-Item -Path $_.FullName -Destination "$enDest\$name" -Force
+    $destination = "$enDest\$name"
     $enCount++
   }
+
+  if ($publishedNames.ContainsKey($destination)) {
+    throw "Duplicate published destination: $destination"
+  }
+  $publishedNames[$destination] = $_.FullName
+  Copy-Item -LiteralPath $_.FullName -Destination $destination -Force
 }
 
 Write-Host ""
@@ -73,5 +66,4 @@ Write-Host "Sync complete." -ForegroundColor Green
 Write-Host "  English posts: $enCount"
 Write-Host "  Japanese posts: $jaCount"
 Write-Host "  Chinese posts: $zhCount"
-Write-Host "  Skipped:       $skipped"
 Write-Host ""

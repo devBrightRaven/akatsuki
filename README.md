@@ -34,13 +34,21 @@ pnpm run build            # production build to public/
 
 ## Content source
 
-文章在 vault：
+只有移入各主題 `shipped/` 的文章會同步：
 
 ```
-D:\Obsidian\br-os-vault\4 BuildInPublic\bright-raven-world\blog\brightraven.world\
+<vault>\4 BuildInPublic\bright-raven-world\blog\
+├── philosophy-gaming\
+│   ├── draft\
+│   ├── review\
+│   └── shipped\
+└── philosophy-agents\
+    ├── draft\
+    ├── review\
+    └── shipped\
 ```
 
-每次 build 前自動 sync。English 檔 `*.md` → `src/en/posts/`，Japanese 檔 `*.ja.md` → `src/ja/posts/`，Traditional Chinese 檔 `*.zh.md` → `src/zh/posts/`（語言 suffix 會自動剝離）。
+每次本機 build 前自動 sync。English 檔 `*.md` → `src/en/posts/`，Japanese 檔 `*.ja.md` → `src/ja/posts/`，Traditional Chinese 檔 `*.zh.md` → `src/zh/posts/`（語言 suffix 會自動剝離）。可用 `BR_OS_VAULT` 覆寫 vault root。
 
 ## Article series
 

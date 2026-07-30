@@ -4,6 +4,10 @@ import markdownItAnchor from "markdown-it-anchor"
 import markdownItAttrs from "markdown-it-attrs"
 
 export default function (eleventyConfig) {
+  const shelfPostSlugs = new Set([
+    "00-player-is-not-infinite",
+  ])
+
   // Markdown engine with anchor links and attribute support
   const md = markdownIt({
     html: true,
@@ -73,26 +77,45 @@ export default function (eleventyConfig) {
     return fallbackToHome ? homeUrl[targetLang] : null
   })
 
-  // Filter draft posts in production
+  // Keep every published URL available, but only place reviewed entries on
+  // the main shelf, in feeds, and in previous/next navigation.
+  eleventyConfig.addCollection("allPostsEn", function (collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("src/en/posts/*.md")
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  })
+
+  eleventyConfig.addCollection("allPostsZh", function (collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("src/zh/posts/*.md")
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  })
+
+  eleventyConfig.addCollection("allPostsJa", function (collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("src/ja/posts/*.md")
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  })
+
   eleventyConfig.addCollection("postsEn", function (collectionApi) {
     return collectionApi
       .getFilteredByGlob("src/en/posts/*.md")
-      .filter((p) => p.data.draft !== true)
-      .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
+      .filter((p) => shelfPostSlugs.has(p.fileSlug))
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   })
 
   eleventyConfig.addCollection("postsZh", function (collectionApi) {
     return collectionApi
       .getFilteredByGlob("src/zh/posts/*.md")
-      .filter((p) => p.data.draft !== true)
-      .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
+      .filter((p) => shelfPostSlugs.has(p.fileSlug))
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   })
 
   eleventyConfig.addCollection("postsJa", function (collectionApi) {
     return collectionApi
       .getFilteredByGlob("src/ja/posts/*.md")
-      .filter((p) => p.data.draft !== true)
-      .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
+      .filter((p) => shelfPostSlugs.has(p.fileSlug))
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   })
 
   return {

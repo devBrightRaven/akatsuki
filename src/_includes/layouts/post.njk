@@ -11,6 +11,7 @@ layout: layouts/base.njk
 {% set previousPost = posts | getPreviousCollectionItem %}
 {% set nextPost = posts | getNextCollectionItem %}
 <article>
+  {% if topicLabel %}<p class="post-topic-label">{{ topicLabel }}</p>{% endif %}
   {{ content | safe }}
 
   <footer class="post-footer">

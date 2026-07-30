@@ -1,6 +1,7 @@
 {
   "name": "brightraven-blog",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.33.2",
   "description": "Trilingual essays about AI, accessibility, games, and human agency. Source for blog.brightraven.world.",
   "type": "module",
   "scripts": {

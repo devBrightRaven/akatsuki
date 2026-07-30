@@ -8,9 +8,9 @@
 {% set metaDescription = description or site.i18n[lang].tagline %}
 <meta name="description" content="{{ metaDescription }}">
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-{% set alternateEn = page.url | translation('en', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
-{% set alternateJa = page.url | translation('ja', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
-{% set alternateZh = page.url | translation('zh-TW', collections.postsEn, collections.postsJa, collections.postsZh, false) %}
+{% set alternateEn = page.url | translation('en', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh, false) %}
+{% set alternateJa = page.url | translation('ja', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh, false) %}
+{% set alternateZh = page.url | translation('zh-TW', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh, false) %}
 {% if alternateEn %}<link rel="alternate" hreflang="en" href="{{ site.url }}{{ alternateEn }}">{% endif %}
 {% if alternateJa %}<link rel="alternate" hreflang="ja" href="{{ site.url }}{{ alternateJa }}">{% endif %}
 {% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
@@ -30,9 +30,9 @@
     <span class="site-parent">by Bright Raven</span>
   </div>
   <nav aria-label="{{ site.i18n[lang].languageNavigation }}">
-    <a href="{{ page.url | translation('en', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="en" hreflang="en"{% if lang == 'en' %} aria-current="page"{% endif %}>EN</a>
-    <a href="{{ page.url | translation('ja', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="ja" hreflang="ja"{% if lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
-    <a href="{{ page.url | translation('zh-TW', collections.postsEn, collections.postsJa, collections.postsZh) }}" lang="zh-TW" hreflang="zh-TW"{% if lang == 'zh-TW' %} aria-current="page"{% endif %}>繁</a>
+    <a href="{{ page.url | translation('en', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh) }}" lang="en" hreflang="en"{% if lang == 'en' %} aria-current="page"{% endif %}>EN</a>
+    <a href="{{ page.url | translation('ja', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh) }}" lang="ja" hreflang="ja"{% if lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
+    <a href="{{ page.url | translation('zh-TW', collections.allPostsEn, collections.allPostsJa, collections.allPostsZh) }}" lang="zh-TW" hreflang="zh-TW"{% if lang == 'zh-TW' %} aria-current="page"{% endif %}>繁</a>
   </nav>
 </header>
 

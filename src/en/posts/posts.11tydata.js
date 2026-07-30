@@ -30,8 +30,8 @@ export default {
   eleventyComputed: {
     title: (data) => extractTitleFromInput(data.page.inputPath),
     displayTitle: (data) => displayTitleFromInput(data.page.inputPath),
-    description: (data) => extractDescriptionFromInput(data.page.inputPath),
-    storyNumber: (data) => data.order
+    description: (data) => data.summary || extractDescriptionFromInput(data.page.inputPath),
+    storyNumber: (data) => data.order !== undefined && data.order !== null
       ? String(data.order).padStart(2, "0")
       : data.page.fileSlug.match(/^[A-Z]-\d+/)?.[0].replace("-", "") || "—",
   },
