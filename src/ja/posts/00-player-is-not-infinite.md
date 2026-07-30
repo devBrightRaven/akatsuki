@@ -104,10 +104,11 @@ topics:
 
 ## 背景資料
 
-- [International Labour Organization: World Employment and Social Outlook, 2025](https://www.ilo.org/publications/flagship-reports/world-employment-and-social-outlook-trends-2025)
-- [United Nations: World Population Prospects 2024](https://www.un.org/sustainabledevelopment/blog/2024/07/press-release-wpp2024/)
 - [International Telecommunication Union: Facts and Figures 2025](https://www.itu.int/itu-d/reports/statistics/facts-figures-2025/)
 - [Entertainment Software Association: Essential Facts About the U.S. Video Game Industry, 2025](https://www.theesa.com/annual-esa-study-reveals-video-games-universal-appeal-across-generations/)
 - [Steamworks: Seasonal Sales](https://partner.steamgames.com/doc/marketing/discounts/seasonalsales?l=english)
 - [Steamworks: Visibility on Steam](https://partner.steamgames.com/doc/marketing/visibility?language=english)
+- [GameAnalytics: Retention](https://docs.gameanalytics.com/products-and-features/analytics-iq/engagement-tools/retention/)
+- [Xbox Accessibility Guideline 109: 目標と進行状況](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109)
+- [Newzoo: The PC & Console Gaming Report 2025](https://newzoo.com/reports/pc-console-gaming-report-2025)
 - [Envisioning and Designing Generative AI to Support Indie Game Development](https://guof.people.clemson.edu/papers/chiplay24.pdf)
