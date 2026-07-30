@@ -46,7 +46,8 @@ export default {
       readingTime: "min read",
       skipToContent: "Skip to main content",
       footerDescription: "studies and builds tools that help people retain understanding, choice, and agency.",
-      noNewsletter: "No newsletter. RSS or come back when you remember.",
+      noNewsletter: "No newsletter. Follow by RSS, or come back whenever you like.",
+      backToTop: "Back to top",
     },
     ja: {
       siteTitle: "曉 Akatsuki",
@@ -75,7 +76,8 @@ export default {
       readingTime: "分で読めます",
       skipToContent: "本文へ移動",
       footerDescription: "人が理解し、選び、行動する力を保つために研究し、ツールをつくっています。",
-      noNewsletter: "ニュースレターはありません。RSSで購読するか、思い出したときに戻ってきてください。",
+      noNewsletter: "ニュースレターは配信していません。RSSで購読するか、また読みたくなったときにお越しください。",
+      backToTop: "ページ上部へ",
     },
     "zh-TW": {
       siteTitle: "曉 Akatsuki",
@@ -104,7 +106,8 @@ export default {
       readingTime: "分鐘",
       skipToContent: "跳至主要內容",
       footerDescription: "研究並製作幫助人保有理解、選擇與行動能力的工具。",
-      noNewsletter: "沒有電子報。用 RSS 訂閱，或想到再回來。",
+      noNewsletter: "不寄電子報。你可以透過 RSS 追蹤，或想起來時再回來看看。",
+      backToTop: "回到頁首",
     },
   },
 }

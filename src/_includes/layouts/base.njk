@@ -15,13 +15,13 @@
 {% if alternateJa %}<link rel="alternate" hreflang="ja" href="{{ site.url }}{{ alternateJa }}">{% endif %}
 {% if alternateZh %}<link rel="alternate" hreflang="zh-TW" href="{{ site.url }}{{ alternateZh }}">{% endif %}
 <link rel="alternate" type="application/rss+xml" href="{{ site.feedUrl[lang] }}" title="{{ site.i18n[lang].siteTitle }}">
-<link rel="stylesheet" href="/assets/style.css?v=20260730">
+<link rel="stylesheet" href="/assets/style.css?v=20260730-2">
 <meta property="og:type" content="{% if bodyClass == 'home-page' %}website{% else %}article{% endif %}">
 <meta property="og:title" content="{% if title %}{{ title }}{% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {{ site.i18n[lang].siteTitle }}{% else %}{{ site.i18n[lang].siteTitle }}{% endif %}">
 <meta property="og:description" content="{{ metaDescription }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 </head>
-<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+<body id="top"{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a class="skip-link" href="#main">{{ site.i18n[lang].skipToContent }}</a>
 
 <header class="site-header" role="banner">
@@ -48,6 +48,12 @@
   </p>
   <p class="quiet">{{ site.i18n[lang].noNewsletter }}</p>
 </footer>
+<a class="back-to-top" href="#top" aria-label="{{ site.i18n[lang].backToTop }}" title="{{ site.i18n[lang].backToTop }}">
+  <svg class="back-to-top-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M2 17 8 11 6 4 13 10 16 6 19 9 23 10 19 12 17 20 12 15 8 20 9 14Z"/>
+    <circle cx="17.25" cy="9.35" r="0.8" fill="var(--bg)"/>
+  </svg>
+</a>
 {% if bodyClass == 'home-page' %}<script type="module" src="/assets/presentation.js"></script>{% endif %}
 </body>
 </html>

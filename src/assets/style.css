@@ -210,6 +210,42 @@ main:focus:not(:focus-visible) { outline: none; }
   color: var(--text-muted);
 }
 
+.back-to-top {
+  position: fixed;
+  right: max(0.25rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.back-to-top:hover {
+  color: var(--dawn);
+  background: var(--surface);
+  border-color: var(--border);
+  text-decoration: none;
+}
+
+.back-to-top-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.back-to-top-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
 /* Links */
 a {
   color: var(--link);
