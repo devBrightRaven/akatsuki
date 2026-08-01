@@ -53,7 +53,7 @@ bodyClass: home-page
       </div>
       <h2>{{ post.data.displayTitle }}</h2>
       <p class="story-summary">{{ post.data.description }}</p>
-      <p class="story-meta">{{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</p>
+      <p class="story-meta"><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</p>
     </a>
     {% if loop.index == 3 or loop.index == 6 or loop.index == 9 or loop.last %}</div>{% endif %}
     {% endfor %}

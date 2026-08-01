@@ -40,6 +40,16 @@ export default function (eleventyConfig) {
     new Date(d).toISOString().split("T")[0]
   )
 
+  eleventyConfig.addFilter("localizedDate", (d, lang = "en") => {
+    const locale = { en: "en-US", ja: "ja-JP", "zh-TW": "zh-TW" }[lang] ?? "en-US"
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: lang === "en" ? "short" : "long",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(d))
+  })
+
   // Reading time (rough estimate: 200 wpm English, 400 chars/min Chinese)
   eleventyConfig.addFilter("readingTime", (text) => {
     if (!text) return ""
