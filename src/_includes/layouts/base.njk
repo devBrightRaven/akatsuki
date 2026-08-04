@@ -20,6 +20,7 @@
 <meta property="og:title" content="{% if title %}{{ title }}{% elif pagination and pagination.pageNumber > 0 %}{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }}{{ site.i18n[lang].pageSuffix }} | {{ site.i18n[lang].siteTitle }}{% else %}{{ site.i18n[lang].siteTitle }}{% endif %}">
 <meta property="og:description" content="{{ metaDescription }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<script src="/assets/privacy-consent.js" defer></script>
 </head>
 <body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a class="skip-link" href="#main">{{ site.i18n[lang].skipToContent }}</a>
