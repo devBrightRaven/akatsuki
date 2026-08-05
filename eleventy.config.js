@@ -7,6 +7,7 @@ export default function (eleventyConfig) {
   const shelfPostSlugs = new Set([
     "00-player-is-not-infinite",
     "01-buying-is-easier-than-playing",
+    "02-platforms-never-run-out-of-games",
   ])
 
   // Markdown engine with anchor links and attribute support
