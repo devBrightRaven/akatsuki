@@ -133,17 +133,13 @@ for (const route of routes.filter(({ path }) => path.includes("/series/"))) {
 
 for (const route of routes.filter(({ path }) => path.includes("/topics/"))) {
   const page = read(route.file)
-  const nodes = [...page.matchAll(/<li[^>]*class="topic-map-node"[^>]*data-topic-id="([^"]+)"[^>]*>/g)]
-  assert.ok(nodes.length > 0, `Expected Topic nodes on ${route.file}`)
-  assert.equal(new Set(nodes.map(([, id]) => id)).size, nodes.length, `Expected unique Topic nodes on ${route.file}`)
-  nodes.forEach((match, index) => {
-    const start = match.index
-    const end = nodes[index + 1]?.index ?? page.indexOf("</section>", start)
-    const node = page.slice(start, end)
-    assert.match(node, /<summary>\s*[^<\s]/, `Expected a non-empty Topic label on ${route.file}`)
-    assert.match(node, /<p>\s*[^<\s]/, `Expected a non-empty Topic description on ${route.file}`)
-    assert.match(node, /<a href="[^"]+">/, `Expected a Topic article link on ${route.file}`)
-  })
+  const tags = [...page.matchAll(/<li class="topic-tag" data-topic-id="([^"]+)">/g)].map((match) => match[1])
+  const articleLinks = [...page.matchAll(/<li class="topic-article-row">[\s\S]*?<h3><a href="([^"]+)"/g)].map((match) => match[1])
+  const expected = seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
+  assert.ok(tags.length > 0, `Expected Tags on ${route.file}`)
+  assert.equal(new Set(tags).size, tags.length, `Expected unique Tags on ${route.file}`)
+  assert.deepEqual(articleLinks, expected, `Expected one unique Article list on ${route.file}`)
+  assert.doesNotMatch(page, /topic-map-node|topic-connections|<details/)
 }
 
 assert.equal(

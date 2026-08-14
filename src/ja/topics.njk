@@ -9,22 +9,26 @@ permalink: /ja/topics/
 {% set posts = collections.postsJa %}
 <section class="topic-map-page" aria-labelledby="topic-map-title">
   <h1 id="topic-map-title">{{ site.i18n[lang].topicMap }}</h1>
-  <ul class="topic-map-list" aria-label="{{ site.i18n[lang].topicMapLabel }}">
+  <section class="topic-tag-index" aria-labelledby="topic-tags-title">
+    <h2 id="topic-tags-title">{{ site.i18n[lang].tags }}</h2>
+    <ul class="topic-tag-list">
     {% for topic in site.topicCatalog %}
       {% set relatedPosts = posts | topicPosts(topic.id) %}
-      {% if relatedPosts.length %}
-      {% set connectedTopics = site.topicCatalog | topicConnections(topic.id, posts) %}
-      <li class="topic-map-node" id="topic-{{ topic.id }}" data-topic-id="{{ topic.id }}">
-        <details open>
-          <summary>{{ topic.labels[lang] }}</summary>
-          <p>{{ topic.description[lang] }}</p>
-          {% if connectedTopics.length %}<p class="topic-connections"><span>{{ site.i18n[lang].connectedTopics }}:</span> {% for connectedTopic in connectedTopics %}<a href="#topic-{{ connectedTopic.id }}">{{ connectedTopic.labels[lang] }}</a>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}</p>{% endif %}
-          <ul>
-            {% for post in relatedPosts %}<li><a href="{{ post.url }}">{{ post.data.displayTitle }}</a></li>{% endfor %}
-          </ul>
-        </details>
-      </li>
-      {% endif %}
+      {% if relatedPosts.length %}<li class="topic-tag" data-topic-id="{{ topic.id }}">{{ topic.labels[lang] }}</li>{% endif %}
     {% endfor %}
-  </ul>
+    </ul>
+  </section>
+  <section class="topic-article-index" aria-labelledby="topic-articles-title">
+    <h2 id="topic-articles-title">{{ site.i18n[lang].allStories }}</h2>
+    <ul class="topic-article-list">
+      {% for post in posts %}
+      <li class="topic-article-row">
+        <h3><a href="{{ post.url }}">{{ post.data.displayTitle }}</a></h3>
+        <ul class="article-topic-tags" aria-label="{{ site.i18n[lang].tags }}">
+          {% for topic in site.topicCatalog %}{% if topic.id in post.data.topicIds %}<li>{{ topic.labels[lang] }}</li>{% endif %}{% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
 </section>

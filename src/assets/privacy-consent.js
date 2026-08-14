@@ -214,7 +214,11 @@
         margin: -1px;
         overflow: hidden;
         clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
+        font-size: 1px;
+        line-height: 1;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-all;
         border: 0;
       }
       .br-consent-copy, .br-consent-current, .br-consent-feedback, .br-consent-note {

@@ -81,15 +81,6 @@ export default function (eleventyConfig) {
     )
   )
 
-  eleventyConfig.addFilter("topicConnections", (catalog = [], topicId, posts = []) => {
-    const topicPosts = posts.filter((post) =>
-      post.data.status === "published" && post.data.topicIds?.includes(topicId)
-    )
-    return catalog.filter((topic) =>
-      topic.id !== topicId && topicPosts.some((post) => post.data.topicIds?.includes(topic.id))
-    )
-  })
-
   // Language switcher: find translation of current page
   eleventyConfig.addFilter("translation", function (currentUrl, otherLang, postsEn = [], postsJa = [], postsZh = [], fallbackToHome = true) {
     if (!currentUrl) return null
