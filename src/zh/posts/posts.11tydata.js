@@ -25,6 +25,10 @@ function displayTitleFromInput(inputPath) {
 }
 
 export default {
+  permalink: (data) => data.status === "published"
+    ? `${{ en: "", ja: "/ja", "zh-TW": "/zh" }[data.lang]}/${data.page.fileSlug}/`
+    : false,
+  eleventyExcludeFromCollections: (data) => data.status !== "published",
   eleventyComputed: {
     title: (data) => extractTitleFromInput(data.page.inputPath),
     displayTitle: (data) => displayTitleFromInput(data.page.inputPath),

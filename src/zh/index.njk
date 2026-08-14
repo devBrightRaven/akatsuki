@@ -1,9 +1,10 @@
 ---
 layout: layouts/home.njk
 lang: zh-TW
+section: latest
 eleventyExcludeFromCollections: true
 pagination:
-  data: collections.postsZh
+  data: collections.recentPostsZh
   size: 9
   alias: pagePosts
 permalink: "{% if pagination.pageNumber == 0 %}/zh/{% else %}/zh/page/{{ pagination.pageNumber + 1 }}/{% endif %}"

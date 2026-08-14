@@ -3,64 +3,34 @@ layout: layouts/base.njk
 bodyClass: home-page
 ---
 {% if lang == 'en' %}
-  {% set posts = collections.postsEn %}
+  {% set seriesPosts = collections.postsEn %}
 {% elif lang == 'ja' %}
-  {% set posts = collections.postsJa %}
+  {% set seriesPosts = collections.postsJa %}
 {% else %}
-  {% set posts = collections.postsZh %}
+  {% set seriesPosts = collections.postsZh %}
 {% endif %}
-{% if pagePosts.length <= 3 %}{% set rowCount = 1 %}{% elif pagePosts.length <= 6 %}{% set rowCount = 2 %}{% else %}{% set rowCount = 3 %}{% endif %}
-
-<section class="story-stage" aria-labelledby="story-series-title" data-presentation="articles">
-  <header class="home-header">
-    <div class="home-intro">
-      <p class="home-kicker">{% if pagination.pageNumber == 0 %}{{ site.i18n[lang].seriesKicker }}{% else %}{{ site.i18n[lang].moreStories }}{% endif %}</p>
-      <h1 id="story-series-title"><span lang="ja">曉</span> Akatsuki</h1>
-      <p class="tagline">{{ site.i18n[lang].tagline }}</p>
-    </div>
-    <div class="home-controls">
-      {% if posts.length %}
-      <fieldset class="presentation-switch" data-presentation-switch>
-        <legend>{{ site.i18n[lang].presentationLabel }}</legend>
-        <div class="presentation-options">
-          <label>
-            <input type="radio" name="presentation" value="articles" checked>
-            <span>{{ site.i18n[lang].presentationArticles }}</span>
-          </label>
-          <label>
-            <input type="radio" name="presentation" value="calligraphy">
-            <span lang="ja">{{ site.i18n[lang].presentationCalligraphy }}</span>
-          </label>
-        </div>
-      </fieldset>
-      {% endif %}
-      <p class="page-summary">{{ posts.length }} {{ site.i18n[lang].stories }} · {{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>
-    </div>
-  </header>
-
-  <div class="story-grid story-grid-rows-{{ rowCount }}">
-    <span class="story-calligraphy" aria-hidden="true" lang="ja"><span>曉</span></span>
+<section class="latest-shell" aria-labelledby="latest-title">
+  <p class="section-kicker">{% if pagination.pageNumber == 0 %}{{ site.i18n[lang].seriesKicker }}{% else %}{{ site.i18n[lang].moreStories }}{% endif %}</p>
+  <h1 id="latest-title">{{ site.series.playersNotInfinite.title[lang] }}</h1>
+  <p class="latest-intro">{{ site.series.playersNotInfinite.description[lang] }}</p>
+  {% if seriesPosts.length %}<a class="primary-action" href="{{ seriesPosts[0].url }}">{{ site.i18n[lang].startSeries }}</a>{% endif %}
+  <ol class="latest-list">
     {% for post in pagePosts %}
-    {% if loop.index == 1 %}<div class="story-row story-row-1">{% elif loop.index == 4 %}<div class="story-row story-row-2">{% elif loop.index == 7 %}<div class="story-row story-row-3">{% endif %}
-    <a class="story-card" href="{{ post.url }}">
-      <span class="story-card-calligraphy" aria-hidden="true" lang="ja">曉</span>
-      <div class="story-card-topline">
-        <span class="story-number">{{ post.data.storyNumber }}</span>
-        <span class="story-labels">
-          {% if post.data.topicLabel %}<span class="topic-label">{{ post.data.topicLabel }}</span>{% endif %}
-          {% if pagination.pageNumber == 0 and loop.first %}<span class="start-label">{{ site.i18n[lang].startHere }}</span>{% endif %}
+    <li class="latest-item">
+      <a href="{{ post.url }}">
+        <span class="latest-item-number">{{ post.data.storyNumber }}</span>
+        <span class="latest-item-copy">
+          <strong>{{ post.data.displayTitle }}</strong>
+          <span>{{ post.data.description }}</span>
+          <small><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.data.topicLabel }} · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</small>
         </span>
-      </div>
-      <h2>{{ post.data.displayTitle }}</h2>
-      <p class="story-summary">{{ post.data.description }}</p>
-      <p class="story-meta"><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</p>
-    </a>
-    {% if loop.index == 3 or loop.index == 6 or loop.index == 9 or loop.last %}</div>{% endif %}
+      </a>
+    </li>
     {% endfor %}
-  </div>
+  </ol>
 </section>
 
-{% if pagination.pages.length > 1 %}
+{% if pagination.pageNumber > 0 and pagination.pages.length > 1 %}
 <nav class="pagination-nav" aria-label="{{ site.i18n[lang].pagination }}">
   <p class="pagination-status" aria-current="page">{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>
   <div class="pagination-actions">

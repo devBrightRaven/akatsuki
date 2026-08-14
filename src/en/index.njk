@@ -1,9 +1,10 @@
 ---
 layout: layouts/home.njk
 lang: en
+section: latest
 eleventyExcludeFromCollections: true
 pagination:
-  data: collections.postsEn
+  data: collections.recentPostsEn
   size: 9
   alias: pagePosts
 permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/page/{{ pagination.pageNumber + 1 }}/{% endif %}"

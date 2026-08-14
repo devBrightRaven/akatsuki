@@ -1,0 +1,22 @@
+---
+layout: layouts/base.njk
+lang: en
+section: series
+title: Series
+description: Read Players Are Not Infinite in order.
+permalink: /series/
+---
+{% set series = site.series.playersNotInfinite %}
+{% set posts = collections.postsEn | seriesPosts('players-not-infinite') %}
+<section class="series-page" aria-labelledby="series-title">
+  <h1 id="series-title">{{ series.title[lang] }}</h1>
+  <p>{{ series.description[lang] }}</p>
+  <p>{{ posts.length }} {{ site.i18n[lang].stories }}</p>
+  {% if posts.length %}<p><a href="{{ posts[0].url }}">{{ site.i18n[lang].recommendedStart }}: {{ posts[0].data.displayTitle }}</a></p>{% endif %}
+  <h2>{{ site.i18n[lang].readingOrder }}</h2>
+  <ol class="series-list">
+    {% for post in posts %}
+    <li class="series-row"><a href="{{ post.url }}">{{ post.data.displayTitle }}</a><p>{{ post.data.summary }}</p></li>
+    {% endfor %}
+  </ol>
+</section>

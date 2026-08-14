@@ -1,0 +1,30 @@
+---
+layout: layouts/base.njk
+lang: en
+section: topics
+title: Topic map
+description: Follow the published essays by topic.
+permalink: /topics/
+---
+{% set posts = collections.postsEn %}
+<section class="topic-map-page" aria-labelledby="topic-map-title">
+  <h1 id="topic-map-title">{{ site.i18n[lang].topicMap }}</h1>
+  <ul class="topic-map-list" aria-label="{{ site.i18n[lang].topicMapLabel }}">
+    {% for topic in site.topicCatalog %}
+      {% set relatedPosts = posts | topicPosts(topic.id) %}
+      {% if relatedPosts.length %}
+      {% set connectedTopics = site.topicCatalog | topicConnections(topic.id, posts) %}
+      <li class="topic-map-node" id="topic-{{ topic.id }}" data-topic-id="{{ topic.id }}">
+        <details open>
+          <summary>{{ topic.labels[lang] }}</summary>
+          <p>{{ topic.description[lang] }}</p>
+          {% if connectedTopics.length %}<p class="topic-connections"><span>{{ site.i18n[lang].connectedTopics }}:</span> {% for connectedTopic in connectedTopics %}<a href="#topic-{{ connectedTopic.id }}">{{ connectedTopic.labels[lang] }}</a>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}</p>{% endif %}
+          <ul>
+            {% for post in relatedPosts %}<li><a href="{{ post.url }}">{{ post.data.displayTitle }}</a></li>{% endfor %}
+          </ul>
+        </details>
+      </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>

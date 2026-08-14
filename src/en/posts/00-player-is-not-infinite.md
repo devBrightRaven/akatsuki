@@ -6,9 +6,14 @@ date: 2026-07-30
 status: published
 lang: en
 series: Players Are Not Infinite
+seriesId: players-not-infinite
 series_order: 0
 order: 0
 topicLabel: Games & Choice
+topicIds:
+  - games
+  - agency
+  - choice
 type: series-essay
 source: codex
 tags:

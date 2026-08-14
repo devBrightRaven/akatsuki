@@ -2,6 +2,7 @@ import rssPlugin from "@11ty/eleventy-plugin-rss"
 import markdownIt from "markdown-it"
 import markdownItAnchor from "markdown-it-anchor"
 import markdownItAttrs from "markdown-it-attrs"
+import site from "./src/_data/site.js"
 
 export default function (eleventyConfig) {
   const shelfPostSlugs = new Set([
@@ -9,6 +10,11 @@ export default function (eleventyConfig) {
     "01-buying-is-easier-than-playing",
     "02-platforms-never-run-out-of-games",
   ])
+  const recentShelfPosts = (glob) => (collectionApi) =>
+    collectionApi
+      .getFilteredByGlob(glob)
+      .filter((post) => shelfPostSlugs.has(post.fileSlug))
+      .sort((a, b) => b.date - a.date || (a.data.order ?? 999) - (b.data.order ?? 999))
 
   // Markdown engine with anchor links and attribute support
   const md = markdownIt({
@@ -63,6 +69,27 @@ export default function (eleventyConfig) {
     return minutes
   })
 
+  eleventyConfig.addFilter("seriesPosts", (posts = [], seriesId) =>
+    posts
+      .filter((post) => post.data.status === "published" && post.data.seriesId === seriesId)
+      .sort((a, b) => (a.data.series_order ?? Infinity) - (b.data.series_order ?? Infinity))
+  )
+
+  eleventyConfig.addFilter("topicPosts", (posts = [], topicId) =>
+    posts.filter((post) =>
+      post.data.status === "published" && post.data.topicIds?.includes(topicId)
+    )
+  )
+
+  eleventyConfig.addFilter("topicConnections", (catalog = [], topicId, posts = []) => {
+    const topicPosts = posts.filter((post) =>
+      post.data.status === "published" && post.data.topicIds?.includes(topicId)
+    )
+    return catalog.filter((topic) =>
+      topic.id !== topicId && topicPosts.some((post) => post.data.topicIds?.includes(topic.id))
+    )
+  })
+
   // Language switcher: find translation of current page
   eleventyConfig.addFilter("translation", function (currentUrl, otherLang, postsEn = [], postsJa = [], postsZh = [], fallbackToHome = true) {
     if (!currentUrl) return null
@@ -71,6 +98,20 @@ export default function (eleventyConfig) {
     const homeUrl = { en: "/", ja: "/ja/", "zh-TW": "/zh/" }
     const targetPosts = { en: postsEn, ja: postsJa, "zh-TW": postsZh }[targetLang]
     if (!targetPosts || !(targetLang in localePrefix)) return null
+
+    const staticSections = {
+      "/": "latest",
+      "/ja/": "latest",
+      "/zh/": "latest",
+      "/series/": "series",
+      "/ja/series/": "series",
+      "/zh/series/": "series",
+      "/topics/": "topics",
+      "/ja/topics/": "topics",
+      "/zh/topics/": "topics",
+    }
+    const section = staticSections[currentUrl]
+    if (section) return site.routes[targetLang][section]
 
     const unprefixedUrl = currentUrl.replace(/^\/(?:ja|zh)(?=\/)/, "") || "/"
     const targetUrl = localePrefix[targetLang] + unprefixedUrl
@@ -129,6 +170,10 @@ export default function (eleventyConfig) {
       .filter((p) => shelfPostSlugs.has(p.fileSlug))
       .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   })
+
+  eleventyConfig.addCollection("recentPostsEn", recentShelfPosts("src/en/posts/*.md"))
+  eleventyConfig.addCollection("recentPostsZh", recentShelfPosts("src/zh/posts/*.md"))
+  eleventyConfig.addCollection("recentPostsJa", recentShelfPosts("src/ja/posts/*.md"))
 
   return {
     dir: {

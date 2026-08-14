@@ -6,9 +6,14 @@ date: 2026-08-05
 status: published
 lang: ja
 series: プレイヤーは無限ではない
+seriesId: players-not-infinite
 series_order: 2
 order: 2
 topicLabel: ゲームと選択
+topicIds:
+  - games
+  - agency
+  - choice
 type: series-essay
 source: codex
 module: 入手

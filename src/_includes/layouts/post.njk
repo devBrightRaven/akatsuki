@@ -14,6 +14,17 @@ layout: layouts/base.njk
   {% if topicLabel %}<p class="post-topic-label">{{ topicLabel }}</p>{% endif %}
   {{ content | safe }}
 
+  {% if seriesId or topicIds %}
+  <aside class="article-context" aria-label="{{ site.i18n[lang].storyNavigation }}">
+    {% if seriesId %}<p><span>{{ site.i18n[lang].series }}</span> <a href="{{ site.routes[lang].series }}">{{ series }}</a></p>{% endif %}
+    {% if topicIds %}
+    <p><span>{{ site.i18n[lang].topics }}</span>
+      {% for topic in site.topicCatalog %}{% if topic.id in topicIds %}<a href="{{ site.routes[lang].topics }}">{{ topic.labels[lang] }}</a>{% if not loop.last %} {% endif %}{% endif %}{% endfor %}
+    </p>
+    {% endif %}
+  </aside>
+  {% endif %}
+
   <footer class="post-footer">
     <p class="post-meta">
       <span>{{ content | readingTime }} {{ site.i18n[lang].readingTime }}</span>

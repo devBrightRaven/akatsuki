@@ -6,9 +6,14 @@ date: 2026-08-05
 status: published
 lang: zh-TW
 series: 玩家不是無限的
+seriesId: players-not-infinite
 series_order: 2
 order: 2
 topicLabel: 遊戲與選擇
+topicIds:
+  - games
+  - agency
+  - choice
 type: series-essay
 source: codex
 module: 取得
