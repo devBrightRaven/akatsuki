@@ -6,6 +6,7 @@
 
   const measurementId = "G-ZJKKRRTFXW";
   const preferenceKey = "br_ga4_consent_v1";
+  const cookieMaxAge = 31536000;
   const scriptSelector = 'script[data-br-ga4="true"]';
   let pageViewSent = false;
   let analyticsActive = false;
@@ -81,25 +82,54 @@
     return "en";
   }
 
-  function readPreference() {
+  function usesSharedDomain() {
+    return location.hostname === "brightraven.world" || location.hostname.endsWith(".brightraven.world");
+  }
+
+  function clearHostOnlyCookie() {
+    if (!location.hostname.endsWith(".brightraven.world")) return;
+    const secure = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${preferenceKey}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;
+  }
+
+  function readCookie() {
+    clearHostOnlyCookie();
+    const entry = document.cookie
+      .split(";")
+      .map((item) => item.trim())
+      .find((item) => item.startsWith(`${preferenceKey}=`));
+    const value = entry?.slice(preferenceKey.length + 1);
+    return value === "granted" || value === "denied" ? value : null;
+  }
+
+  function writeCookie(status) {
+    const domain = usesSharedDomain() ? "; Domain=.brightraven.world" : "";
+    const secure = location.protocol === "https:" ? "; Secure" : "";
+    clearHostOnlyCookie();
+    document.cookie = `${preferenceKey}=${status}; Max-Age=${cookieMaxAge}; Path=/; SameSite=Lax${domain}${secure}`;
+    return readCookie() === status;
+  }
+
+  function clearLocalPreference() {
     try {
-      const value = JSON.parse(localStorage.getItem(preferenceKey));
-      if (value && (value.status === "granted" || value.status === "denied")) return value.status;
+      localStorage.removeItem(preferenceKey);
     } catch (_error) {}
+  }
+
+  function readPreference() {
+    clearLocalPreference();
+    const cookie = readCookie();
+    if (cookie) {
+      writeCookie(cookie);
+      return cookie;
+    }
     return sessionPreference;
   }
 
   function writePreference(status) {
     sessionPreference = status;
-    try {
-      localStorage.setItem(preferenceKey, JSON.stringify({
-        status,
-        updatedAt: new Date().toISOString(),
-        version: 1
-      }));
-    } catch (_error) {
-      // Storage can be unavailable in hardened browsers. Consent remains valid for this page only.
-    }
+    writeCookie(status);
+    clearLocalPreference();
   }
 
   function deleteAnalyticsCookies() {

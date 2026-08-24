@@ -150,7 +150,7 @@ assert.equal(
 for (const { path, source } of generatedHtml) {
   assert.doesNotMatch(source, /presentation-switch|data-presentation|calligraphy|\/assets\/presentation\.js/)
   assert.doesNotMatch(source, /(?:googletagmanager\.com\/gtag\/js|google-analytics\.com\/analytics\.js)/i)
-  assert.match(source, /src="\/assets\/privacy-consent\.js"/)
+  assert.match(source, /src="\/assets\/privacy-consent\.js\?v=20260825a"/)
   assert.ok(path, "Expected a generated HTML path")
 }
 
@@ -236,6 +236,9 @@ assert.match(privacyConsentScript, /class="br-consent-feedback" role="status"/)
 assert.match(privacyConsentScript, /close\.hidden = false;[\s\S]*updateText\(\);/)
 assert.match(privacyConsentScript, /if \(window\.__akatsukiConsentInitialized\) return;/)
 assert.match(privacyConsentScript, /window\.__akatsukiConsentInitialized = true;/)
+assert.match(privacyConsentScript, /Domain=\.brightraven\.world/)
+assert.doesNotMatch(privacyConsentScript, /localStorage\.(?:getItem|setItem)\(/)
+assert.match(privacyConsentScript, /return readCookie\(\) === status;/)
 assert.match(privacyConsentScript, /let pageViewSent = false;[\s\S]*let analyticsActive = false;/)
 assert.match(privacyConsentScript, /function disableAnalytics\(\) \{[\s\S]*ga-disable-[\s\S]*script\.remove\(\)[\s\S]*deleteAnalyticsCookies\(\);[\s\S]*\}/)
 assert.match(privacyConsentScript, /function enableAnalytics\(\) \{[\s\S]*if \(!analyticsActive\)[\s\S]*createElement\("script"\)[\s\S]*googletagmanager\.com\/gtag\/js[\s\S]*\}/)
