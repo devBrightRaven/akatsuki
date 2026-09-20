@@ -30,6 +30,29 @@ bodyClass: home-page
   </ol>
 </section>
 
+{% if lang == 'zh-TW' and collections.maidaRedesignZh.length %}
+<section class="latest-shell series-shelf" aria-labelledby="maida-redesign-title">
+  <p class="section-kicker">MAIDA REDESIGN</p>
+  <h2 id="maida-redesign-title">{{ site.series.maidaRedesign.title[lang] }}</h2>
+  <p class="latest-intro">{{ site.series.maidaRedesign.description[lang] }}</p>
+  <a class="primary-action" href="{{ collections.maidaRedesignZh[0].url }}">{{ site.i18n[lang].startSeries }}</a>
+  <ol class="latest-list">
+    {% for post in collections.maidaRedesignZh %}
+    <li class="latest-item">
+      <a href="{{ post.url }}">
+        <span class="latest-item-number">{{ post.data.storyNumber }}</span>
+        <span class="latest-item-copy">
+          <strong>{{ post.data.displayTitle }}</strong>
+          <span>{{ post.data.description }}</span>
+          <small><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.data.topicLabel }} · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</small>
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
 {% if pagination.pageNumber > 0 and pagination.pages.length > 1 %}
 <nav class="pagination-nav" aria-label="{{ site.i18n[lang].pagination }}">
   <p class="pagination-status" aria-current="page">{{ site.i18n[lang].page }} {{ pagination.pageNumber + 1 }} {{ site.i18n[lang].of }} {{ pagination.pages.length }}{{ site.i18n[lang].pageSuffix }}</p>

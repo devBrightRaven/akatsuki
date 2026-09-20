@@ -24,6 +24,14 @@ export default {
         "zh-TW": "遊戲可以一直增加，但玩家能投入的時間、注意力與身體不會跟著增加。",
       },
     },
+    maidaRedesign: {
+      title: {
+        "zh-TW": "Maida redesign",
+      },
+      description: {
+        "zh-TW": "從一個連作者自己都不想打開的選擇工具開始，記錄 Maida 的重新思考。",
+      },
+    },
   },
   topicCatalog: [
     {

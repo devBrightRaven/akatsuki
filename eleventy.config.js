@@ -9,7 +9,6 @@ export default function (eleventyConfig) {
     "00-player-is-not-infinite",
     "01-buying-is-easier-than-playing",
     "02-platforms-never-run-out-of-games",
-    "01-maida-decision-memory",
   ])
   const recentShelfPosts = (glob) => (collectionApi) =>
     collectionApi
@@ -166,6 +165,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addCollection("recentPostsEn", recentShelfPosts("src/en/posts/*.md"))
   eleventyConfig.addCollection("recentPostsZh", recentShelfPosts("src/zh/posts/*.md"))
   eleventyConfig.addCollection("recentPostsJa", recentShelfPosts("src/ja/posts/*.md"))
+
+  eleventyConfig.addCollection("maidaRedesignZh", function (collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("src/zh/posts/*.md")
+      .filter((post) => post.data.status === "published" && post.data.series === "maida-redesign")
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  })
 
   return {
     dir: {

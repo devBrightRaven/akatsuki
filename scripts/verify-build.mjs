@@ -34,17 +34,6 @@ const seriesSlugs = [
   "01-buying-is-easier-than-playing",
   "02-platforms-never-run-out-of-games",
 ]
-const topicSlugsByLang = {
-  en: seriesSlugs,
-  ja: seriesSlugs,
-  "zh-TW": [
-    "00-player-is-not-infinite",
-    "01-buying-is-easier-than-playing",
-    "01-maida-decision-memory",
-    "02-platforms-never-run-out-of-games",
-  ],
-}
-
 const publicUrl = new URL("../public/", import.meta.url)
 const draftRoutes = [
   { source: "../src/en/posts/", output: "" },
@@ -146,7 +135,7 @@ for (const route of routes.filter(({ path }) => path.includes("/topics/"))) {
   const page = read(route.file)
   const tags = [...page.matchAll(/<li class="topic-tag" data-topic-id="([^"]+)">/g)].map((match) => match[1])
   const articleLinks = [...page.matchAll(/<li class="topic-article-row">[\s\S]*?<h3><a href="([^"]+)"/g)].map((match) => match[1])
-  const expected = topicSlugsByLang[route.lang].map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
+  const expected = seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
   assert.ok(tags.length > 0, `Expected Tags on ${route.file}`)
   assert.equal(new Set(tags).size, tags.length, `Expected unique Tags on ${route.file}`)
   assert.deepEqual(articleLinks, expected, `Expected one unique Article list on ${route.file}`)
@@ -218,9 +207,12 @@ assert.match(zhHome, /關於 AI、無障礙、遊戲/)
 assert.match(zhHome, /關於能動性的文章/)
 assert.match(zhHome, /Bright Raven[\s\S]*研究並製作/)
 assert.equal((zhHome.match(/class="latest-item"/g) || []).length, 4)
-assert.match(zhHome, /<time datetime="2026-09-20">2026年9月20日<\/time> · 遊戲與選擇 · \d+ 分鐘/)
-assertOrdered(zhHome, 'datetime="2026-09-20"', 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"')
-assert.match(zhFeed, /01-maida-decision-memory/)
+const maidaShelf = zhHome.match(/<section class="latest-shell series-shelf"[\s\S]*?<\/section>/)?.[0]
+assert.ok(maidaShelf, "Expected a separate Maida redesign shelf on the Chinese homepage")
+assert.match(maidaShelf, /<h2 id="maida-redesign-title">Maida redesign<\/h2>/)
+assert.match(maidaShelf, /href="\/zh\/01-maida-decision-memory\/"/)
+assert.match(maidaShelf, /<time datetime="2026-09-20">2026年9月20日<\/time> · 遊戲與選擇 · \d+ 分鐘/)
+assert.doesNotMatch(zhFeed, /01-maida-decision-memory/)
 assert.doesNotMatch(home, /Maida is a free, open-source tool/)
 assert.doesNotMatch(home, /class="post-list"/)
 assert.doesNotMatch(home, /presentation-switch|data-presentation|presentation\.js/)
@@ -286,8 +278,7 @@ assert.match(home, /No newsletter\. Follow by RSS, or come back whenever you lik
 assert.match(jaHome, /ニュースレターは配信していません。RSSで購読するか、また読みたくなったときにお越しください。/)
 assert.match(zhHome, /不寄電子報。你可以透過 RSS 追蹤，或想起來時再回來看看。/)
 assert.equal((zhHome.match(/class="latest-item"/g) || []).length, 4)
-assert.match(zhHome, /<time datetime="2026-09-20">2026年9月20日<\/time> · 遊戲與選擇 · \d+ 分鐘/)
-assertOrdered(zhHome, 'datetime="2026-09-20"', 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"')
+assertOrdered(zhHome, 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"', 'id="maida-redesign-title"', 'datetime="2026-09-20"')
 assert.doesNotMatch(zhHome, /pagination-next/)
 assert.doesNotMatch(zhHome, /class="pagination-nav"/)
 assert.doesNotMatch(style, /[0-9](?:dvh|svh|vh)\b/)
