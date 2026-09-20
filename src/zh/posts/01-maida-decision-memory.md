@@ -5,7 +5,9 @@ summary: 選項變少，不代表我會更想玩遊戲。
 date: 2026-09-20
 status: published
 order: 1
-series: maida-redesign
+series: 值得打開的理由
+seriesId: maida-reasons-to-open
+series_order: 1
 lang: zh-TW
 type: essay
 source: codex

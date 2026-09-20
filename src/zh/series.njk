@@ -3,20 +3,27 @@ layout: layouts/base.njk
 lang: zh-TW
 section: series
 title: 系列
-description: 依序閱讀「玩家不是無限的」。
+description: 依序閱讀 Bright Raven 已發表的系列。
 permalink: /zh/series/
 ---
-{% set series = site.series.playersNotInfinite %}
-{% set posts = collections.postsZh | seriesPosts('players-not-infinite') %}
 <section class="series-page" aria-labelledby="series-title">
-  <h1 id="series-title">{{ series.title[lang] }}</h1>
-  <p>{{ series.description[lang] }}</p>
-  <p>{{ posts.length }} {{ site.i18n[lang].stories }}</p>
-  {% if posts.length %}<p><a href="{{ posts[0].url }}">{{ site.i18n[lang].recommendedStart }}: {{ posts[0].data.displayTitle }}</a></p>{% endif %}
-  <h2>{{ site.i18n[lang].readingOrder }}</h2>
-  <ol class="series-list">
-    {% for post in posts %}
-    <li class="series-row"><a href="{{ post.url }}">{{ post.data.displayTitle }}</a><p>{{ post.data.summary }}</p></li>
-    {% endfor %}
-  </ol>
+  <h1 id="series-title">{{ title }}</h1>
+  <p>{{ description }}</p>
+  {% for seriesKey, series in site.series %}
+    {% set posts = collections.publishedPostsZh | seriesPosts(series.id) %}
+    {% if series.title[lang] and posts.length %}
+    <section class="series-group" aria-labelledby="series-{{ series.id }}">
+      <h2 id="series-{{ series.id }}">{{ series.title[lang] }}</h2>
+      <p>{{ series.description[lang] }}</p>
+      <p>{{ posts.length }} {{ site.i18n[lang].stories }}</p>
+      <p><a href="{{ posts[0].url }}">{{ site.i18n[lang].recommendedStart }}: {{ posts[0].data.displayTitle }}</a></p>
+      <h3>{{ site.i18n[lang].readingOrder }}</h3>
+      <ol class="series-list">
+        {% for post in posts %}
+        <li class="series-row"><a href="{{ post.url }}">{{ post.data.displayTitle }}</a><p>{{ post.data.summary }}</p></li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+  {% endfor %}
 </section>

@@ -13,6 +13,7 @@ export default {
   },
   series: {
     playersNotInfinite: {
+      id: "players-not-infinite",
       title: {
         en: "Players Are Not Infinite",
         ja: "プレイヤーは無限ではない",
@@ -25,6 +26,7 @@ export default {
       },
     },
     maidaRedesign: {
+      id: "maida-reasons-to-open",
       title: {
         "zh-TW": "值得打開的理由",
       },

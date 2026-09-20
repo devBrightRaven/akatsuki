@@ -169,9 +169,22 @@ export default function (eleventyConfig) {
   eleventyConfig.addCollection("maidaRedesignZh", function (collectionApi) {
     return collectionApi
       .getFilteredByGlob("src/zh/posts/*.md")
-      .filter((post) => post.data.status === "published" && post.data.series === "maida-redesign")
+      .filter((post) => post.data.status === "published" && post.data.seriesId === "maida-reasons-to-open")
       .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   })
+
+  // Published articles are the shared public index. Individual shelves may
+  // choose a smaller editorial selection, but series and topic navigation
+  // must never silently lose an otherwise published article.
+  const publishedPosts = (glob) => (collectionApi) =>
+    collectionApi
+      .getFilteredByGlob(glob)
+      .filter((post) => post.data.status === "published")
+      .sort((a, b) => b.date - a.date || a.fileSlug.localeCompare(b.fileSlug))
+
+  eleventyConfig.addCollection("publishedPostsEn", publishedPosts("src/en/posts/*.md"))
+  eleventyConfig.addCollection("publishedPostsZh", publishedPosts("src/zh/posts/*.md"))
+  eleventyConfig.addCollection("publishedPostsJa", publishedPosts("src/ja/posts/*.md"))
 
   return {
     dir: {

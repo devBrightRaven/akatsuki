@@ -64,6 +64,8 @@ const jaHome = read("ja/index.html")
 const jaFeed = read("ja/feed.xml")
 const zhHome = read("zh/index.html")
 const zhFeed = read("zh/feed.xml")
+const zhSeries = read("zh/series/index.html")
+const zhTopics = read("zh/topics/index.html")
 const style = read("assets/style.css")
 const backToTopScript = read("assets/back-to-top.js")
 const privacyConsentScript = read("assets/privacy-consent.js")
@@ -124,23 +126,46 @@ for (const [surface, pages] of Object.entries(shellPages)) {
   }
 }
 
-for (const route of routes.filter(({ path }) => path.includes("/series/"))) {
+for (const route of routes.filter(({ path }) => path.includes("/series/") && path !== "/zh/series/")) {
   const page = read(route.file)
   const expected = seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
   const actual = [...page.matchAll(/<li class="series-row"><a href="([^"]+)"/g)].map((match) => match[1])
   assert.deepEqual(actual, expected, `Expected stable Series order on ${route.file}`)
 }
 
+const zhSeriesLinks = [...zhSeries.matchAll(/<li class="series-row"><a href="([^"]+)"/g)].map((match) => match[1])
+assert.deepEqual(
+  zhSeriesLinks,
+  [
+    "/zh/00-player-is-not-infinite/",
+    "/zh/01-buying-is-easier-than-playing/",
+    "/zh/02-platforms-never-run-out-of-games/",
+    "/zh/01-maida-decision-memory/",
+  ],
+  "Expected the Chinese Series page to include the Maida article after the Player series",
+)
+assert.match(zhSeries, /id="series-maida-reasons-to-open">值得打開的理由<\/h2>/)
+assert.match(zhSeries, /href="\/zh\/01-maida-decision-memory\/">我做了一個連自己都不想用的選擇工具<\/a>/)
+
 for (const route of routes.filter(({ path }) => path.includes("/topics/"))) {
   const page = read(route.file)
   const tags = [...page.matchAll(/<li class="topic-tag" data-topic-id="([^"]+)">/g)].map((match) => match[1])
   const articleLinks = [...page.matchAll(/<li class="topic-article-row">[\s\S]*?<h3><a href="([^"]+)"/g)].map((match) => match[1])
-  const expected = seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
+  const expected = route.lang === "zh-TW"
+    ? [
+        "/zh/01-maida-decision-memory/",
+        "/zh/02-platforms-never-run-out-of-games/",
+        "/zh/01-buying-is-easier-than-playing/",
+        "/zh/00-player-is-not-infinite/",
+      ]
+    : seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
   assert.ok(tags.length > 0, `Expected Tags on ${route.file}`)
   assert.equal(new Set(tags).size, tags.length, `Expected unique Tags on ${route.file}`)
   assert.deepEqual(articleLinks, expected, `Expected one unique Article list on ${route.file}`)
   assert.doesNotMatch(page, /topic-map-node|topic-connections|<details/)
 }
+
+assert.match(zhTopics, /href="\/zh\/01-maida-decision-memory\/">我做了一個連自己都不想用的選擇工具<\/a>/)
 
 assert.equal(
   fs.existsSync(new URL("assets/presentation.js", publicUrl)),
@@ -203,6 +228,7 @@ assert.match(newStory, /Games &amp; Choice/)
 assert.match(jaNewStory, /ゲームと選択/)
 assert.match(zhNewStory, /遊戲與選擇/)
 assert.match(zhMaidaStory, /遊戲與選擇/)
+assert.match(zhMaidaStory, /<span>系列<\/span> <a href="\/zh\/series\/">值得打開的理由<\/a>/)
 assert.match(zhHome, /關於 AI、無障礙、遊戲/)
 assert.match(zhHome, /關於能動性的文章/)
 assert.match(zhHome, /Bright Raven[\s\S]*研究並製作/)
@@ -285,6 +311,7 @@ assert.doesNotMatch(style, /[0-9](?:dvh|svh|vh)\b/)
 assert.doesNotMatch(style, /PMingLiU|MingLiU|(^|[,\s])serif(?=[,;\s])/m)
 assert.doesNotMatch(style, /font-family:\s*monospace\b/)
 assert.doesNotMatch(style, /font-style:\s*italic/)
+assert.match(style, /\.series-group \+ \.series-group\s*\{[^}]*border-top: 1px solid var\(--color-line\)/s)
 assert.match(style, /em,\s*i\s*\{[^}]*font-style:\s*normal/s)
 assert.match(style, /\.back-to-top\s*\{[^}]*position:\s*fixed[^}]*width:\s*64px[^}]*height:\s*64px/s)
 assert.match(style, /\.back-to-top\[hidden\]\s*\{[^}]*display:\s*none/s)
