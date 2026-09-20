@@ -26,10 +26,10 @@ export default {
     },
     maidaRedesign: {
       title: {
-        "zh-TW": "Maida redesign",
+        "zh-TW": "值得打開的理由",
       },
       description: {
-        "zh-TW": "從一個連作者自己都不想打開的選擇工具開始，記錄 Maida 的重新思考。",
+        "zh-TW": "為什麼值得打開 Maida，也為什麼此刻值得打開某一款遊戲。",
       },
     },
   },

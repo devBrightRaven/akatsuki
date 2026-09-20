@@ -9,31 +9,10 @@ bodyClass: home-page
 {% else %}
   {% set seriesPosts = collections.postsZh %}
 {% endif %}
-<section class="latest-shell" aria-labelledby="latest-title">
-  <p class="section-kicker">{% if pagination.pageNumber == 0 %}{{ site.i18n[lang].seriesKicker }}{% else %}{{ site.i18n[lang].moreStories }}{% endif %}</p>
-  <h1 id="latest-title">{{ site.series.playersNotInfinite.title[lang] }}</h1>
-  <p class="latest-intro">{{ site.series.playersNotInfinite.description[lang] }}</p>
-  {% if seriesPosts.length %}<a class="primary-action" href="{{ seriesPosts[0].url }}">{{ site.i18n[lang].startSeries }}</a>{% endif %}
-  <ol class="latest-list">
-    {% for post in pagePosts %}
-    <li class="latest-item">
-      <a href="{{ post.url }}">
-        <span class="latest-item-number">{{ post.data.storyNumber }}</span>
-        <span class="latest-item-copy">
-          <strong>{{ post.data.displayTitle }}</strong>
-          <span>{{ post.data.description }}</span>
-          <small><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.data.topicLabel }} · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</small>
-        </span>
-      </a>
-    </li>
-    {% endfor %}
-  </ol>
-</section>
-
 {% if lang == 'zh-TW' and collections.maidaRedesignZh.length %}
 <section class="latest-shell series-shelf" aria-labelledby="maida-redesign-title">
-  <p class="section-kicker">MAIDA REDESIGN</p>
-  <h2 id="maida-redesign-title">{{ site.series.maidaRedesign.title[lang] }}</h2>
+  <p class="section-kicker">MAIDA</p>
+  <h1 id="maida-redesign-title">{{ site.series.maidaRedesign.title[lang] }}</h1>
   <p class="latest-intro">{{ site.series.maidaRedesign.description[lang] }}</p>
   <a class="primary-action" href="{{ collections.maidaRedesignZh[0].url }}">{{ site.i18n[lang].startSeries }}</a>
   <ol class="latest-list">
@@ -52,6 +31,30 @@ bodyClass: home-page
   </ol>
 </section>
 {% endif %}
+<section class="latest-shell" aria-labelledby="latest-title">
+  <p class="section-kicker">{% if pagination.pageNumber == 0 %}{{ site.i18n[lang].seriesKicker }}{% else %}{{ site.i18n[lang].moreStories }}{% endif %}</p>
+  {% if lang == 'zh-TW' and collections.maidaRedesignZh.length %}
+  <h2 id="latest-title">{{ site.series.playersNotInfinite.title[lang] }}</h2>
+  {% else %}
+  <h1 id="latest-title">{{ site.series.playersNotInfinite.title[lang] }}</h1>
+  {% endif %}
+  <p class="latest-intro">{{ site.series.playersNotInfinite.description[lang] }}</p>
+  {% if seriesPosts.length %}<a class="primary-action" href="{{ seriesPosts[0].url }}">{{ site.i18n[lang].startSeries }}</a>{% endif %}
+  <ol class="latest-list">
+    {% for post in pagePosts %}
+    <li class="latest-item">
+      <a href="{{ post.url }}">
+        <span class="latest-item-number">{{ post.data.storyNumber }}</span>
+        <span class="latest-item-copy">
+          <strong>{{ post.data.displayTitle }}</strong>
+          <span>{{ post.data.description }}</span>
+          <small><time datetime="{{ post.date | isoDate }}">{{ post.date | localizedDate(lang) }}</time> · {{ post.data.topicLabel }} · {{ post.templateContent | readingTime }} {{ site.i18n[lang].readingTime }}</small>
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
 
 {% if pagination.pageNumber > 0 and pagination.pages.length > 1 %}
 <nav class="pagination-nav" aria-label="{{ site.i18n[lang].pagination }}">
