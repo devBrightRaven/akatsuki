@@ -9,6 +9,7 @@ export default function (eleventyConfig) {
     "00-player-is-not-infinite",
     "01-buying-is-easier-than-playing",
     "02-platforms-never-run-out-of-games",
+    "01-maida-decision-memory",
   ])
   const recentShelfPosts = (glob) => (collectionApi) =>
     collectionApi

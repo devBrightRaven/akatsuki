@@ -34,6 +34,16 @@ const seriesSlugs = [
   "01-buying-is-easier-than-playing",
   "02-platforms-never-run-out-of-games",
 ]
+const topicSlugsByLang = {
+  en: seriesSlugs,
+  ja: seriesSlugs,
+  "zh-TW": [
+    "00-player-is-not-infinite",
+    "01-buying-is-easier-than-playing",
+    "01-maida-decision-memory",
+    "02-platforms-never-run-out-of-games",
+  ],
+}
 
 const publicUrl = new URL("../public/", import.meta.url)
 const draftRoutes = [
@@ -77,6 +87,7 @@ const zhNewStory = read("zh/00-player-is-not-infinite/index.html")
 const buyingStory = read("01-buying-is-easier-than-playing/index.html")
 const jaBuyingStory = read("ja/01-buying-is-easier-than-playing/index.html")
 const zhBuyingStory = read("zh/01-buying-is-easier-than-playing/index.html")
+const zhMaidaStory = read("zh/01-maida-decision-memory/index.html")
 const platformStory = read("02-platforms-never-run-out-of-games/index.html")
 const jaPlatformStory = read("ja/02-platforms-never-run-out-of-games/index.html")
 const zhPlatformStory = read("zh/02-platforms-never-run-out-of-games/index.html")
@@ -135,7 +146,7 @@ for (const route of routes.filter(({ path }) => path.includes("/topics/"))) {
   const page = read(route.file)
   const tags = [...page.matchAll(/<li class="topic-tag" data-topic-id="([^"]+)">/g)].map((match) => match[1])
   const articleLinks = [...page.matchAll(/<li class="topic-article-row">[\s\S]*?<h3><a href="([^"]+)"/g)].map((match) => match[1])
-  const expected = seriesSlugs.map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
+  const expected = topicSlugsByLang[route.lang].map((slug) => href(`${localePrefixes[route.lang]}/${slug}/`.replace("//", "/")))
   assert.ok(tags.length > 0, `Expected Tags on ${route.file}`)
   assert.equal(new Set(tags).size, tags.length, `Expected unique Tags on ${route.file}`)
   assert.deepEqual(articleLinks, expected, `Expected one unique Article list on ${route.file}`)
@@ -202,9 +213,14 @@ assert.match(feed, /02-platforms-never-run-out-of-games/)
 assert.match(newStory, /Games &amp; Choice/)
 assert.match(jaNewStory, /ゲームと選択/)
 assert.match(zhNewStory, /遊戲與選擇/)
+assert.match(zhMaidaStory, /遊戲與選擇/)
 assert.match(zhHome, /關於 AI、無障礙、遊戲/)
 assert.match(zhHome, /關於能動性的文章/)
 assert.match(zhHome, /Bright Raven[\s\S]*研究並製作/)
+assert.equal((zhHome.match(/class="latest-item"/g) || []).length, 4)
+assert.match(zhHome, /<time datetime="2026-09-20">2026年9月20日<\/time> · 遊戲與選擇 · \d+ 分鐘/)
+assertOrdered(zhHome, 'datetime="2026-09-20"', 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"')
+assert.match(zhFeed, /01-maida-decision-memory/)
 assert.doesNotMatch(home, /Maida is a free, open-source tool/)
 assert.doesNotMatch(home, /class="post-list"/)
 assert.doesNotMatch(home, /presentation-switch|data-presentation|presentation\.js/)
@@ -269,9 +285,9 @@ assert.match(home, /\/assets\/style\.css\?v=20260809-1/)
 assert.match(home, /No newsletter\. Follow by RSS, or come back whenever you like\./)
 assert.match(jaHome, /ニュースレターは配信していません。RSSで購読するか、また読みたくなったときにお越しください。/)
 assert.match(zhHome, /不寄電子報。你可以透過 RSS 追蹤，或想起來時再回來看看。/)
-assert.equal((zhHome.match(/class="latest-item"/g) || []).length, 3)
-assert.match(zhHome, /<time datetime="2026-08-05">2026年8月5日<\/time> · [^·]+ · \d+ 分鐘/)
-assertOrdered(zhHome, 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"')
+assert.equal((zhHome.match(/class="latest-item"/g) || []).length, 4)
+assert.match(zhHome, /<time datetime="2026-09-20">2026年9月20日<\/time> · 遊戲與選擇 · \d+ 分鐘/)
+assertOrdered(zhHome, 'datetime="2026-09-20"', 'datetime="2026-08-05"', 'datetime="2026-08-01"', 'datetime="2026-07-30"')
 assert.doesNotMatch(zhHome, /pagination-next/)
 assert.doesNotMatch(zhHome, /class="pagination-nav"/)
 assert.doesNotMatch(style, /[0-9](?:dvh|svh|vh)\b/)

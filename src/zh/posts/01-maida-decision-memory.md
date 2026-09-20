@@ -9,6 +9,11 @@ series: maida-redesign
 lang: zh-TW
 type: essay
 source: codex
+topicLabel: 遊戲與選擇
+topicIds:
+  - games
+  - choice
+  - agency
 tags:
   - blog
   - maida

@@ -544,7 +544,7 @@ article h3 a:hover { color: var(--color-accent); }
   height: 64px;
   padding: 0;
   border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border-radius: 0;
   color: var(--color-surface);
   background: var(--color-text);
   cursor: pointer;
@@ -575,7 +575,7 @@ article h3 a:hover { color: var(--color-accent); }
 @media (max-width: 42rem) {
   .site-header,
   main,
-  .site-footer { padding-inline: max(0.875rem, env(safe-area-inset-left)) max(0.875rem, env(safe-area-inset-right)); }
+  .site-footer { padding-inline: max(0.5rem, env(safe-area-inset-left)) max(0.5rem, env(safe-area-inset-right)); }
   main { padding-top: 1rem; padding-bottom: 3rem; }
   .site-header { gap: 0.35rem; padding-top: max(0.625rem, env(safe-area-inset-top)); padding-bottom: 0.625rem; }
   .site-brand { gap: 0.35rem; }
