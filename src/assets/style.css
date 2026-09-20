@@ -298,6 +298,7 @@ i { font-style: normal; }
 
 .latest-shell > :not(.latest-list) { grid-column: 1; }
 .latest-shell > .latest-list { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
+.home-page .latest-shell + .latest-shell { margin-top: clamp(3rem, 6vw, 6rem); }
 
 .section-kicker,
 .post-topic-label {
